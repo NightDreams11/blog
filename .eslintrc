@@ -29,6 +29,7 @@
         "semi": false
       }
     ],
+    "import/no-unresolved": "off",
     "react/prop-types": 0,
     "linebreak-style": ["error", "unix"],
     "arrow-body-style": "off",

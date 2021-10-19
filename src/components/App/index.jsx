@@ -1,3 +1,9 @@
+import { Wrapper, Title } from './styled'
+
 export const App = () => {
-  return <h1>Welcome to FicusLife</h1>
+  return (
+    <Wrapper>
+      <Title>Welcome to FicusLife!</Title>
+    </Wrapper>
+  )
 }
