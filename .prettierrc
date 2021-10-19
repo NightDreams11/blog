@@ -1,0 +1,7 @@
+{
+  "singleQuote": true,
+  "printWidth": 85,
+  "semi": false,
+  "arrowParens": "avoid",
+  "endOfLine": "auto"
+}
