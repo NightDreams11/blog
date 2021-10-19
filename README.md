@@ -42,4 +42,4 @@ _В проекте присутствует базовая файловая ст
 - **fetching**: Axios (interceptors)/native fetch, error handling;
 - **state management**: react context, redux, redux-thunk, redux-reselect, redux-toolkit;
 - **code styling**: prettier, eslint, husky;
-- **other**: lazy load, react suspense, react-waypoint, react custom hooks, react-debounce-input.
+- **other**: lazy load, react suspense, react-waypoint, react custom hooks, use-debounce.
