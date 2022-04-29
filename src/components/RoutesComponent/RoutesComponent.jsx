@@ -1,5 +1,5 @@
-import { HomePage } from 'components/HomePage/HomePage'
-import { LoginPage } from 'components/LoginPage/LoginPage'
+import { HomePage } from 'pages/HomePage/HomePage'
+import { LoginPage } from 'pages/LoginPage/LoginPage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 export const RoutesComponent = () => {
@@ -7,7 +7,7 @@ export const RoutesComponent = () => {
     <div>
       <BrowserRouter>
         <Routes>
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
         </Routes>
       </BrowserRouter>

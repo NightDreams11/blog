@@ -1,17 +1,14 @@
 import { Footer } from 'components/layout/Footer'
 import { ResponsiveAppBar } from 'components/layout/Header'
 import { RoutesComponent } from 'components/RoutesComponent/RoutesComponent'
-// import { Wrapper, Title } from './styled'
+import { Wrapper } from './styled'
 
 export const App = () => {
   return (
-    <div>
+    <Wrapper>
       <ResponsiveAppBar />
       <RoutesComponent />
-      {/* <Wrapper>
-        <Title>Welcome to FicusLife!</Title>
-      </Wrapper> */}
       <Footer />
-    </div>
+    </Wrapper>
   )
 }

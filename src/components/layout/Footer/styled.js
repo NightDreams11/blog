@@ -1,5 +1,6 @@
 import { Container, Typography } from '@mui/material'
 import { styled } from '@mui/system'
+import style from 'styled-components'
 
 // export const BoxWrapper = styled(Box, {
 //   // Here we can add some discription of component. It will be added to className
@@ -19,14 +20,26 @@ import { styled } from '@mui/system'
 //   // margin: 0 20px;
 // `
 
+export const Wrapper = style.div`
+  display: flex; //В данном случае, флекс нужен, чтобы прижать дочерний элемент свойством margin-top: auto;
+  min-height: 100vh;
+`
+
+export const WrapperInner = style.div`
+  max-width: 100vw;
+  width: 100%;
+  border-top: 2px solid #000;
+  margin-top: auto;
+`
+
 export const ContainerWrapper = styled(
   Container,
   {}
 )({
   backgroundColor: 'transparent',
   color: '#fff',
-  borderTop: '2px solid #000',
   height: 30,
+  width: '100vw',
 })
 
 export const TypographyItem = styled(
