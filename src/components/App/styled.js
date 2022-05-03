@@ -1,11 +1,10 @@
 import styled from 'styled-components'
 
 export const Wrapper = styled.div`
+  // background-color: ${({ theme }) => theme.colors.primary};
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background-color: ${({ theme }) => theme.colors.primary};
+  flex-direction: column;
+  min-height: 100vh;
 `
 
 export const Title = styled.h1`
