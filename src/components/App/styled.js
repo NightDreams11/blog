@@ -2,6 +2,9 @@ import styled from 'styled-components'
 
 export const Wrapper = styled.div`
   // background-color: ${({ theme }) => theme.colors.primary};
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 `
 
 export const Title = styled.h1`
