@@ -21,8 +21,6 @@ import style from 'styled-components'
 // `
 
 export const Wrapper = style.div`
-  // display: flex; //В данном случае, флекс нужен, чтобы прижать дочерний элемент свойством margin-top: auto;
-  // min-height: 100vh;
   border-top: 2px solid #000;
   margin-top: auto;
 `
