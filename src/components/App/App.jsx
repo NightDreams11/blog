@@ -1,5 +1,5 @@
-import { Footer } from 'components/layout/Footer'
-import { ResponsiveAppBar } from 'components/layout/Header'
+import { Footer } from 'components/layout/Footer/Footer'
+import { ResponsiveAppBar } from 'components/layout/Header/Header'
 import { RoutesComponent } from 'components/RoutesComponent/RoutesComponent'
 import { Wrapper } from './styled'
 

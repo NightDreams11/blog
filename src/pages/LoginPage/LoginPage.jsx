@@ -21,7 +21,7 @@ export const LoginPage = () => {
   const [login, setLogin] = useState('')
   const [password, setPassword] = useState('')
 
-  const [isLoginDirty, setIsLoginDirty] = useState(false)
+  const [isDirtyLogin, setIsLoginDirty] = useState(false)
   const [isPasswordDirty, setIsPasswordDirty] = useState(false)
 
   return (
@@ -35,11 +35,12 @@ export const LoginPage = () => {
               placeholder="Enter your login"
               label="Login*"
               name="login"
+              autoComplete="no"
               /*eslint-disable */
               inputProps={{ maxLength: 128 }}
               InputProps={{
                 endAdornment:
-                  isLoginDirty &&
+                  isDirtyLogin &&
                   (loginValidator(login) ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (
@@ -50,14 +51,14 @@ export const LoginPage = () => {
                 setLogin(e.target.value)
               }}
               onBlur={() => setIsLoginDirty(true)}
-              error={isLoginDirty ? !!loginValidator(login) : false}
+              error={isDirtyLogin ? !!loginValidator(login) : false}
               FormHelperTextProps={{ style: stylesForTextField.helperText }}
               helperText={
                 <HelperTexts
                   error={!!loginValidator(login)}
                   errorMessage={loginValidator(login)}
                   counter={`${login.length}/${128}`}
-                  isDirty={isLoginDirty}
+                  isDirty={isDirtyLogin}
                 />
               }
             />
@@ -67,6 +68,7 @@ export const LoginPage = () => {
               label="Password*"
               name="password"
               type="password"
+              autoComplete="no"
               InputProps={{
                 endAdornment:
                   isPasswordDirty &&

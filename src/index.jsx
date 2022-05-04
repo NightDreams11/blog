@@ -1,5 +1,5 @@
 import { render } from 'react-dom'
-import { App } from 'components/App'
+import { App } from 'components/App/App'
 import { GlobalStyles } from 'styles/global'
 import { Normalize } from 'styles/normalize'
 import { theme } from 'styles/theme'

@@ -1,0 +1,178 @@
+import { useState } from 'react'
+import { HelperTexts } from './HelperTexts/HelperTexts'
+import { emailValidator, nameValidator, passwordValidator } from './regex'
+import {
+  BoxContainer,
+  ContainerWrapper,
+  Details,
+  Email,
+  ExtraDetails,
+  Failed,
+  Form,
+  Name,
+  Passed,
+  Password,
+  Profession,
+  RegButton,
+  Skills,
+  stylesForTextField,
+  Title,
+  Wrapper,
+} from './styled'
+
+export const RegPage = () => {
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [extraDetails, setExtraDetails] = useState('')
+  const [skills, setSkills] = useState('')
+  const [profession, setProfession] = useState('')
+  const [details, setDetails] = useState('')
+
+  const [isDirtyName, setIsDirtyName] = useState(false)
+  const [isDirtyEmail, setIsDirtyEmail] = useState(false)
+  const [isDirtyPassword, setIsDirtyPassword] = useState(false)
+
+  return (
+    <Wrapper>
+      <ContainerWrapper>
+        <BoxContainer>
+          <Form>
+            <Title variant="h4">Регистрация</Title>
+            <Name
+              label="Name*"
+              placeholder="Enter your name"
+              name="name"
+              autoComplete="no"
+              onChange={(e) => {
+                setName(e.target.value)
+              }}
+              InputProps={{
+                endAdornment:
+                  isDirtyName &&
+                  (nameValidator(name) ? (
+                    <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                  ) : (
+                    <Passed color="success" sx={{ ...stylesForTextField.icon }} />
+                  )),
+              }}
+              onBlur={() => setIsDirtyName(true)}
+              error={isDirtyName ? !!nameValidator(name) : false}
+              FormHelperTextProps={{ style: stylesForTextField.helperText }}
+              helperText={
+                <HelperTexts
+                  error={!!nameValidator(name)}
+                  errorMessage={nameValidator(name)}
+                  isDirty={isDirtyName}
+                />
+              }
+            />
+            <Email
+              label="Email*"
+              placeholder="Enter your email"
+              name="email"
+              autoComplete="no"
+              onChange={(e) => {
+                setEmail(e.target.value)
+              }}
+              InputProps={{
+                endAdornment:
+                  isDirtyEmail &&
+                  (emailValidator(email) ? (
+                    <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                  ) : (
+                    <Passed color="success" sx={{ ...stylesForTextField.icon }} />
+                  )),
+              }}
+              onBlur={() => setIsDirtyEmail(true)}
+              error={isDirtyEmail ? !!emailValidator(email) : false}
+              FormHelperTextProps={{ style: stylesForTextField.helperText }}
+              helperText={
+                <HelperTexts
+                  error={!!emailValidator(email)}
+                  errorMessage={emailValidator(email)}
+                  isDirty={isDirtyEmail}
+                />
+              }
+            />
+            <Password
+              label="Password*"
+              placeholder="Enter your password"
+              name="password"
+              type="password"
+              autoComplete="no"
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
+              InputProps={{
+                endAdornment:
+                  isDirtyPassword &&
+                  (passwordValidator(password) ? (
+                    <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                  ) : (
+                    <Passed color="success" sx={{ ...stylesForTextField.icon }} />
+                  )),
+              }}
+              onBlur={() => setIsDirtyPassword(true)}
+              error={isDirtyPassword ? !!passwordValidator(password) : false}
+              FormHelperTextProps={{ style: stylesForTextField.helperText }}
+              helperText={
+                <HelperTexts
+                  error={!!passwordValidator(password)}
+                  errorMessage={passwordValidator(password)}
+                  isDirty={isDirtyPassword}
+                />
+              }
+            />
+            <ExtraDetails
+              label="Extra details"
+              placeholder="Add extra information"
+              name="extraDetails"
+              autoComplete="no"
+              onChange={(e) => {
+                setExtraDetails(e.target.value)
+              }}
+            />
+            <Skills
+              label="Skills"
+              placeholder="Add your skills"
+              name="skills"
+              autoComplete="no"
+              onChange={(e) => {
+                setSkills(e.target.value)
+              }}
+            />
+            <Profession
+              label="Profession"
+              placeholder="Add your profession"
+              name="profession"
+              autoComplete="no"
+              onChange={(e) => {
+                setProfession(e.target.value)
+              }}
+            />
+            <Details
+              label="Details"
+              placeholder="Add details"
+              name="details"
+              autoComplete="no"
+              onChange={(e) => {
+                setDetails(e.target.value)
+              }}
+            />
+            <RegButton
+              variant="contained"
+              disabled={
+                nameValidator(name) ||
+                emailValidator(email) ||
+                passwordValidator(password)
+              }
+            >
+              Зарегистрироваться
+            </RegButton>
+          </Form>
+        </BoxContainer>
+      </ContainerWrapper>
+    </Wrapper>
+  )
+}
