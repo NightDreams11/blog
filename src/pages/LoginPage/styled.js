@@ -1,4 +1,6 @@
 import { Box, Button, Container, Link, TextField, Typography } from '@mui/material'
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
+import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
 import { styled } from '@mui/system'
 import style from 'styled-components'
 
@@ -23,9 +25,6 @@ export const BoxContainer = styled(
   minHeight: 500,
   maxWidth: 400,
   width: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
   textAlign: 'center',
   position: 'absolute',
   left: 0,
@@ -34,6 +33,12 @@ export const BoxContainer = styled(
   marginRight: 'auto',
   top: 'calc(50% - 250px)',
 })
+
+export const Form = style.form`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+`
 
 export const Title = styled(
   Typography,
@@ -54,6 +59,13 @@ export const Login = styled(
   width: '100%',
   minWidth: 320,
   marginTop: 50,
+  zIndex: 1,
+  //   '& .MuiOutlinedInput-notchedOutline': {
+  //     background: '#fff',
+  //   },
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
 })
 
 export const Password = styled(
@@ -64,6 +76,9 @@ export const Password = styled(
   width: '100%',
   minWidth: 320,
   marginTop: 30,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
 })
 
 export const EnterButton = styled(
@@ -82,18 +97,40 @@ export const RegistrationLink = styled(
   cursor: 'pointer',
 })
 
+export const Passed = styled(
+  CheckCircleOutlinedIcon,
+  {}
+)({
+  background: 'transparent',
+  zIndex: 1,
+})
+
+export const Failed = styled(
+  ErrorOutlineOutlinedIcon,
+  {}
+)({
+  background: 'transparent',
+  zIndex: 1,
+})
+
 export const stylesForTextField = {
+  root: {
+    ':-webkit-autofill': {
+      WebkitBoxShadow: '0 0 0 1000px white inset',
+    },
+  },
   input: {
     ':-webkit-autofill': {
       WebkitBoxShadow: '0 0 0 1000px white inset',
     },
     backgroundColor: '#fff',
   },
-  //   icon: {
-  //     ml: 1,
-  //   },
+  icon: {
+    ml: 1,
+  },
   helperText: {
     display: 'flex',
     justifyContent: 'space-between',
+    height: 20,
   },
 }

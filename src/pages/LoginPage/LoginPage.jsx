@@ -6,7 +6,10 @@ import {
   BoxContainer,
   ContainerWrapper,
   EnterButton,
+  Failed,
+  Form,
   Login,
+  Passed,
   Password,
   RegistrationLink,
   stylesForTextField,
@@ -25,51 +28,78 @@ export const LoginPage = () => {
     <Wrapper>
       <ContainerWrapper>
         <BoxContainer>
-          <Title variant="h4">Вход</Title>
-          <Login
-            sx={{ ...stylesForTextField }}
-            placeholder="Enter your login"
-            label="Login*"
-            name="login"
-            inputProps={{ maxLength: 128 }}
-            onChange={(e) => {
-              setLogin(e.target.value)
-            }}
-            onBlur={() => setIsLoginDirty(true)}
-            error={isLoginDirty ? !!loginValidator(login) : false}
-            FormHelperTextProps={{ style: stylesForTextField.helperText }}
-            helperText={
-              <HelperTexts
-                error={!!loginValidator(login)}
-                errorMessage={loginValidator(login)}
-                counter={`${login.length}/${128}`}
-                isDirty={isLoginDirty}
-              />
-            }
-          />
-          <Password
-            sx={{ ...stylesForTextField }}
-            placeholder="Enter your password"
-            label="Password*"
-            name="password"
-            onChange={(e) => {
-              setPassword(e.target.value)
-            }}
-            onBlur={() => setIsPasswordDirty(true)}
-            error={isPasswordDirty ? !!passwordValidator(password) : false}
-            FormHelperTextProps={{ style: stylesForTextField.helperText }}
-            helperText={
-              <HelperTexts
-                error={!!passwordValidator(password)}
-                errorMessage={passwordValidator(password)}
-                isDirty={isPasswordDirty}
-              />
-            }
-          />
-          <EnterButton variant="contained">Войти</EnterButton>
-          <RegistrationLink href="/registration" underline="hover">
-            Регистация
-          </RegistrationLink>
+          <Form>
+            <Title variant="h4">Вход</Title>
+            <Login
+              sx={{ ...stylesForTextField }}
+              placeholder="Enter your login"
+              label="Login*"
+              name="login"
+              /*eslint-disable */
+              inputProps={{ maxLength: 128 }}
+              InputProps={{
+                endAdornment:
+                  isLoginDirty &&
+                  (loginValidator(login) ? (
+                    <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                  ) : (
+                    <Passed color="success" sx={{ ...stylesForTextField.icon }} />
+                  )),
+              }}
+              onChange={(e) => {
+                setLogin(e.target.value)
+              }}
+              onBlur={() => setIsLoginDirty(true)}
+              error={isLoginDirty ? !!loginValidator(login) : false}
+              FormHelperTextProps={{ style: stylesForTextField.helperText }}
+              helperText={
+                <HelperTexts
+                  error={!!loginValidator(login)}
+                  errorMessage={loginValidator(login)}
+                  counter={`${login.length}/${128}`}
+                  isDirty={isLoginDirty}
+                />
+              }
+            />
+            <Password
+              sx={{ ...stylesForTextField }}
+              placeholder="Enter your password"
+              label="Password*"
+              name="password"
+              type="password"
+              InputProps={{
+                endAdornment:
+                  isPasswordDirty &&
+                  (passwordValidator(password) ? (
+                    <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                  ) : (
+                    <Passed color="success" sx={{ ...stylesForTextField.icon }} />
+                  )),
+              }}
+              onChange={(e) => {
+                setPassword(e.target.value)
+              }}
+              onBlur={() => setIsPasswordDirty(true)}
+              error={isPasswordDirty ? !!passwordValidator(password) : false}
+              FormHelperTextProps={{ style: stylesForTextField.helperText }}
+              helperText={
+                <HelperTexts
+                  error={!!passwordValidator(password)}
+                  errorMessage={passwordValidator(password)}
+                  isDirty={isPasswordDirty}
+                />
+              }
+            />
+            <EnterButton
+              variant="contained"
+              disabled={loginValidator(login) || passwordValidator(password)}
+            >
+              Войти
+            </EnterButton>
+            <RegistrationLink href="/registration" underline="hover">
+              Регистация
+            </RegistrationLink>
+          </Form>
         </BoxContainer>
       </ContainerWrapper>
     </Wrapper>
