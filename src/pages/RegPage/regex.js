@@ -20,10 +20,13 @@ export const emailValidator = (email) => {
 }
 
 export const passwordValidator = (password) => {
-  const regex = /^[a-zA-Z0-9]+$/
+  const regex = /^[a-zA-Z0-9]{5,}$/
 
   if (regex.test(password)) {
     return false
   }
-  return 'Please use numbers and latin characters'
+  if (!password.match(/^[a-zA-Z0-9]+$/g)) {
+    return 'Please use numbers and latin characters'
+  }
+  return 'Password contains min 5 characters'
 }

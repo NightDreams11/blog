@@ -1,14 +1,16 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { loginUser } from 'store/auth'
 import { HelperTexts } from './HelperTexts/HelperTexts'
 
-import { loginValidator, passwordValidator } from './regex'
+import { emailValidator, passwordValidator } from './regex'
 import {
   BoxContainer,
   ContainerWrapper,
+  Email,
   EnterButton,
   Failed,
   Form,
-  Login,
   Passed,
   Password,
   RegistrationLink,
@@ -18,47 +20,56 @@ import {
 } from './styled'
 
 export const LoginPage = () => {
-  const [login, setLogin] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const [isDirtyLogin, setIsLoginDirty] = useState(false)
+  const [isDirtyEmail, setIsDirtyEmail] = useState(false)
   const [isPasswordDirty, setIsPasswordDirty] = useState(false)
+
+  const dispatch = useDispatch()
+
+  const handleSubmit = (data) => {
+    data.preventDefault()
+    const formData = new FormData(data.target)
+    const payload = Object.fromEntries(formData.entries())
+    dispatch(loginUser(payload))
+  }
 
   return (
     <Wrapper>
       <ContainerWrapper>
         <BoxContainer>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Title variant="h4">Вход</Title>
-            <Login
+            <Email
               sx={{ ...stylesForTextField }}
-              placeholder="Enter your login"
-              label="Login*"
-              name="login"
-              autoComplete="no"
+              placeholder="Enter your email"
+              label="Email"
+              name="email"
+              autoComplete="off"
               /*eslint-disable */
               inputProps={{ maxLength: 128 }}
               InputProps={{
                 endAdornment:
-                  isDirtyLogin &&
-                  (loginValidator(login) ? (
+                  isDirtyEmail &&
+                  (emailValidator(email) ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (
                     <Passed color="success" sx={{ ...stylesForTextField.icon }} />
                   )),
               }}
               onChange={(e) => {
-                setLogin(e.target.value)
+                setEmail(e.target.value)
               }}
-              onBlur={() => setIsLoginDirty(true)}
-              error={isDirtyLogin ? !!loginValidator(login) : false}
+              onBlur={() => setIsDirtyEmail(true)}
+              error={isDirtyEmail ? !!emailValidator(email) : false}
               FormHelperTextProps={{ style: stylesForTextField.helperText }}
               helperText={
                 <HelperTexts
-                  error={!!loginValidator(login)}
-                  errorMessage={loginValidator(login)}
-                  counter={`${login.length}/${128}`}
-                  isDirty={isDirtyLogin}
+                  error={!!emailValidator(email)}
+                  errorMessage={emailValidator(email)}
+                  counter={`${email.length}/${128}`}
+                  isDirty={isDirtyEmail}
                 />
               }
             />
@@ -68,7 +79,7 @@ export const LoginPage = () => {
               label="Password*"
               name="password"
               type="password"
-              autoComplete="no"
+              autoComplete="off"
               InputProps={{
                 endAdornment:
                   isPasswordDirty &&
@@ -94,7 +105,8 @@ export const LoginPage = () => {
             />
             <EnterButton
               variant="contained"
-              disabled={loginValidator(login) || passwordValidator(password)}
+              type="submit"
+              disabled={!!emailValidator(email) || !!passwordValidator(password)}
             >
               Войти
             </EnterButton>

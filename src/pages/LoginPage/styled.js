@@ -51,7 +51,7 @@ export const Title = styled(
   color: '#1976d2',
 })
 
-export const Login = styled(
+export const Email = styled(
   TextField,
   {}
 )({

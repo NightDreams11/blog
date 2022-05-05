@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { regUser } from 'store/auth'
 import { HelperTexts } from './HelperTexts/HelperTexts'
 import { emailValidator, nameValidator, passwordValidator } from './regex'
 import {
@@ -24,26 +26,35 @@ export const RegPage = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [extraDetails, setExtraDetails] = useState('')
-  const [skills, setSkills] = useState('')
-  const [profession, setProfession] = useState('')
-  const [details, setDetails] = useState('')
+  // const [extraDetails, setExtraDetails] = useState('')
+  // const [skills, setSkills] = useState('')
+  // const [profession, setProfession] = useState('')
+  // const [details, setDetails] = useState('')
 
   const [isDirtyName, setIsDirtyName] = useState(false)
   const [isDirtyEmail, setIsDirtyEmail] = useState(false)
   const [isDirtyPassword, setIsDirtyPassword] = useState(false)
 
+  const dispatch = useDispatch()
+
+  const handleSubmit = (data) => {
+    data.preventDefault()
+    const formData = new FormData(data.target)
+    const payload = Object.fromEntries(formData.entries())
+    dispatch(regUser(payload))
+  }
+
   return (
     <Wrapper>
       <ContainerWrapper>
         <BoxContainer>
-          <Form>
+          <Form onSubmit={handleSubmit}>
             <Title variant="h4">Регистрация</Title>
             <Name
               label="Name*"
               placeholder="Enter your name"
               name="name"
-              autoComplete="no"
+              autoComplete="off"
               onChange={(e) => {
                 setName(e.target.value)
               }}
@@ -71,7 +82,7 @@ export const RegPage = () => {
               label="Email*"
               placeholder="Enter your email"
               name="email"
-              autoComplete="no"
+              autoComplete="off"
               onChange={(e) => {
                 setEmail(e.target.value)
               }}
@@ -100,7 +111,7 @@ export const RegPage = () => {
               placeholder="Enter your password"
               name="password"
               type="password"
-              autoComplete="no"
+              autoComplete="off"
               onChange={(e) => {
                 setPassword(e.target.value)
               }}
@@ -127,45 +138,46 @@ export const RegPage = () => {
             <ExtraDetails
               label="Extra details"
               placeholder="Add extra information"
-              name="extraDetails"
-              autoComplete="no"
-              onChange={(e) => {
-                setExtraDetails(e.target.value)
-              }}
+              name="extra_details"
+              autoComplete="off"
+              // onChange={(e) => {
+              //   setExtraDetails(e.target.value)
+              // }}
             />
             <Skills
               label="Skills"
               placeholder="Add your skills"
               name="skills"
-              autoComplete="no"
-              onChange={(e) => {
-                setSkills(e.target.value)
-              }}
+              autoComplete="off"
+              // onChange={(e) => {
+              //   setSkills(e.target.value)
+              // }}
             />
             <Profession
               label="Profession"
               placeholder="Add your profession"
               name="profession"
-              autoComplete="no"
-              onChange={(e) => {
-                setProfession(e.target.value)
-              }}
+              autoComplete="off"
+              // onChange={(e) => {
+              //   setProfession(e.target.value)
+              // }}
             />
             <Details
               label="Details"
               placeholder="Add details"
               name="details"
-              autoComplete="no"
-              onChange={(e) => {
-                setDetails(e.target.value)
-              }}
+              autoComplete="off"
+              // onChange={(e) => {
+              //   setDetails(e.target.value)
+              // }}
             />
             <RegButton
               variant="contained"
+              type="submit"
               disabled={
-                nameValidator(name) ||
-                emailValidator(email) ||
-                passwordValidator(password)
+                !!nameValidator(name) ||
+                !!emailValidator(email) ||
+                !!passwordValidator(password)
               }
             >
               Зарегистрироваться
