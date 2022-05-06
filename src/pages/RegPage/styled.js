@@ -1,19 +1,20 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, Link, TextField, Typography } from '@mui/material'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
 import { styled } from '@mui/system'
 import style from 'styled-components'
 
-export const Wrapper = style.div`
-min-height: 1150px;`
+export const Wrapper = style.div``
 
 export const ContainerWrapper = styled(
   Container,
   {}
 )({
   width: '100vw',
-  height: '100vh',
-  position: 'relative',
+  height: 1225,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 })
 
 export const BoxContainer = styled(
@@ -23,16 +24,12 @@ export const BoxContainer = styled(
   borderRadius: 4,
   backgroundColor: '#F5FAFE',
   transition: '0.1',
-  minHeight: 975,
+  minHeight: 1025,
   maxWidth: 400,
   width: '100%',
   textAlign: 'center',
-  position: 'absolute',
-  left: 0,
-  right: 0,
   marginLeft: 'auto',
   marginRight: 'auto',
-  top: 'calc(50% - 250px)',
 })
 
 export const Form = style.form`
@@ -155,13 +152,13 @@ export const RegButton = styled(
   width: 200,
 })
 
-// export const RegistrationLink = styled(
-//   Link,
-//   {}
-// )({
-//   paddingTop: 30,
-//   cursor: 'pointer',
-// })
+export const LoginLink = styled(
+  Link,
+  {}
+)({
+  paddingTop: 30,
+  cursor: 'pointer',
+})
 
 export const Passed = styled(
   CheckCircleOutlinedIcon,

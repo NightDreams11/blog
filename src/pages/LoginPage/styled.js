@@ -11,8 +11,10 @@ export const ContainerWrapper = styled(
   {}
 )({
   width: '100vw',
-  height: '100vh',
-  position: 'relative',
+  height: 700,
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 })
 
 export const BoxContainer = styled(
@@ -26,12 +28,8 @@ export const BoxContainer = styled(
   maxWidth: 400,
   width: '100%',
   textAlign: 'center',
-  position: 'absolute',
-  left: 0,
-  right: 0,
   marginLeft: 'auto',
   marginRight: 'auto',
-  top: 'calc(50% - 250px)',
 })
 
 export const Form = style.form`

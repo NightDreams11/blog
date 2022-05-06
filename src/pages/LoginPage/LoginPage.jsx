@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import { loginUser } from 'store/auth'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Navigate } from 'react-router'
+import { loginUser, setTokenAC, toggleSnackAC } from 'store/auth'
 import { HelperTexts } from './HelperTexts/HelperTexts'
 
 import { emailValidator, passwordValidator } from './regex'
@@ -20,19 +21,33 @@ import {
 } from './styled'
 
 export const LoginPage = () => {
+  const dispatch = useDispatch()
+  const token = useSelector((state) => state.auth.token)
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const [isDirtyEmail, setIsDirtyEmail] = useState(false)
   const [isPasswordDirty, setIsPasswordDirty] = useState(false)
 
-  const dispatch = useDispatch()
+  useEffect(() => {
+    const value = localStorage.getItem('token')
+    dispatch(setTokenAC(JSON.parse(value)))
+  }, [dispatch])
+
+  useEffect(() => {
+    window.localStorage.setItem('token', JSON.stringify(token))
+  }, [token])
 
   const handleSubmit = (data) => {
     data.preventDefault()
     const formData = new FormData(data.target)
     const payload = Object.fromEntries(formData.entries())
     dispatch(loginUser(payload))
+  }
+
+  if (token) {
+    return <Navigate to="/profile" />
   }
 
   return (
@@ -107,6 +122,7 @@ export const LoginPage = () => {
               variant="contained"
               type="submit"
               disabled={!!emailValidator(email) || !!passwordValidator(password)}
+              onClick={() => dispatch(toggleSnackAC(true))}
             >
               Войти
             </EnterButton>

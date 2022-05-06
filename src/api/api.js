@@ -20,4 +20,12 @@ export const authAPI = {
       },
     })
   },
+
+  getUser(token) {
+    return instance.get('/auth/user', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+  },
 }

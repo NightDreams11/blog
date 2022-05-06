@@ -11,6 +11,7 @@ import {
   ExtraDetails,
   Failed,
   Form,
+  LoginLink,
   Name,
   Passed,
   Password,
@@ -182,6 +183,9 @@ export const RegPage = () => {
             >
               Зарегистрироваться
             </RegButton>
+            <LoginLink href="/login" underline="hover">
+              Уже зарегистрированы? Войти
+            </LoginLink>
           </Form>
         </BoxContainer>
       </ContainerWrapper>
