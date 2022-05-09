@@ -3,7 +3,6 @@ import { authAPI } from '../api/api'
 const ActionTypes = {
   SET_TOKEN: 'SET_TOKEN',
   SET_USER: 'SET_USER',
-  TOGGLE_SNACKBAR: 'TOGGLE_SNACKBAR',
 }
 
 const initialState = {
@@ -18,8 +17,6 @@ export const authReducer = (state = initialState, { type, payload = 0 }) => {
       return { ...state, token: payload }
     case ActionTypes.SET_USER:
       return { ...state, user: payload }
-    case ActionTypes.TOGGLE_SNACKBAR:
-      return { ...state, isSnackOpen: payload }
     default:
       return state
   }
@@ -32,10 +29,6 @@ export const setTokenAC = (token) => ({
 export const setUserAC = (user) => ({
   type: ActionTypes.SET_USER,
   payload: user,
-})
-export const toggleSnackAC = (payload) => ({
-  type: ActionTypes.TOGGLE_SNACKBAR,
-  payload,
 })
 
 export const regUser = (payload) => async () => {

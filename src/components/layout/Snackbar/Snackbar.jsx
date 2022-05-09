@@ -2,12 +2,12 @@ import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
-import { toggleSnackAC } from 'store/auth'
+import { toggleSnackAC } from 'store/messages'
 import { useDispatch, useSelector } from 'react-redux'
 
 export function SimpleSnackbar() {
   const dispatch = useDispatch()
-  const isSnackOpen = useSelector((state) => state.auth.isSnackOpen)
+  const isSnackOpen = useSelector((state) => state.messages.isSnackOpen)
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return

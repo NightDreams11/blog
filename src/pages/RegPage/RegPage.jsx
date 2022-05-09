@@ -1,7 +1,8 @@
+import { HelperTexts } from 'components/auth/HelperText/HelperTexts'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { regUser } from 'store/auth'
-import { HelperTexts } from './HelperTexts/HelperTexts'
+
 import { emailValidator, nameValidator, passwordValidator } from './regex'
 import {
   BoxContainer,

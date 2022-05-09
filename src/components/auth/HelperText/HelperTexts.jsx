@@ -1,16 +1,16 @@
 export function HelperTexts({ error, errorMessage, counter, isDirty, description }) {
   function foo() {
     let message = ''
-    if ((isDirty || description) === false) {
+    if (!(isDirty || description)) {
       message = ''
     }
-    if (isDirty === true && description && error === false) {
+    if (isDirty && description && !error) {
       message = description
     }
-    if (isDirty === false) {
+    if (!isDirty) {
       message = description
     }
-    if (isDirty === true && error === true) {
+    if (isDirty && error) {
       message = errorMessage
     }
     return message

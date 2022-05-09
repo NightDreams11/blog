@@ -1,8 +1,9 @@
+import { HelperTexts } from 'components/auth/HelperText/HelperTexts'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
-import { loginUser, setTokenAC, toggleSnackAC } from 'store/auth'
-import { HelperTexts } from './HelperTexts/HelperTexts'
+import { loginUser, setTokenAC } from 'store/auth'
+import { toggleSnackAC } from 'store/messages'
 
 import { emailValidator, passwordValidator } from './regex'
 import {

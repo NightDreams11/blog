@@ -32,7 +32,7 @@
     ],
     "import/no-unresolved": "off",
     "react/prop-types": 0,
-    "linebreak-style": ["error", "unix"],
+    "linebreak-style": ["error", "windows"],
     "arrow-body-style": "off",
     "prefer-arrow-callback": "off",
     "jsx-a11y/anchor-is-valid": "off",
