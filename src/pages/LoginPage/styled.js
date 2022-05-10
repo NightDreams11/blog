@@ -83,7 +83,7 @@ export const EnterButton = styled(
   Button,
   {}
 )({
-  marginTop: 50,
+  marginTop: 70,
   width: 150,
 })
 
@@ -127,8 +127,8 @@ export const stylesForTextField = {
     ml: 1,
   },
   helperText: {
-    display: 'flex',
-    justifyContent: 'space-between',
+    position: 'absolute',
+    bottom: -22,
     height: 20,
   },
 }
