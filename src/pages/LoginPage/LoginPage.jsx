@@ -1,5 +1,4 @@
-import { HelperTexts } from 'components/auth/HelperText/HelperTexts'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
@@ -8,7 +7,6 @@ import { toggleSnackAC } from 'store/messages'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { passwordValidator } from './regex'
 import {
   BoxContainer,
   ContainerWrapper,
@@ -28,10 +26,6 @@ export const LoginPage = () => {
   const dispatch = useDispatch()
   const token = useSelector((state) => state.auth.token)
 
-  const [password, setPassword] = useState('')
-
-  const [isPasswordDirty, setIsPasswordDirty] = useState(false)
-
   useEffect(() => {
     const value = localStorage.getItem('token')
     dispatch(setTokenAC(JSON.parse(value)))
@@ -47,17 +41,22 @@ export const LoginPage = () => {
       .required('Field is required')
       .email('Please use numbers and latin characters. Format х@х.хх')
       .max(128, 'Email is too long'),
+    password: yup
+      .string()
+      .required('Field is required')
+      .matches(/^[a-zA-Z0-9]+$/, 'Please use numbers and latin characters')
+      .min(5, 'Password contains min 5 characters'),
   })
 
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, dirtyFields },
     getFieldState,
   } = useForm({
     resolver: yupResolver(validationSchema),
     // Определяет момент, когда будет проверяться валидация. По умолчанию onSubmit
-    mode: 'onBlur',
+    mode: 'onChange',
   })
 
   const onSubmit = (data) => {
@@ -81,7 +80,8 @@ export const LoginPage = () => {
               autoComplete="off"
               InputProps={{
                 endAdornment:
-                  getFieldState('email').isTouched &&
+                  (getFieldState('email').isTouched ||
+                    getFieldState('email').isDirty) &&
                   (errors.email ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (
@@ -93,7 +93,7 @@ export const LoginPage = () => {
                   value: 128,
                 },
               })}
-              // Преобразование undefined => false, потому ошибки изначально нет
+              // undefined преобразовывается в false, потому изначально ошибки нет
               error={!!errors.email}
               FormHelperTextProps={{ style: stylesForTextField.helperText }}
               helperText={errors?.email?.message}
@@ -102,36 +102,35 @@ export const LoginPage = () => {
               sx={{ ...stylesForTextField }}
               placeholder="Enter your password"
               label="Password*"
-              name="password"
               type="password"
               autoComplete="off"
               InputProps={{
                 endAdornment:
-                  isPasswordDirty &&
-                  (passwordValidator(password) ? (
+                  (getFieldState('password').isTouched ||
+                    getFieldState('password').isDirty) &&
+                  (errors.password ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (
                     <Passed color="success" sx={{ ...stylesForTextField.icon }} />
                   )),
               }}
-              onChange={(e) => {
-                setPassword(e.target.value)
-              }}
-              onBlur={() => setIsPasswordDirty(true)}
-              error={isPasswordDirty ? !!passwordValidator(password) : false}
+              {...register('password', {
+                mixLength: {
+                  value: 5,
+                },
+              })}
+              error={!!errors.password}
               FormHelperTextProps={{ style: stylesForTextField.helperText }}
-              helperText={
-                <HelperTexts
-                  error={!!passwordValidator(password)}
-                  errorMessage={passwordValidator(password)}
-                  isDirty={isPasswordDirty}
-                />
-              }
+              helperText={errors?.password?.message}
             />
             <EnterButton
               variant="contained"
               type="submit"
-              // disabled={!!emailValidator(email) || !!passwordValidator(password)}
+              disabled={Boolean(
+                dirtyFields.email && dirtyFields.password
+                  ? errors.email || errors.password
+                  : true
+              )}
               onClick={() => dispatch(toggleSnackAC(true))}
             >
               Войти

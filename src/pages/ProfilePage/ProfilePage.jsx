@@ -1,10 +1,11 @@
+import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { Wrapper } from './styled'
 
 export const ProfilePage = () => {
-  const token = localStorage.getItem('token')
-
-  if (!token) {
+  const rerender = useSelector((state) => state.auth.isRerender)
+  const token = useSelector((state) => state.auth.token)
+  if (!token && (rerender || !rerender)) {
     return <Navigate to="/login" />
   }
 

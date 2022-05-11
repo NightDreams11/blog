@@ -11,11 +11,21 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
+import { logoutUserAC, rerenderAC } from 'store/auth'
+import { useDispatch } from 'react-redux'
 
 const pages = ['Products', 'Pricing', 'Blog']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 
 export const ResponsiveAppBar = () => {
+  const dispatch = useDispatch()
+
+  const logout = () => {
+    localStorage.clear()
+    dispatch(logoutUserAC())
+    dispatch(rerenderAC())
+  }
+
   const [anchorElNav, setAnchorElNav] = useState(null)
   const [anchorElUser, setAnchorElUser] = useState(null)
 
@@ -118,7 +128,9 @@ export const ResponsiveAppBar = () => {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography textAlign="center" onClick={() => logout()}>
+                    {setting}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
