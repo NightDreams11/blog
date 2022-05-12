@@ -11,19 +11,20 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
-import { logoutUserAC, rerenderAC } from 'store/auth'
-import { useDispatch } from 'react-redux'
+import { logoutUserAC } from 'store/auth'
+import { useDispatch, useSelector } from 'react-redux'
 
 const pages = ['Products', 'Pricing', 'Blog']
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+const loggedInUser = ['Login', 'Sing Up']
 
 export const ResponsiveAppBar = () => {
+  const user = useSelector((state) => state.auth.user)
   const dispatch = useDispatch()
 
   const logout = () => {
-    localStorage.clear()
+    localStorage.removeItem('token')
     dispatch(logoutUserAC())
-    dispatch(rerenderAC())
   }
 
   const [anchorElNav, setAnchorElNav] = useState(null)
@@ -107,7 +108,10 @@ export const ResponsiveAppBar = () => {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar
+                  alt={user === null ? '' : user.name}
+                  src={user === null ? '' : process.env.REACT_APP_URL + user.avatar}
+                />
               </IconButton>
             </Tooltip>
             <Menu
@@ -126,13 +130,21 @@ export const ResponsiveAppBar = () => {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center" onClick={() => logout()}>
-                    {setting}
-                  </Typography>
-                </MenuItem>
-              ))}
+              {user
+                ? settings.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center" onClick={() => logout()}>
+                        {setting}
+                      </Typography>
+                    </MenuItem>
+                  ))
+                : loggedInUser.map((setting) => (
+                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center" onClick={() => logout()}>
+                        {setting}
+                      </Typography>
+                    </MenuItem>
+                  ))}
             </Menu>
           </Box>
         </Toolbar>

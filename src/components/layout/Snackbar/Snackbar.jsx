@@ -8,6 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 export function SimpleSnackbar() {
   const dispatch = useDispatch()
   const isSnackOpen = useSelector((state) => state.messages.isSnackOpen)
+  const snackbarMessage = useSelector((state) => state.messages.snackbarMessages)
+
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return
@@ -37,7 +39,7 @@ export function SimpleSnackbar() {
         open={isSnackOpen}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Добро пожаловать"
+        message={snackbarMessage[0]}
         action={action}
       />
     </div>

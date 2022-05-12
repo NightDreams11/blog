@@ -4,13 +4,11 @@ const ActionTypes = {
   SET_TOKEN: 'SET_TOKEN',
   SET_USER: 'SET_USER',
   LOGOUT_USER: 'LOGOUT_USER',
-  RERENDER: 'RERENDER',
 }
 
 const initialState = {
-  user: [],
+  user: null,
   token: null,
-  isSnackOpen: false,
   isRerender: false,
 }
 
@@ -21,9 +19,7 @@ export const authReducer = (state = initialState, { type, payload = 0 }) => {
     case ActionTypes.SET_USER:
       return { ...state, user: payload }
     case ActionTypes.LOGOUT_USER:
-      return { ...state, token: null }
-    case ActionTypes.RERENDER:
-      return { ...state, isRerender: !state.isRerender }
+      return { ...state, token: null, user: null }
     default:
       return state
   }
@@ -36,9 +32,6 @@ export const setTokenAC = (token) => ({
 export const setUserAC = (user) => ({
   type: ActionTypes.SET_USER,
   payload: user,
-})
-export const rerenderAC = () => ({
-  type: ActionTypes.RERENDER,
 })
 export const logoutUserAC = () => ({
   type: ActionTypes.LOGOUT_USER,
@@ -53,6 +46,13 @@ export const loginUser = (payload) => async (dispatch) => {
   dispatch(setTokenAC(token.data.token))
   if (token.data.token) {
     const user = await authAPI.getUser(token.data.token)
+    dispatch(setUserAC(user.data))
+  }
+}
+
+export const getUser = () => async (dispatch) => {
+  if (JSON.parse(localStorage.getItem('token'))) {
+    const user = await authAPI.getUser(JSON.parse(localStorage.getItem('token')))
     dispatch(setUserAC(user.data))
     // console.log(getState())
   }
