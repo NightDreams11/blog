@@ -2,19 +2,20 @@ import Button from '@mui/material/Button'
 import Snackbar from '@mui/material/Snackbar'
 import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
-import { toggleSnackAC } from 'store/messages'
+import { deleteSnackbarMessageAC, toggleSnackAC } from 'store/messages'
 import { useDispatch, useSelector } from 'react-redux'
 
 export function SimpleSnackbar() {
   const dispatch = useDispatch()
   const isSnackOpen = useSelector((state) => state.messages.isSnackOpen)
-  const snackbarMessage = useSelector((state) => state.messages.snackbarMessages)
+  const snackbarMessage = useSelector((state) => state.messages.snackbarMessage)
 
   const handleClose = (event, reason) => {
     if (reason === 'clickaway') {
       return
     }
     dispatch(toggleSnackAC(false))
+    dispatch(deleteSnackbarMessageAC())
   }
 
   const action = (
@@ -39,7 +40,7 @@ export function SimpleSnackbar() {
         open={isSnackOpen}
         autoHideDuration={6000}
         onClose={handleClose}
-        message={snackbarMessage[0]}
+        message={snackbarMessage}
         action={action}
       />
     </div>

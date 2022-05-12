@@ -6,7 +6,7 @@ const ActionTypes = {
 
 const initialState = {
   isSnackOpen: false,
-  snackbarMessages: ['Добро пожаловать', 'До свидания'],
+  snackbarMessage: null,
 }
 
 export const messageReducer = (state = initialState, { type, payload = 0 }) => {
@@ -14,9 +14,9 @@ export const messageReducer = (state = initialState, { type, payload = 0 }) => {
     case ActionTypes.TOGGLE_SNACKBAR:
       return { ...state, isSnackOpen: payload }
     case ActionTypes.ADD_SNACKBAR_MESSAGE:
-      return { ...state, isSnackOpen: payload }
+      return { ...state, snackbarMessage: payload }
     case ActionTypes.DELETE_SNACKBAR_MESSAGE:
-      return { ...state, isSnackOpen: payload }
+      return { ...state, snackbarMessage: null }
     default:
       return state
   }
@@ -31,7 +31,11 @@ export const addSnackbarMessageAC = (payload) => ({
   payload,
 })
 
-export const deleteSnackbarMessageAC = (payload) => ({
+export const deleteSnackbarMessageAC = () => ({
   type: ActionTypes.DELETE_SNACKBAR_MESSAGE,
-  payload,
 })
+
+export const addSnackbarMessage = (payload) => (dispatch) => {
+  dispatch(addSnackbarMessageAC(payload))
+  dispatch(toggleSnackAC(true))
+}
