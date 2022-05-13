@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { loginUser, setTokenAC } from 'store/auth'
-import { addSnackbarMessage } from 'store/messages'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
@@ -25,7 +24,6 @@ import {
 export const LoginPage = () => {
   const dispatch = useDispatch()
   const token = useSelector((state) => state.auth.token)
-  const userName = useSelector((state) => state.auth.user)
 
   useEffect(() => {
     const value = localStorage.getItem('token')
@@ -132,13 +130,6 @@ export const LoginPage = () => {
                   ? errors.email || errors.password
                   : true
               )}
-              onClick={() =>
-                dispatch(
-                  addSnackbarMessage(
-                    `Добро пожаловать: ${userName ? userName.name : ''}`
-                  )
-                )
-              }
             >
               Войти
             </EnterButton>

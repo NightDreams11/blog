@@ -1,4 +1,5 @@
 import { authAPI } from '../api/api'
+import { addSnackbarMessage } from './messages'
 
 const ActionTypes = {
   SET_TOKEN: 'SET_TOKEN',
@@ -47,6 +48,7 @@ export const loginUser = (payload) => async (dispatch) => {
   if (token.data.token) {
     const user = await authAPI.getUser(token.data.token)
     dispatch(setUserAC(user.data))
+    dispatch(addSnackbarMessage(`Welcome ${user.data.name}`))
   }
 }
 
