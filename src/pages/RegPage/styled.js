@@ -12,7 +12,7 @@ export const ContainerWrapper = styled(
   {}
 )({
   width: '100vw',
-  height: 700,
+  height: 1225,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -25,7 +25,7 @@ export const BoxContainer = styled(
   borderRadius: 4,
   backgroundColor: '#F5FAFE',
   transition: '0.1',
-  minHeight: 500,
+  minHeight: 1025,
   maxWidth: 400,
   width: '100%',
   textAlign: 'center',
@@ -50,7 +50,7 @@ export const Title = styled(
   color: '#1976d2',
 })
 
-export const Email = styled(
+export const Name = styled(
   TextField,
   {}
 )({
@@ -59,9 +59,22 @@ export const Email = styled(
   minWidth: 320,
   marginTop: 50,
   zIndex: 1,
-  //   '& .MuiOutlinedInput-notchedOutline': {
-  //     background: '#fff',
-  //   },
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+  ':-webkit-autofill': {
+    WebkitBoxShadow: '0 0 0 1000px white inset',
+  },
+})
+
+export const Email = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 30,
   '& .MuiOutlinedInput-root': {
     background: '#fff',
   },
@@ -80,15 +93,67 @@ export const Password = styled(
   },
 })
 
-export const EnterButton = styled(
+export const ExtraDetails = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 30,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+})
+
+export const Skills = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 50,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+})
+
+export const Profession = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 50,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+})
+
+export const Details = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 50,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+})
+
+export const RegButton = styled(
   Button,
   {}
 )({
-  marginTop: 70,
-  width: 150,
+  marginTop: 50,
+  width: 200,
 })
 
-export const RegistrationLink = styled(
+export const LoginLink = styled(
   Link,
   {}
 )({
@@ -130,8 +195,8 @@ export const stylesForTextField = {
     ml: 1,
   },
   helperText: {
-    position: 'absolute',
-    bottom: -22,
+    display: 'flex',
+    justifyContent: 'space-between',
     height: 20,
   },
 }

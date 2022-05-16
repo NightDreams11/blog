@@ -11,11 +11,32 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
+import { logoutUserAC } from 'store/auth'
+import { useDispatch, useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const pages = ['Products', 'Pricing', 'Blog']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+const authorization = [
+  { title: 'Login', path: '/login' },
+  { title: 'Sing Up', path: '/registration' },
+]
 
 export const ResponsiveAppBar = () => {
+  const user = useSelector((state) => state.auth.user)
+  const dispatch = useDispatch()
+
+  const settings = [
+    { title: 'Profile', path: '/profile' },
+    {
+      title: 'Logout',
+      path: '',
+      logout() {
+        localStorage.removeItem('token')
+        dispatch(logoutUserAC())
+      },
+    },
+  ]
+
   const [anchorElNav, setAnchorElNav] = useState(null)
   const [anchorElUser, setAnchorElUser] = useState(null)
 
@@ -93,36 +114,66 @@ export const ResponsiveAppBar = () => {
               </Button>
             ))}
           </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
+          {user ? (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={user.name}
+                    src={process.env.REACT_APP_URL + user.avatar}
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: '45px' }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
+                    <Link
+                      to={setting.path}
+                      onClick={setting.logout}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'rgba(0, 0, 0, 0.87)',
+                      }}
+                    >
+                      <Typography textAlign="center">{setting.title}</Typography>
+                    </Link>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </Box>
+          ) : (
+            <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
+              {authorization.map((page) => (
+                <Link
+                  key={page.title}
+                  to={page.path}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <Button
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
+                  >
+                    {page.title}
+                  </Button>
+                </Link>
               ))}
-            </Menu>
-          </Box>
+            </Box>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
