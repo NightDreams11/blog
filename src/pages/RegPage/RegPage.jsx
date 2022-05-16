@@ -1,6 +1,7 @@
 import { HelperTexts } from 'components/auth/HelperText/HelperTexts'
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { Navigate } from 'react-router'
 import { regUser } from 'store/auth'
 
 import { emailValidator, nameValidator, passwordValidator } from './regex'
@@ -25,6 +26,8 @@ import {
 } from './styled'
 
 export const RegPage = () => {
+  const token = useSelector((state) => state.auth.token)
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -44,6 +47,10 @@ export const RegPage = () => {
     const formData = new FormData(data.target)
     const payload = Object.fromEntries(formData.entries())
     dispatch(regUser(payload))
+  }
+
+  if (token) {
+    return <Navigate to="/profile" />
   }
 
   return (
@@ -184,7 +191,7 @@ export const RegPage = () => {
             >
               Зарегистрироваться
             </RegButton>
-            <LoginLink href="/login" underline="hover">
+            <LoginLink to="/login" underline="hover">
               Уже зарегистрированы? Войти
             </LoginLink>
           </Form>

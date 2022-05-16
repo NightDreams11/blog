@@ -133,7 +133,7 @@ export const LoginPage = () => {
             >
               Войти
             </EnterButton>
-            <RegistrationLink href="/registration" underline="hover">
+            <RegistrationLink to="/registration" underline="hover">
               Регистация
             </RegistrationLink>
           </Form>

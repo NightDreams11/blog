@@ -9,7 +9,6 @@ import { Wrapper } from './styled'
 
 export const App = () => {
   const dispatch = useDispatch()
-
   useEffect(() => {
     dispatch(getUser())
   }, [dispatch])

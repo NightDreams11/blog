@@ -10,7 +10,6 @@ const ActionTypes = {
 const initialState = {
   user: null,
   token: null,
-  isRerender: false,
 }
 
 export const authReducer = (state = initialState, { type, payload = 0 }) => {

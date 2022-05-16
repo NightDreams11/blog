@@ -4,7 +4,6 @@ const ActionTypes = {
 }
 
 const initialState = {
-  isSnackOpen: false,
   snackbarMessage: null,
 }
 

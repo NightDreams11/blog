@@ -1,8 +1,9 @@
-import { Box, Button, Container, Link, TextField, Typography } from '@mui/material'
+import { Box, Button, Container, TextField, Typography } from '@mui/material'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
 import { styled } from '@mui/system'
 import style from 'styled-components'
+import { Link } from 'react-router-dom'
 
 export const Wrapper = style.div``
 
@@ -93,6 +94,8 @@ export const RegistrationLink = styled(
 )({
   paddingTop: 30,
   cursor: 'pointer',
+  textDecoration: 'none',
+  color: '#1976d2',
 })
 
 export const Passed = styled(

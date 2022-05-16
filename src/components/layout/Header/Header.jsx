@@ -13,23 +13,29 @@ import Tooltip from '@mui/material/Tooltip'
 import MenuItem from '@mui/material/MenuItem'
 import { logoutUserAC } from 'store/auth'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 const pages = ['Products', 'Pricing', 'Blog']
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
 const authorization = [
-  { id: 1, title: 'Login', path: '/login' },
-  { id: 2, title: 'Sing Up', path: '/registration' },
+  { title: 'Login', path: '/login' },
+  { title: 'Sing Up', path: '/registration' },
 ]
 
 export const ResponsiveAppBar = () => {
   const user = useSelector((state) => state.auth.user)
   const dispatch = useDispatch()
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    dispatch(logoutUserAC())
-  }
+  const settings = [
+    { title: 'Profile', path: '/profile' },
+    {
+      title: 'Logout',
+      path: '',
+      logout() {
+        localStorage.removeItem('token')
+        dispatch(logoutUserAC())
+      },
+    },
+  ]
 
   const [anchorElNav, setAnchorElNav] = useState(null)
   const [anchorElUser, setAnchorElUser] = useState(null)
@@ -113,10 +119,8 @@ export const ResponsiveAppBar = () => {
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
-                    alt={user === null ? '' : user.name}
-                    src={
-                      user === null ? '' : process.env.REACT_APP_URL + user.avatar
-                    }
+                    alt={user.name}
+                    src={process.env.REACT_APP_URL + user.avatar}
                   />
                 </IconButton>
               </Tooltip>
@@ -137,10 +141,17 @@ export const ResponsiveAppBar = () => {
                 onClose={handleCloseUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center" onClick={() => logout()}>
-                      {setting}
-                    </Typography>
+                  <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
+                    <Link
+                      to={setting.path}
+                      onClick={setting.logout}
+                      style={{
+                        textDecoration: 'none',
+                        color: 'rgba(0, 0, 0, 0.87)',
+                      }}
+                    >
+                      <Typography textAlign="center">{setting.title}</Typography>
+                    </Link>
                   </MenuItem>
                 ))}
               </Menu>
@@ -148,7 +159,11 @@ export const ResponsiveAppBar = () => {
           ) : (
             <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
               {authorization.map((page) => (
-                <Link key={page.id} href={page.path} underline="hover">
+                <Link
+                  key={page.title}
+                  to={page.path}
+                  style={{ textDecoration: 'none' }}
+                >
                   <Button
                     onClick={handleCloseNavMenu}
                     sx={{ my: 2, color: 'white', display: 'block' }}
