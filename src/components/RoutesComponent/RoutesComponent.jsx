@@ -12,6 +12,7 @@ export const RoutesComponent = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/registration" element={<RegPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/profile/edit" element={<ProfilePage editMode />} />
       </Routes>
     </div>
   )

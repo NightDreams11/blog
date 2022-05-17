@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
+import { Link } from 'react-router-dom'
 import { toggleEditModeAC } from 'store/profile'
 import {
   BoxInner1,
@@ -29,6 +30,7 @@ export const ViewProfile = () => {
       <ContainerWrapper>
         <GridContainer container spacing={2}>
           <GridElement1 item xs={8}>
+            <Link to="/profile/edit">EditPage</Link>
             <ProfileAvatar
               sx={{ ...styles.avatar }}
               alt="profileLogo"

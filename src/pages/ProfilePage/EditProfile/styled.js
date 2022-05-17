@@ -6,20 +6,19 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { Box } from '@mui/system'
-import { Link } from 'react-router-dom'
-import styled from 'styled-components'
+import { Box, styled } from '@mui/system'
+import style from 'styled-components'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
 
-export const Wrapper = styled.div``
+export const Wrapper = style.div``
 
 export const ContainerWrapper = styled(
   Container,
   {}
 )({
   width: '100vw',
-  height: 700,
+  minHeight: 700,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -95,24 +94,13 @@ export const BoxContainer = styled(
   marginRight: 'auto',
 })
 
-export const Form = styled.form`
+export const Form = style.form`
   display: flex;
   flex-direction: column;
   align-items: center;
 `
 
-export const Title = styled(
-  Typography,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  paddingTop: 50,
-  color: '#1976d2',
-})
-
-export const Email = styled(
+export const Name = styled(
   TextField,
   {}
 )({
@@ -121,15 +109,12 @@ export const Email = styled(
   minWidth: 320,
   marginTop: 50,
   zIndex: 1,
-  //   '& .MuiOutlinedInput-notchedOutline': {
-  //     background: '#fff',
-  //   },
   '& .MuiOutlinedInput-root': {
     background: '#fff',
   },
 })
 
-export const Password = styled(
+export const ExtraDetails = styled(
   TextField,
   {}
 )({
@@ -142,22 +127,52 @@ export const Password = styled(
   },
 })
 
-export const EnterButton = styled(
+export const Skills = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 30,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+})
+
+export const Profession = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 30,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+})
+
+export const Details = styled(
+  TextField,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  marginTop: 30,
+  '& .MuiOutlinedInput-root': {
+    background: '#fff',
+  },
+})
+
+export const SaveButton = styled(
   Button,
   {}
 )({
-  marginTop: 70,
+  marginTop: 50,
+  marginBottom: 50,
   width: 150,
-})
-
-export const RegistrationLink = styled(
-  Link,
-  {}
-)({
-  paddingTop: 30,
-  cursor: 'pointer',
-  textDecoration: 'none',
-  color: '#1976d2',
 })
 
 export const Passed = styled(

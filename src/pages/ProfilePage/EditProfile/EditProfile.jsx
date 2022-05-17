@@ -2,31 +2,31 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { toggleEditModeAC } from 'store/profile'
 import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
-import { loginUser } from 'store/auth'
+import { Link } from 'react-router-dom'
+import { useFormik } from 'formik'
 import {
   BoxContainer,
   BoxInner1,
   BoxInner2,
   ContainerWrapper,
   Description,
+  Details,
   EditButton1,
-  Email,
-  EnterButton,
+  ExtraDetails,
   Failed,
   Form,
   GridContainer,
   GridElement1,
   GridElement2,
   GridElement3,
+  Name,
   Passed,
-  Password,
+  Profession,
   ProfileAvatar,
-  RegistrationLink,
+  SaveButton,
+  Skills,
   styles,
   stylesForTextField,
-  Title,
   Wrapper,
 } from './styled'
 
@@ -36,33 +36,31 @@ export const EditProfile = () => {
   const token = useSelector((state) => state.auth.token)
 
   const validationSchema = yup.object().shape({
-    email: yup
+    name: yup
       .string()
-      .required('Field is required')
-      .email('Please use numbers and latin characters. Format х@х.хх')
-      .max(128, 'Email is too long'),
-    password: yup
-      .string()
-      .required('Field is required')
-      .matches(/^[a-zA-Z0-9]+$/, 'Please use numbers and latin characters')
-      .min(5, 'Password contains min 5 characters'),
+      .matches(/^[a-zA-Z\s]+[a-zA-Z\s]$/, 'Please use only latin characters')
+      .min(2, 'Min lenght 2 characters'),
+    extra_details: yup.string(),
+    skills: yup.string(),
+    profession: yup.string(),
+    details: yup.string(),
   })
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, dirtyFields },
-    getFieldState,
-  } = useForm({
-    resolver: yupResolver(validationSchema),
-    // Определяет момент, когда будет проверяться валидация. По умолчанию onSubmit
-    mode: 'onChange',
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      extra_details: '',
+      skills: '',
+      profession: '',
+      details: '',
+    },
+    // validationSchema: validationSchema
+    validationSchema,
+    onSubmit: () => {
+      // console.log(data)
+    },
   })
-
-  const onSubmit = (data) => {
-    dispatch(loginUser(data))
-  }
-
+  // console.log(formik)
   if (!token) {
     return <Navigate to="/login" />
   }
@@ -72,6 +70,7 @@ export const EditProfile = () => {
       <ContainerWrapper>
         <GridContainer container spacing={2}>
           <GridElement1 item xs={8}>
+            <Link to="/profile">ViewPage</Link>
             <ProfileAvatar
               sx={{ ...styles.avatar }}
               alt="profileLogo"
@@ -82,7 +81,7 @@ export const EditProfile = () => {
               <Description>{`Created at: ${
                 user ? user.dateCreated : ''
               }`}</Description>
-              <Description>{`EmailASD: ${user ? user.email : ''}`}</Description>
+              <Description>{`Email: ${user ? user.email : ''}`}</Description>
             </BoxInner1>
           </GridElement1>
           <GridElement2 item xs={4}>
@@ -96,19 +95,23 @@ export const EditProfile = () => {
             </BoxInner2>
           </GridElement2>
           <GridElement3 item xs={12}>
+            {/* Form */}
             <BoxContainer>
-              <Form onSubmit={handleSubmit(onSubmit)}>
-                <Title variant="h4">Вход</Title>
-                <Email
+              <Form onSubmit={formik.handleSubmit}>
+                <Name
                   sx={{ ...stylesForTextField }}
-                  placeholder="Enter your email"
-                  label="Email"
+                  name="name"
+                  placeholder="Enter your name"
+                  label="Name"
                   autoComplete="off"
+                  error={!!formik.errors.name}
+                  value={formik.values.name}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   InputProps={{
                     endAdornment:
-                      (getFieldState('email').isTouched ||
-                        getFieldState('email').isDirty) &&
-                      (errors.email ? (
+                      formik.touched.name &&
+                      (formik.errors.name ? (
                         <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                       ) : (
                         <Passed
@@ -117,27 +120,25 @@ export const EditProfile = () => {
                         />
                       )),
                   }}
-                  {...register('email', {
-                    maxLength: {
-                      value: 128,
-                    },
-                  })}
-                  // undefined преобразовывается в false, потому изначально ошибки нет
-                  error={!!errors.email}
-                  FormHelperTextProps={{ style: stylesForTextField.helperText }}
-                  helperText={errors?.email?.message}
+                  FormHelperTextProps={{
+                    style: stylesForTextField.helperText,
+                  }}
+                  helperText={formik.errors?.name}
                 />
-                <Password
+                <ExtraDetails
                   sx={{ ...stylesForTextField }}
-                  placeholder="Enter your password"
-                  label="Password*"
-                  type="password"
+                  name="extra_details"
+                  placeholder="Enter extra details"
+                  label="Extra details"
                   autoComplete="off"
+                  error={!!formik.errors.extra_details}
+                  value={formik.values.extra_details}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
                   InputProps={{
                     endAdornment:
-                      (getFieldState('password').isTouched ||
-                        getFieldState('password').isDirty) &&
-                      (errors.password ? (
+                      formik.touched.extra_details &&
+                      (formik.errors.extra_details ? (
                         <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                       ) : (
                         <Passed
@@ -146,29 +147,99 @@ export const EditProfile = () => {
                         />
                       )),
                   }}
-                  {...register('password', {
-                    mixLength: {
-                      value: 5,
-                    },
-                  })}
-                  error={!!errors.password}
-                  FormHelperTextProps={{ style: stylesForTextField.helperText }}
-                  helperText={errors?.password?.message}
+                  FormHelperTextProps={{
+                    style: stylesForTextField.helperText,
+                  }}
+                  helperText={formik.errors?.password?.message}
                 />
-                <EnterButton
+                <Skills
+                  sx={{ ...stylesForTextField }}
+                  name="skills"
+                  placeholder="Enter your skills"
+                  label="Skills"
+                  autoComplete="off"
+                  error={!!formik.errors.skills}
+                  value={formik.values.skills}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  InputProps={{
+                    endAdornment:
+                      formik.touched.skills &&
+                      (formik.errors.skills ? (
+                        <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                      ) : (
+                        <Passed
+                          color="success"
+                          sx={{ ...stylesForTextField.icon }}
+                        />
+                      )),
+                  }}
+                  FormHelperTextProps={{
+                    style: stylesForTextField.helperText,
+                  }}
+                  helperText={formik.errors?.password?.message}
+                />
+                <Profession
+                  sx={{ ...stylesForTextField }}
+                  name="profession"
+                  placeholder="Enter your profession"
+                  label="Profession"
+                  autoComplete="off"
+                  error={!!formik.errors.profession}
+                  value={formik.values.profession}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  InputProps={{
+                    endAdornment:
+                      formik.touched.profession &&
+                      (formik.errors.profession ? (
+                        <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                      ) : (
+                        <Passed
+                          color="success"
+                          sx={{ ...stylesForTextField.icon }}
+                        />
+                      )),
+                  }}
+                  FormHelperTextProps={{
+                    style: stylesForTextField.helperText,
+                  }}
+                  helperText={formik.errors?.password?.message}
+                />
+                <Details
+                  sx={{ ...stylesForTextField }}
+                  name="details"
+                  placeholder="Enter details"
+                  label="Details"
+                  autoComplete="off"
+                  error={!!formik.errors.details}
+                  value={formik.values.details}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  InputProps={{
+                    endAdornment:
+                      formik.touched.details &&
+                      (formik.errors.details ? (
+                        <Failed color="error" sx={{ ...stylesForTextField.icon }} />
+                      ) : (
+                        <Passed
+                          color="success"
+                          sx={{ ...stylesForTextField.icon }}
+                        />
+                      )),
+                  }}
+                  FormHelperTextProps={{
+                    style: stylesForTextField.helperText,
+                  }}
+                  helperText={formik.errors?.password?.message}
+                />
+                <SaveButton
                   variant="contained"
                   type="submit"
-                  disabled={Boolean(
-                    dirtyFields.email && dirtyFields.password
-                      ? errors.email || errors.password
-                      : true
-                  )}
+                  disabled={!formik.isValid && !formik.dirty}
                 >
-                  Войти
-                </EnterButton>
-                <RegistrationLink to="/registration" underline="hover">
-                  Регистация
-                </RegistrationLink>
+                  Save
+                </SaveButton>
               </Form>
             </BoxContainer>
           </GridElement3>
