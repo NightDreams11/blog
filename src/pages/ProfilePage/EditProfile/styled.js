@@ -39,7 +39,13 @@ export const GridElement2 = styled(
 )({
   display: 'flex',
 })
-export const GridElement3 = styled(Grid, {})({})
+export const GridElement3 = styled(
+  Grid,
+  {}
+)({
+  marginLeft: 65,
+})
+export const GridElement4 = styled(Grid, {})({})
 
 export const BoxInner1 = styled(
   Box,

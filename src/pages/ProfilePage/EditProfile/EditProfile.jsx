@@ -1,9 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
-import { toggleEditModeAC } from 'store/profile'
 import * as yup from 'yup'
 import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
+import { UploadButton } from 'components/layout/UploadButton/UploadButton'
+import { updateUser } from 'store/profile'
 import {
   BoxContainer,
   BoxInner1,
@@ -19,6 +20,7 @@ import {
   GridElement1,
   GridElement2,
   GridElement3,
+  GridElement4,
   Name,
   Passed,
   Profession,
@@ -38,8 +40,9 @@ export const EditProfile = () => {
   const validationSchema = yup.object().shape({
     name: yup
       .string()
-      .matches(/^[a-zA-Z\s]+[a-zA-Z\s]$/, 'Please use only latin characters')
-      .min(2, 'Min lenght 2 characters'),
+      .required()
+      .min(2, 'Min lenght 2 characters')
+      .matches(/^[a-zA-Z\s]+[a-zA-Z\s]$/, 'Please use only latin characters'),
     extra_details: yup.string(),
     skills: yup.string(),
     profession: yup.string(),
@@ -56,11 +59,18 @@ export const EditProfile = () => {
     },
     // validationSchema: validationSchema
     validationSchema,
-    onSubmit: () => {
-      // console.log(data)
+    onSubmit: (data) => {
+      const newData = {
+        name: !data.name ? user.name : data.name,
+        extra_details: !data.extra_details ? user.extra_details : data.extra_details,
+        skills: !data.skills ? user.skills : !data.skills,
+        profession: !data.skills ? user.skills : data.skills,
+        details: !data.details ? user.details : data.details,
+      }
+      dispatch(updateUser(newData))
     },
   })
-  // console.log(formik)
+
   if (!token) {
     return <Navigate to="/login" />
   }
@@ -86,15 +96,13 @@ export const EditProfile = () => {
           </GridElement1>
           <GridElement2 item xs={4}>
             <BoxInner2>
-              <EditButton1
-                variant="contained"
-                onClick={() => dispatch(toggleEditModeAC())}
-              >
-                Edit Profile
-              </EditButton1>
+              <EditButton1 variant="contained">Edit Profile</EditButton1>
             </BoxInner2>
           </GridElement2>
-          <GridElement3 item xs={12}>
+          <GridElement3 item xs={3}>
+            <UploadButton>Upload avatar</UploadButton>
+          </GridElement3>
+          <GridElement4 item xs={12}>
             {/* Form */}
             <BoxContainer>
               <Form onSubmit={formik.handleSubmit}>
@@ -236,13 +244,19 @@ export const EditProfile = () => {
                 <SaveButton
                   variant="contained"
                   type="submit"
-                  disabled={!formik.isValid && !formik.dirty}
+                  disabled={
+                    !formik.touched.name ||
+                    !formik.touched.extra_details ||
+                    !formik.touched.skills ||
+                    !formik.touched.profession ||
+                    !formik.touched.details
+                  }
                 >
                   Save
                 </SaveButton>
               </Form>
             </BoxContainer>
-          </GridElement3>
+          </GridElement4>
         </GridContainer>
       </ContainerWrapper>
     </Wrapper>

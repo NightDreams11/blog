@@ -1,5 +1,9 @@
+import { profileAPI } from 'api/api'
+import { userAdapter } from 'patterns/adapter'
+import { setUserAC } from './auth'
+
 const ActionTypes = {
-  TOGGLE_EDIT_MODE: 'TOGGLE_EDIT_MODE',
+  UPDATE_USER: 'UPDATE_USER',
 }
 
 const initialState = {
@@ -8,13 +12,27 @@ const initialState = {
 
 export const ProfileReducer = (state = initialState, { type }) => {
   switch (type) {
-    case ActionTypes.TOGGLE_EDIT_MODE:
+    case ActionTypes.UPDATE_USER:
       return { ...state, editMode: !state.editMode }
     default:
       return state
   }
 }
 
-export const toggleEditModeAC = () => ({
-  type: ActionTypes.TOGGLE_EDIT_MODE,
-})
+export const uploadAvatar = (file) => async (dispatch, getState) => {
+  const user = userAdapter(getState().auth.user)
+  const token = JSON.parse(localStorage.getItem('token'))
+  const updatedUser = await profileAPI.uploadAvatar({ file, user, token })
+  if (updatedUser) {
+    dispatch(setUserAC(updatedUser.data))
+  }
+}
+
+export const updateUser = (user) => async (dispatch, getState) => {
+  const id = userAdapter(getState().auth.user)
+  const token = JSON.parse(localStorage.getItem('token'))
+  const updatedUser = await profileAPI.updateUser({ user, token, id })
+  if (updatedUser) {
+    dispatch(setUserAC(updatedUser.data))
+  }
+}

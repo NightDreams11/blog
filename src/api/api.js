@@ -24,3 +24,24 @@ export const authAPI = {
     })
   },
 }
+
+export const profileAPI = {
+  uploadAvatar(payload) {
+    const formData = new FormData()
+    formData.append('avatar', payload.file)
+    return instance.put(`/users/upload/${payload.user.id}`, formData, {
+      headers: {
+        Authorization: `Bearer ${payload.token}`,
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+  },
+
+  updateUser(payload) {
+    return instance.patch(`/users/${payload.id.id}`, payload.user, {
+      headers: {
+        Authorization: `Bearer ${payload.token}`,
+      },
+    })
+  },
+}

@@ -1,7 +1,6 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { Link } from 'react-router-dom'
-import { toggleEditModeAC } from 'store/profile'
 import {
   BoxInner1,
   BoxInner2,
@@ -18,7 +17,6 @@ import {
 } from './styled'
 
 export const ViewProfile = () => {
-  const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.user)
   const token = useSelector((state) => state.auth.token)
   if (!token) {
@@ -46,12 +44,7 @@ export const ViewProfile = () => {
           </GridElement1>
           <GridElement2 item xs={4}>
             <BoxInner2>
-              <EditButton1
-                variant="contained"
-                onClick={() => dispatch(toggleEditModeAC())}
-              >
-                Edit Profile
-              </EditButton1>
+              <EditButton1 variant="contained">Edit Profile</EditButton1>
               <EditButton2 variant="contained" sx={{ ...styles.button2 }}>
                 Delete Profile
               </EditButton2>
