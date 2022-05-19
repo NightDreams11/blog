@@ -3,21 +3,26 @@ import { userAdapter } from 'patterns/adapter'
 import { setUserAC } from './auth'
 
 const ActionTypes = {
-  UPDATE_USER: 'UPDATE_USER',
+  TOGGLE_MODAL: 'TOGGLE_MODAL',
 }
 
 const initialState = {
-  editMode: false,
+  isModalOpen: false,
 }
 
-export const ProfileReducer = (state = initialState, { type }) => {
+export const ProfileReducer = (state = initialState, { type, payload = 0 }) => {
   switch (type) {
-    case ActionTypes.UPDATE_USER:
-      return { ...state, editMode: !state.editMode }
+    case ActionTypes.TOGGLE_MODAL:
+      return { ...state, isModalOpen: payload }
     default:
       return state
   }
 }
+
+export const toggleModalAC = (value) => ({
+  type: ActionTypes.TOGGLE_MODAL,
+  payload: value,
+})
 
 export const uploadAvatar = (file) => async (dispatch, getState) => {
   const user = userAdapter(getState().auth.user)
@@ -29,9 +34,9 @@ export const uploadAvatar = (file) => async (dispatch, getState) => {
 }
 
 export const updateUser = (user) => async (dispatch, getState) => {
-  const id = userAdapter(getState().auth.user)
+  const usersId = userAdapter(getState().auth.user)
   const token = JSON.parse(localStorage.getItem('token'))
-  const updatedUser = await profileAPI.updateUser({ user, token, id })
+  const updatedUser = await profileAPI.updateUser({ user, token, usersId })
   if (updatedUser) {
     dispatch(setUserAC(updatedUser.data))
   }

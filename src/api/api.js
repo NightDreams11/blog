@@ -38,7 +38,15 @@ export const profileAPI = {
   },
 
   updateUser(payload) {
-    return instance.patch(`/users/${payload.id.id}`, payload.user, {
+    return instance.patch(`/users/${payload.usersId.id}`, payload.user, {
+      headers: {
+        Authorization: `Bearer ${payload.token}`,
+      },
+    })
+  },
+
+  deleteUser(payload) {
+    return instance.delete(`/users/${payload.user.id}`, {
       headers: {
         Authorization: `Bearer ${payload.token}`,
       },

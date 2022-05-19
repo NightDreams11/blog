@@ -1,10 +1,12 @@
-import { authAPI } from '../api/api'
+import { userAdapter } from 'patterns/adapter'
+import { authAPI, profileAPI } from '../api/api'
 import { addSnackbarMessage } from './messages'
 
 const ActionTypes = {
   SET_TOKEN: 'SET_TOKEN',
   SET_USER: 'SET_USER',
   LOGOUT_USER: 'LOGOUT_USER',
+  DELETE_USER: 'DELETE_USER',
 }
 
 const initialState = {
@@ -19,6 +21,8 @@ export const authReducer = (state = initialState, { type, payload = 0 }) => {
     case ActionTypes.SET_USER:
       return { ...state, user: payload }
     case ActionTypes.LOGOUT_USER:
+      return { ...state, token: null, user: null }
+    case ActionTypes.DELETE_USER:
       return { ...state, token: null, user: null }
     default:
       return state
@@ -35,6 +39,9 @@ export const setUserAC = (user) => ({
 })
 export const logoutUserAC = () => ({
   type: ActionTypes.LOGOUT_USER,
+})
+export const deleteUserAC = () => ({
+  type: ActionTypes.DELETE_USER,
 })
 
 export const regUser = (payload) => async () => {
@@ -56,5 +63,15 @@ export const getUser = () => async (dispatch) => {
     const user = await authAPI.getUser(JSON.parse(localStorage.getItem('token')))
     dispatch(setUserAC(user.data))
     // console.log(getState())
+  }
+}
+
+export const deleteUser = () => async (dispatch, getState) => {
+  const user = userAdapter(getState().auth.user)
+  const token = JSON.parse(localStorage.getItem('token'))
+  const response = await profileAPI.deleteUser({ token, user })
+  if (response.status === 200) {
+    localStorage.removeItem('token')
+    dispatch(deleteUserAC())
   }
 }

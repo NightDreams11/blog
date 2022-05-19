@@ -1,10 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import * as yup from 'yup'
-import { Link } from 'react-router-dom'
 import { useFormik } from 'formik'
 import { UploadButton } from 'components/layout/UploadButton/UploadButton'
 import { updateUser } from 'store/profile'
+import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import {
   BoxContainer,
   BoxInner1,
@@ -25,10 +25,12 @@ import {
   Passed,
   Profession,
   ProfileAvatar,
+  RouteLink,
   SaveButton,
   Skills,
   styles,
   stylesForTextField,
+  Title,
   Wrapper,
 } from './styled'
 
@@ -80,23 +82,24 @@ export const EditProfile = () => {
       <ContainerWrapper>
         <GridContainer container spacing={2}>
           <GridElement1 item xs={8}>
-            <Link to="/profile">ViewPage</Link>
             <ProfileAvatar
               sx={{ ...styles.avatar }}
-              alt="profileLogo"
+              alt={user ? user.name : ''}
               src={user ? process.env.REACT_APP_URL + user.avatar : ''}
             />
             <BoxInner1>
               <Description>{user ? user.name : ''}</Description>
-              <Description>{`Created at: ${
+              <Description>{`Created at: ${dateFormatter(
                 user ? user.dateCreated : ''
-              }`}</Description>
+              )}`}</Description>
               <Description>{`Email: ${user ? user.email : ''}`}</Description>
             </BoxInner1>
           </GridElement1>
           <GridElement2 item xs={4}>
             <BoxInner2>
-              <EditButton1 variant="contained">Edit Profile</EditButton1>
+              <RouteLink to="/profile">
+                <EditButton1 variant="contained">Back</EditButton1>
+              </RouteLink>
             </BoxInner2>
           </GridElement2>
           <GridElement3 item xs={3}>
@@ -106,6 +109,7 @@ export const EditProfile = () => {
             {/* Form */}
             <BoxContainer>
               <Form onSubmit={formik.handleSubmit}>
+                <Title>Данные профиля</Title>
                 <Name
                   sx={{ ...stylesForTextField }}
                   name="name"

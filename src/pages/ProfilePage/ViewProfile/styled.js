@@ -1,5 +1,7 @@
 import { Avatar, Button, Container, Grid, Typography } from '@mui/material'
 import { Box } from '@mui/system'
+import { Link } from 'react-router-dom'
+import DeleteIcon from '@mui/icons-material/Delete'
 import styled from 'styled-components'
 
 export const Wrapper = styled.div``
@@ -50,6 +52,13 @@ export const BoxInner2 = styled(
   flexDirection: 'column',
   marginLeft: 'auto',
 })
+
+export const RouteLink = styled(
+  Link,
+  {}
+)({
+  textDecoration: 'none',
+})
 export const EditButton1 = styled(
   Button,
   {}
@@ -66,6 +75,16 @@ export const EditButton2 = styled(
   width: 150,
 })
 
+export const DelIcon = styled(
+  DeleteIcon,
+  {}
+)({
+  position: 'absolute',
+  left: 0,
+  // Так можно задавать в пикселях значения для MUI
+  top: '8px',
+})
+
 export const styles = {
   avatar: {
     width: 150,
@@ -73,5 +92,9 @@ export const styles = {
   },
   button2: {
     marginTop: 2,
+    backgroundColor: '#d40808',
+    '&:hover': {
+      backgroundColor: '#bd0808',
+    },
   },
 }

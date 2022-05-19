@@ -10,8 +10,10 @@ import { Box, styled } from '@mui/system'
 import style from 'styled-components'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
+import { Link } from 'react-router-dom'
 
-export const Wrapper = style.div``
+export const Wrapper = style.div`
+min-height: 1000px;`
 
 export const ContainerWrapper = styled(
   Container,
@@ -27,6 +29,17 @@ export const ContainerWrapper = styled(
 
 export const GridContainer = styled(Grid, {})({})
 
+export const Title = styled(
+  Typography,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  paddingTop: 30,
+  color: '#1976d2',
+})
+
 export const GridElement1 = styled(
   Grid,
   {}
@@ -39,13 +52,15 @@ export const GridElement2 = styled(
 )({
   display: 'flex',
 })
-export const GridElement3 = styled(
-  Grid,
+export const GridElement3 = styled(Grid, {})({})
+export const GridElement4 = styled(Grid, {})({})
+
+export const RouteLink = styled(
+  Link,
   {}
 )({
-  marginLeft: 65,
+  textDecoration: 'none',
 })
-export const GridElement4 = styled(Grid, {})({})
 
 export const BoxInner1 = styled(
   Box,
@@ -113,7 +128,7 @@ export const Name = styled(
   maxWidth: 360,
   width: '100%',
   minWidth: 320,
-  marginTop: 50,
+  marginTop: 30,
   zIndex: 1,
   '& .MuiOutlinedInput-root': {
     background: '#fff',

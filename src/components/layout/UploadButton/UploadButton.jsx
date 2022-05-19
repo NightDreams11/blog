@@ -28,10 +28,12 @@ export function UploadButton() {
         <EditButton1 variant="contained" component="span">
           Upload
         </EditButton1>
-      </label>
-      <label hidden htmlFor="icon-button-file">
-        <input accept="image/*" id="icon-button-file" type="file" />
-        <IconButton color="primary" aria-label="upload picture" component="span">
+        <IconButton
+          sx={{ ml: 1 }}
+          color="primary"
+          aria-label="upload picture"
+          component="span"
+        >
           <PhotoCamera />
         </IconButton>
       </label>
