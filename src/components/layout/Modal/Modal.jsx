@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography'
 import Modal from '@mui/material/Modal'
 import { useDispatch, useSelector } from 'react-redux'
 import { toggleModalAC } from 'store/profile'
-import { EditButton2 } from 'pages/ProfilePage/ViewProfile/styled'
+import { DeleteProfileButton } from 'pages/ProfilePage/ViewProfile/styled'
 import { Button } from '@mui/material'
 import { deleteUser } from 'store/auth'
 import { DelIcon, styles } from '../../../pages/ProfilePage/ViewProfile/styled'
@@ -44,14 +44,15 @@ export function BasicModal() {
 
   return (
     <div>
-      <EditButton2
+      <DeleteProfileButton
         variant="contained"
         startIcon={<DelIcon />}
         sx={{ ...styles.button2 }}
         onClick={handleOpen}
+        fullWidth
       >
         Delete Profile
-      </EditButton2>
+      </DeleteProfileButton>
       <Modal
         open={isModalOpen}
         onClose={isModalClose}

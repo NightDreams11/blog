@@ -1,43 +1,34 @@
-import { useDispatch, useSelector } from 'react-redux'
-import { Navigate } from 'react-router'
+import { useDispatch } from 'react-redux'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import { UploadButton } from 'components/layout/UploadButton/UploadButton'
+import { UploadButton } from 'pages/ProfilePage/EditProfile/UploadButton/UploadButton'
 import { updateUser } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import {
   BoxContainer,
-  BoxInner1,
-  BoxInner2,
   ContainerWrapper,
   Description,
-  Details,
-  EditButton1,
-  ExtraDetails,
   Failed,
   Form,
   GridContainer,
-  GridElement1,
-  GridElement2,
-  GridElement3,
-  GridElement4,
-  Name,
+  GridProfile,
   Passed,
-  Profession,
   ProfileAvatar,
   RouteLink,
   SaveButton,
-  Skills,
   styles,
   stylesForTextField,
   Title,
   Wrapper,
+  GridContainerInner,
+  BoxProfileBlock,
+  BoxButtonBlock,
+  BackButton,
+  EditProfileTextField,
 } from './styled'
 
-export const EditProfile = () => {
+export const EditProfile = ({ user }) => {
   const dispatch = useDispatch()
-  const user = useSelector((state) => state.auth.user)
-  const token = useSelector((state) => state.auth.token)
 
   const validationSchema = yup.object().shape({
     name: yup
@@ -62,55 +53,55 @@ export const EditProfile = () => {
     // validationSchema: validationSchema
     validationSchema,
     onSubmit: (data) => {
-      const newData = {
-        name: !data.name ? user.name : data.name,
-        extra_details: !data.extra_details ? user.extra_details : data.extra_details,
-        skills: !data.skills ? user.skills : !data.skills,
-        profession: !data.skills ? user.skills : data.skills,
-        details: !data.details ? user.details : data.details,
-      }
+      // key это элемент, в данном случае, массива. Массив создан на основании объекта data
+      // Соответственно key равен по очереди name, extra_details и т.д.
+      // пустой объект в конце определяет чем является accumulator на первой итерации
+      const newData = Object.keys(data).reduce((accumulator, key) => {
+        accumulator[key] = data[key] || user[key]
+        return accumulator
+      }, {})
       dispatch(updateUser(newData))
     },
   })
-
-  if (!token) {
-    return <Navigate to="/login" />
-  }
 
   return (
     <Wrapper>
       <ContainerWrapper>
         <GridContainer container spacing={2}>
-          <GridElement1 item xs={8}>
+          <GridProfile item xs={8}>
             <ProfileAvatar
               sx={{ ...styles.avatar }}
               alt={user ? user.name : ''}
               src={user ? process.env.REACT_APP_URL + user.avatar : ''}
             />
-            <BoxInner1>
-              <Description>{user ? user.name : ''}</Description>
+            <BoxProfileBlock>
+              <Description>{user.name}</Description>
               <Description>{`Created at: ${dateFormatter(
-                user ? user.dateCreated : ''
+                user.dateCreated
               )}`}</Description>
-              <Description>{`Email: ${user ? user.email : ''}`}</Description>
-            </BoxInner1>
-          </GridElement1>
-          <GridElement2 item xs={4}>
-            <BoxInner2>
+              <Description>{`Email: ${user.email}`}</Description>
+              <Description>{`Extra details: ${user.extra_details}`}</Description>
+              <Description>{`Skills: ${user.skills}`}</Description>
+              <Description>{`Profession: ${user.profession}`}</Description>
+              <Description>{`Details: ${user.details}`}</Description>
+            </BoxProfileBlock>
+          </GridProfile>
+          <GridProfile item xs={4}>
+            <BoxButtonBlock>
               <RouteLink to="/profile">
-                <EditButton1 variant="contained">Back</EditButton1>
+                <BackButton variant="contained">Back</BackButton>
               </RouteLink>
-            </BoxInner2>
-          </GridElement2>
-          <GridElement3 item xs={3}>
+            </BoxButtonBlock>
+          </GridProfile>
+          <GridContainerInner item xs={3}>
             <UploadButton>Upload avatar</UploadButton>
-          </GridElement3>
-          <GridElement4 item xs={12}>
+          </GridContainerInner>
+          <GridContainerInner item xs={12}>
             {/* Form */}
             <BoxContainer>
               <Form onSubmit={formik.handleSubmit}>
                 <Title>Данные профиля</Title>
-                <Name
+                <EditProfileTextField
                   sx={{ ...stylesForTextField }}
                   name="name"
                   placeholder="Enter your name"
@@ -137,7 +128,7 @@ export const EditProfile = () => {
                   }}
                   helperText={formik.errors?.name}
                 />
-                <ExtraDetails
+                <EditProfileTextField
                   sx={{ ...stylesForTextField }}
                   name="extra_details"
                   placeholder="Enter extra details"
@@ -164,7 +155,7 @@ export const EditProfile = () => {
                   }}
                   helperText={formik.errors?.password?.message}
                 />
-                <Skills
+                <EditProfileTextField
                   sx={{ ...stylesForTextField }}
                   name="skills"
                   placeholder="Enter your skills"
@@ -191,7 +182,7 @@ export const EditProfile = () => {
                   }}
                   helperText={formik.errors?.password?.message}
                 />
-                <Profession
+                <EditProfileTextField
                   sx={{ ...stylesForTextField }}
                   name="profession"
                   placeholder="Enter your profession"
@@ -218,7 +209,7 @@ export const EditProfile = () => {
                   }}
                   helperText={formik.errors?.password?.message}
                 />
-                <Details
+                <EditProfileTextField
                   sx={{ ...stylesForTextField }}
                   name="details"
                   placeholder="Enter details"
@@ -260,7 +251,7 @@ export const EditProfile = () => {
                 </SaveButton>
               </Form>
             </BoxContainer>
-          </GridElement4>
+          </GridContainerInner>
         </GridContainer>
       </ContainerWrapper>
     </Wrapper>

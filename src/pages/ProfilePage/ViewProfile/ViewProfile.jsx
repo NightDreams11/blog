@@ -1,56 +1,54 @@
 import { BasicModal } from 'components/layout/Modal/Modal'
-import { useSelector } from 'react-redux'
-import { Navigate } from 'react-router'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import {
-  BoxInner1,
-  BoxInner2,
+  ButtonBlockGrid,
+  ButtonBoxContainer,
   ContainerWrapper,
   Description,
-  EditButton1,
+  DescriptionBoxContainer,
+  EditProfileButton,
   GridContainer,
-  GridElement1,
-  GridElement2,
   ProfileAvatar,
+  ProfileBlockGrid,
   RouteLink,
   styles,
   Wrapper,
 } from './styled'
 
-export const ViewProfile = () => {
-  const user = useSelector((state) => state.auth.user)
-  const token = useSelector((state) => state.auth.token)
-  if (!token) {
-    return <Navigate to="/login" />
-  }
-
+export const ViewProfile = ({ user }) => {
   return (
     <Wrapper>
       <ContainerWrapper>
         <GridContainer container spacing={2}>
-          <GridElement1 item xs={8}>
+          <ProfileBlockGrid item xs={8}>
             <ProfileAvatar
               sx={{ ...styles.avatar }}
-              alt={user ? user.name : ''}
-              src={user ? process.env.REACT_APP_URL + user.avatar : ''}
+              alt={user.name}
+              src={process.env.REACT_APP_URL + user.avatar}
             />
-            <BoxInner1>
-              <Description>{user ? user.name : ''}</Description>
+            <DescriptionBoxContainer>
+              <Description>{user.name}</Description>
               <Description>{`Created at: ${dateFormatter(
-                user ? user.dateCreated : ''
+                user.dateCreated
               )}`}</Description>
-              <Description>{`Email: ${user ? user.email : ''}`}</Description>
-            </BoxInner1>
-          </GridElement1>
-          <GridElement2 item xs={4}>
-            <BoxInner2>
+              <Description>{`Email: ${user.email}`}</Description>
+              <Description>{`Extra details: ${user.extra_details}`}</Description>
+              <Description>{`Skills: ${user.skills}`}</Description>
+              <Description>{`Profession: ${user.profession}`}</Description>
+              <Description>{`Details: ${user.details}`}</Description>
+            </DescriptionBoxContainer>
+          </ProfileBlockGrid>
+          <ButtonBlockGrid item xs={4}>
+            <ButtonBoxContainer>
               <RouteLink to="/profile/edit">
-                <EditButton1 variant="contained">Edit Profile</EditButton1>
+                <EditProfileButton fullWidth variant="contained">
+                  Edit Profile
+                </EditProfileButton>
               </RouteLink>
               {/* Кнопку перенес в BasicModal */}
               <BasicModal />
-            </BoxInner2>
-          </GridElement2>
+            </ButtonBoxContainer>
+          </ButtonBlockGrid>
         </GridContainer>
       </ContainerWrapper>
     </Wrapper>

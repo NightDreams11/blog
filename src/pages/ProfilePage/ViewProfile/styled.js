@@ -20,20 +20,20 @@ export const ContainerWrapper = styled(
 
 export const GridContainer = styled(Grid, {})({})
 
-export const GridElement1 = styled(
+export const ProfileBlockGrid = styled(
   Grid,
   {}
 )({
   display: 'flex',
 })
-export const GridElement2 = styled(
+export const ButtonBlockGrid = styled(
   Grid,
   {}
 )({
   display: 'flex',
 })
 
-export const BoxInner1 = styled(
+export const DescriptionBoxContainer = styled(
   Box,
   {}
 )({
@@ -44,13 +44,14 @@ export const BoxInner1 = styled(
 export const ProfileAvatar = styled(Avatar, {})({})
 
 export const Description = styled(Typography, {})({})
-export const BoxInner2 = styled(
+export const ButtonBoxContainer = styled(
   Box,
   {}
 )({
   display: 'flex',
   flexDirection: 'column',
   marginLeft: 'auto',
+  width: 170,
 })
 
 export const RouteLink = styled(
@@ -59,30 +60,25 @@ export const RouteLink = styled(
 )({
   textDecoration: 'none',
 })
-export const EditButton1 = styled(
+export const EditProfileButton = styled(
   Button,
   {}
 )({
   height: 40,
-  width: 150,
 })
 
-export const EditButton2 = styled(
+export const DeleteProfileButton = styled(
   Button,
   {}
 )({
   height: 40,
-  width: 150,
 })
 
 export const DelIcon = styled(
   DeleteIcon,
   {}
 )({
-  position: 'absolute',
-  left: 0,
-  // Так можно задавать в пикселях значения для MUI
-  top: '8px',
+  marginBottom: '5px',
 })
 
 export const styles = {
@@ -92,6 +88,7 @@ export const styles = {
   },
   button2: {
     marginTop: 2,
+    paddingTop: '10px',
     backgroundColor: '#d40808',
     '&:hover': {
       backgroundColor: '#bd0808',

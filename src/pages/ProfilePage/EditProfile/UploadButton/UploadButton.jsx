@@ -3,8 +3,8 @@ import IconButton from '@mui/material/IconButton'
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import Stack from '@mui/material/Stack'
 import { useDispatch } from 'react-redux'
-import { uploadAvatar } from '../../../store/profile'
-import { EditButton1 } from './styled'
+import { uploadAvatar } from '../../../../store/profile'
+import { UploadAvatarButton } from './styled'
 
 export function UploadButton() {
   const dispatch = useDispatch()
@@ -25,9 +25,9 @@ export function UploadButton() {
           type="file"
           onChange={onInputChange}
         />
-        <EditButton1 variant="contained" component="span">
+        <UploadAvatarButton variant="contained" component="span">
           Upload
-        </EditButton1>
+        </UploadAvatarButton>
         <IconButton
           sx={{ ml: 1 }}
           color="primary"

@@ -1,5 +1,4 @@
 import { profileAPI } from 'api/api'
-import { userAdapter } from 'patterns/adapter'
 import { setUserAC } from './auth'
 
 const ActionTypes = {
@@ -25,18 +24,16 @@ export const toggleModalAC = (value) => ({
 })
 
 export const uploadAvatar = (file) => async (dispatch, getState) => {
-  const user = userAdapter(getState().auth.user)
-  const token = JSON.parse(localStorage.getItem('token'))
-  const updatedUser = await profileAPI.uploadAvatar({ file, user, token })
+  const { id } = getState().auth.user
+  const updatedUser = await profileAPI.uploadAvatar({ file, id })
   if (updatedUser) {
     dispatch(setUserAC(updatedUser.data))
   }
 }
 
 export const updateUser = (user) => async (dispatch, getState) => {
-  const usersId = userAdapter(getState().auth.user)
-  const token = JSON.parse(localStorage.getItem('token'))
-  const updatedUser = await profileAPI.updateUser({ user, token, usersId })
+  const { id } = getState().auth.user
+  const updatedUser = await profileAPI.updateUser({ user, id })
   if (updatedUser) {
     dispatch(setUserAC(updatedUser.data))
   }

@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import styled from 'styled-components'
 
-export const EditButton1 = styled(
+export const UploadAvatarButton = styled(
   Button,
   {}
 )({

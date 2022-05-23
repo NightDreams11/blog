@@ -1,10 +1,17 @@
 import * as axios from 'axios'
 
+const token = JSON.parse(localStorage.getItem('token'))
+
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
   },
+})
+
+instance.interceptors.request.use((request) => {
+  request.headers.Authorization = `Bearer ${token}`
+  return request
 })
 
 export const authAPI = {
@@ -16,40 +23,23 @@ export const authAPI = {
     return instance.post('/auth', payload)
   },
 
-  getUser(token) {
-    return instance.get('/auth/user', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  getUser() {
+    return instance.get('/auth/user')
   },
 }
 
 export const profileAPI = {
-  uploadAvatar(payload) {
+  uploadAvatar({ file, id }) {
     const formData = new FormData()
-    formData.append('avatar', payload.file)
-    return instance.put(`/users/upload/${payload.user.id}`, formData, {
-      headers: {
-        Authorization: `Bearer ${payload.token}`,
-        'Content-Type': 'multipart/form-data',
-      },
-    })
+    formData.append('avatar', file)
+    return instance.put(`/users/upload/${id}`, formData)
   },
 
-  updateUser(payload) {
-    return instance.patch(`/users/${payload.usersId.id}`, payload.user, {
-      headers: {
-        Authorization: `Bearer ${payload.token}`,
-      },
-    })
+  updateUser({ user, id }) {
+    return instance.patch(`/users/${id}`, user)
   },
 
-  deleteUser(payload) {
-    return instance.delete(`/users/${payload.user.id}`, {
-      headers: {
-        Authorization: `Bearer ${payload.token}`,
-      },
-    })
+  deleteUser({ id }) {
+    return instance.delete(`/users/${id}`)
   },
 }

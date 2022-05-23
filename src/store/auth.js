@@ -19,7 +19,7 @@ export const authReducer = (state = initialState, { type, payload = 0 }) => {
     case ActionTypes.SET_TOKEN:
       return { ...state, token: payload }
     case ActionTypes.SET_USER:
-      return { ...state, user: payload }
+      return { ...state, user: userAdapter(payload) }
     case ActionTypes.LOGOUT_USER:
       return { ...state, token: null, user: null }
     case ActionTypes.DELETE_USER:
@@ -44,32 +44,40 @@ export const deleteUserAC = () => ({
   type: ActionTypes.DELETE_USER,
 })
 
-export const regUser = (payload) => async () => {
-  await authAPI.regUser(payload)
+export const regUser = (payload) => async (dispatch) => {
+  try {
+    await authAPI.regUser(payload)
+    dispatch(addSnackbarMessage('Новый пользователь зарегистрирован'))
+  } catch (error) {
+    dispatch(addSnackbarMessage(error.response.data.error.message))
+  }
 }
 
 export const loginUser = (payload) => async (dispatch) => {
-  const token = await authAPI.loginUser(payload)
-  dispatch(setTokenAC(token.data.token))
-  if (token.data.token) {
-    const user = await authAPI.getUser(token.data.token)
-    dispatch(setUserAC(user.data))
-    dispatch(addSnackbarMessage(`Welcome ${user.data.name}`))
+  try {
+    const token = await authAPI.loginUser(payload)
+    if (token.data.token) {
+      dispatch(setTokenAC(token.data.token))
+      const user = await authAPI.getUser(token.data.token)
+      dispatch(setUserAC(user.data))
+      dispatch(addSnackbarMessage(`Welcome ${user.data.name}`))
+    }
+  } catch (error) {
+    dispatch(addSnackbarMessage(error.response.data.error))
   }
 }
 
 export const getUser = () => async (dispatch) => {
   if (JSON.parse(localStorage.getItem('token'))) {
-    const user = await authAPI.getUser(JSON.parse(localStorage.getItem('token')))
+    const user = await authAPI.getUser()
     dispatch(setUserAC(user.data))
     // console.log(getState())
   }
 }
 
 export const deleteUser = () => async (dispatch, getState) => {
-  const user = userAdapter(getState().auth.user)
-  const token = JSON.parse(localStorage.getItem('token'))
-  const response = await profileAPI.deleteUser({ token, user })
+  const { id } = getState().auth.user
+  const response = await profileAPI.deleteUser({ id })
   if (response.status === 200) {
     localStorage.removeItem('token')
     dispatch(deleteUserAC())

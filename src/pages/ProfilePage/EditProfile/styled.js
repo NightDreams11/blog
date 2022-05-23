@@ -40,20 +40,13 @@ export const Title = styled(
   color: '#1976d2',
 })
 
-export const GridElement1 = styled(
+export const GridProfile = styled(
   Grid,
   {}
 )({
   display: 'flex',
 })
-export const GridElement2 = styled(
-  Grid,
-  {}
-)({
-  display: 'flex',
-})
-export const GridElement3 = styled(Grid, {})({})
-export const GridElement4 = styled(Grid, {})({})
+export const GridContainerInner = styled(Grid, {})({})
 
 export const RouteLink = styled(
   Link,
@@ -62,7 +55,7 @@ export const RouteLink = styled(
   textDecoration: 'none',
 })
 
-export const BoxInner1 = styled(
+export const BoxProfileBlock = styled(
   Box,
   {}
 )({
@@ -73,7 +66,7 @@ export const BoxInner1 = styled(
 export const ProfileAvatar = styled(Avatar, {})({})
 
 export const Description = styled(Typography, {})({})
-export const BoxInner2 = styled(
+export const BoxButtonBlock = styled(
   Box,
   {}
 )({
@@ -81,7 +74,7 @@ export const BoxInner2 = styled(
   flexDirection: 'column',
   marginLeft: 'auto',
 })
-export const EditButton1 = styled(
+export const BackButton = styled(
   Button,
   {}
 )({
@@ -121,7 +114,7 @@ export const Form = style.form`
   align-items: center;
 `
 
-export const Name = styled(
+export const EditProfileTextField = styled(
   TextField,
   {}
 )({
@@ -130,58 +123,6 @@ export const Name = styled(
   minWidth: 320,
   marginTop: 30,
   zIndex: 1,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const ExtraDetails = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 30,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Skills = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 30,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Profession = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 30,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Details = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 30,
   '& .MuiOutlinedInput-root': {
     background: '#fff',
   },

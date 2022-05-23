@@ -5,11 +5,18 @@ import { Wrapper } from './styled'
 import { ViewProfile } from './ViewProfile/ViewProfile'
 
 export const ProfilePage = ({ editMode }) => {
-  const token = useSelector((state) => state.auth.token)
+  let user = useSelector((state) => state.auth.user)
+  if (user === null) {
+    user = {}
+  }
 
-  if (!token) {
+  if (!JSON.parse(localStorage.getItem('token'))) {
     return <Navigate to="/login" />
   }
 
-  return <Wrapper>{!editMode ? <ViewProfile /> : <EditProfile />}</Wrapper>
+  return (
+    <Wrapper>
+      {!editMode ? <ViewProfile user={user} /> : <EditProfile user={user} />}
+    </Wrapper>
+  )
 }
