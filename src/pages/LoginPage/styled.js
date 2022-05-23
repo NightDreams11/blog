@@ -22,6 +22,7 @@ export const BoxContainer = styled(
   Box,
   {}
 )({
+  position: 'relative',
   borderRadius: 4,
   backgroundColor: '#F5FAFE',
   transition: '0.1',
