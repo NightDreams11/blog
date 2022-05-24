@@ -1,4 +1,4 @@
-import { userAdapter } from 'patterns/adapter'
+import { userAdapter } from 'adapters/userAdapter'
 import { authAPI, profileAPI } from '../api/api'
 import { addSnackbarMessage } from './messages'
 
@@ -69,8 +69,8 @@ export const loginUser = (payload) => async (dispatch) => {
 
 export const getUser = () => async (dispatch) => {
   if (JSON.parse(localStorage.getItem('token'))) {
-    const user = await authAPI.getUser()
-    dispatch(setUserAC(user.data))
+    const response = await authAPI.getUser()
+    dispatch(setUserAC(response.data))
     // console.log(getState())
   }
 }

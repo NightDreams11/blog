@@ -1,14 +1,17 @@
-import { BasicModal } from 'components/layout/Modal/Modal'
+import { Avatar, Typography } from '@mui/material'
+import { useState } from 'react'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
+import { getImageUrl } from 'utils/imageURL/imageURL'
+import { AlertDialogSlide } from './DeleteProfileConfirmation/DeleteProfileConfirmation'
 import {
   ButtonBlockGrid,
   ButtonBoxContainer,
   ContainerWrapper,
-  Description,
+  DeleteProfileButton,
+  DelIcon,
   DescriptionBoxContainer,
   EditProfileButton,
   GridContainer,
-  ProfileAvatar,
   ProfileBlockGrid,
   RouteLink,
   styles,
@@ -16,26 +19,28 @@ import {
 } from './styled'
 
 export const ViewProfile = ({ user }) => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
   return (
     <Wrapper>
       <ContainerWrapper>
         <GridContainer container spacing={2}>
           <ProfileBlockGrid item xs={8}>
-            <ProfileAvatar
+            <Avatar
               sx={{ ...styles.avatar }}
               alt={user.name}
-              src={process.env.REACT_APP_URL + user.avatar}
+              src={getImageUrl(user.avatar)}
             />
             <DescriptionBoxContainer>
-              <Description>{user.name}</Description>
-              <Description>{`Created at: ${dateFormatter(
+              <Typography>{user.name}</Typography>
+              <Typography>{`Created at: ${dateFormatter(
                 user.dateCreated
-              )}`}</Description>
-              <Description>{`Email: ${user.email}`}</Description>
-              <Description>{`Extra details: ${user.extra_details}`}</Description>
-              <Description>{`Skills: ${user.skills}`}</Description>
-              <Description>{`Profession: ${user.profession}`}</Description>
-              <Description>{`Details: ${user.details}`}</Description>
+              )}`}</Typography>
+              <Typography>{`Email: ${user.email}`}</Typography>
+              <Typography>{`Extra details: ${user.extra_details}`}</Typography>
+              <Typography>{`Skills: ${user.skills}`}</Typography>
+              <Typography>{`Profession: ${user.profession}`}</Typography>
+              <Typography>{`Details: ${user.details}`}</Typography>
             </DescriptionBoxContainer>
           </ProfileBlockGrid>
           <ButtonBlockGrid item xs={4}>
@@ -45,8 +50,19 @@ export const ViewProfile = ({ user }) => {
                   Edit Profile
                 </EditProfileButton>
               </RouteLink>
-              {/* Кнопку перенес в BasicModal */}
-              <BasicModal />
+              <DeleteProfileButton
+                variant="contained"
+                startIcon={<DelIcon />}
+                sx={{ ...styles.button2 }}
+                onClick={() => setIsDialogOpen(true)}
+                fullWidth
+              >
+                Delete Profile
+              </DeleteProfileButton>
+              <AlertDialogSlide
+                isDialogOpen={isDialogOpen}
+                setIsDialogOpen={setIsDialogOpen}
+              />
             </ButtonBoxContainer>
           </ButtonBlockGrid>
         </GridContainer>

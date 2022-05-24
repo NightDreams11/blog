@@ -1,11 +1,4 @@
-import {
-  Avatar,
-  Button,
-  Container,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Button, Container, Grid, TextField, Typography } from '@mui/material'
 import { Box, styled } from '@mui/system'
 import style from 'styled-components'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
@@ -63,9 +56,6 @@ export const BoxProfileBlock = styled(
   paddingTop: 20,
 })
 
-export const ProfileAvatar = styled(Avatar, {})({})
-
-export const Description = styled(Typography, {})({})
 export const BoxButtonBlock = styled(
   Box,
   {}

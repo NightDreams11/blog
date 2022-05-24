@@ -4,16 +4,16 @@ import { useFormik } from 'formik'
 import { UploadButton } from 'pages/ProfilePage/EditProfile/UploadButton/UploadButton'
 import { updateUser } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
+import { Avatar, Typography } from '@mui/material'
+import { getImageUrl } from 'utils/imageURL/imageURL'
 import {
   BoxContainer,
   ContainerWrapper,
-  Description,
   Failed,
   Form,
   GridContainer,
   GridProfile,
   Passed,
-  ProfileAvatar,
   RouteLink,
   SaveButton,
   styles,
@@ -69,21 +69,21 @@ export const EditProfile = ({ user }) => {
       <ContainerWrapper>
         <GridContainer container spacing={2}>
           <GridProfile item xs={8}>
-            <ProfileAvatar
+            <Avatar
               sx={{ ...styles.avatar }}
-              alt={user ? user.name : ''}
-              src={user ? process.env.REACT_APP_URL + user.avatar : ''}
+              alt={user.name}
+              src={getImageUrl(user.avatar)}
             />
             <BoxProfileBlock>
-              <Description>{user.name}</Description>
-              <Description>{`Created at: ${dateFormatter(
+              <Typography>{user.name}</Typography>
+              <Typography>{`Created at: ${dateFormatter(
                 user.dateCreated
-              )}`}</Description>
-              <Description>{`Email: ${user.email}`}</Description>
-              <Description>{`Extra details: ${user.extra_details}`}</Description>
-              <Description>{`Skills: ${user.skills}`}</Description>
-              <Description>{`Profession: ${user.profession}`}</Description>
-              <Description>{`Details: ${user.details}`}</Description>
+              )}`}</Typography>
+              <Typography>{`Email: ${user.email}`}</Typography>
+              <Typography>{`Extra details: ${user.extra_details}`}</Typography>
+              <Typography>{`Skills: ${user.skills}`}</Typography>
+              <Typography>{`Profession: ${user.profession}`}</Typography>
+              <Typography>{`Details: ${user.details}`}</Typography>
             </BoxProfileBlock>
           </GridProfile>
           <GridProfile item xs={4}>

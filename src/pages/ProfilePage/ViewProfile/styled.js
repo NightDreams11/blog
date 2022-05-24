@@ -1,4 +1,4 @@
-import { Avatar, Button, Container, Grid, Typography } from '@mui/material'
+import { Button, Container, Grid } from '@mui/material'
 import { Box } from '@mui/system'
 import { Link } from 'react-router-dom'
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -41,9 +41,6 @@ export const DescriptionBoxContainer = styled(
   paddingTop: 20,
 })
 
-export const ProfileAvatar = styled(Avatar, {})({})
-
-export const Description = styled(Typography, {})({})
 export const ButtonBoxContainer = styled(
   Box,
   {}
