@@ -1,3 +1,4 @@
+import { userAdapter } from 'adapters/userAdapter'
 import * as axios from 'axios'
 
 const token = JSON.parse(localStorage.getItem('token'))
@@ -23,20 +24,20 @@ export const authAPI = {
     return instance.post('/auth', payload)
   },
 
-  getUser() {
-    return instance.get('/auth/user')
+  async getUser() {
+    return userAdapter(await instance.get('/auth/user'))
   },
 }
 
 export const profileAPI = {
-  uploadAvatar({ file, id }) {
+  async uploadAvatar({ file, id }) {
     const formData = new FormData()
     formData.append('avatar', file)
-    return instance.put(`/users/upload/${id}`, formData)
+    return userAdapter(await instance.put(`/users/upload/${id}`, formData))
   },
 
-  updateUser({ user, id }) {
-    return instance.patch(`/users/${id}`, user)
+  async updateUser({ user, id }) {
+    return userAdapter(await instance.patch(`/users/${id}`, user))
   },
 
   deleteUser({ id }) {

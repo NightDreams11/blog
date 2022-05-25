@@ -3,15 +3,15 @@ export function userAdapter(userResponse) {
   const idField = '_id'
 
   return {
-    avatar: userResponse.avatar,
-    dateCreaterd: userResponse.dataCreated,
-    details: userResponse.details,
-    email: userResponse.email,
-    extra_details: userResponse.extra_details,
-    name: userResponse.name,
-    profession: userResponse.profession,
-    skills: userResponse.skills,
-    v: userResponse[vField],
-    id: userResponse[idField],
+    avatar: userResponse.data.avatar,
+    dateCreated: userResponse.data.dateCreated,
+    details: userResponse.data.details,
+    email: userResponse.data.email,
+    extra_details: userResponse.data.extra_details,
+    name: userResponse.data.name,
+    profession: userResponse.data.profession,
+    skills: userResponse.data.skills,
+    v: userResponse.data[vField],
+    id: userResponse.data[idField],
   }
 }

@@ -16,7 +16,7 @@ export const uploadAvatar = (file) => async (dispatch, getState) => {
   const { id } = getState().auth.user
   const updatedUser = await profileAPI.uploadAvatar({ file, id })
   if (updatedUser) {
-    dispatch(setUserAC(updatedUser.data))
+    dispatch(setUserAC(updatedUser))
   }
 }
 
@@ -24,7 +24,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
   const { id } = getState().auth.user
   const updatedUser = await profileAPI.updateUser({ user, id })
   if (updatedUser) {
-    dispatch(setUserAC(updatedUser.data))
+    dispatch(setUserAC(updatedUser))
   }
 }
 

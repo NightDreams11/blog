@@ -1,4 +1,3 @@
-import { userAdapter } from 'adapters/userAdapter'
 import { authAPI } from '../api/api'
 import { addSnackbarMessage } from './messages'
 
@@ -59,7 +58,7 @@ export const loginUser = (payload) => async (dispatch) => {
     if (token.data.token) {
       dispatch(setTokenAC(token.data.token))
       const user = await authAPI.getUser(token.data.token)
-      dispatch(setUserAC(userAdapter(user.data)))
+      dispatch(setUserAC(user.data))
       dispatch(addSnackbarMessage(`Welcome ${user.data.name}`))
     }
   } catch (error) {
@@ -70,7 +69,7 @@ export const loginUser = (payload) => async (dispatch) => {
 export const getUser = () => async (dispatch) => {
   if (JSON.parse(localStorage.getItem('token'))) {
     const response = await authAPI.getUser()
-    dispatch(setUserAC(userAdapter(response.data)))
+    dispatch(setUserAC(response))
     // console.log(getState())
   }
 }
