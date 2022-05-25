@@ -1,27 +1,16 @@
 import { profileAPI } from 'api/api'
-import { setUserAC } from './auth'
+import { deleteUserAC, setUserAC } from './auth'
 
-const ActionTypes = {
-  TOGGLE_MODAL: 'TOGGLE_MODAL',
-}
+// const ActionTypes = {}
 
-const initialState = {
-  isModalOpen: false,
-}
+const initialState = {}
 
-export const ProfileReducer = (state = initialState, { type, payload = 0 }) => {
+export const ProfileReducer = (state = initialState, { type }) => {
   switch (type) {
-    case ActionTypes.TOGGLE_MODAL:
-      return { ...state, isModalOpen: payload }
     default:
       return state
   }
 }
-
-export const toggleModalAC = (value) => ({
-  type: ActionTypes.TOGGLE_MODAL,
-  payload: value,
-})
 
 export const uploadAvatar = (file) => async (dispatch, getState) => {
   const { id } = getState().auth.user
@@ -36,5 +25,14 @@ export const updateUser = (user) => async (dispatch, getState) => {
   const updatedUser = await profileAPI.updateUser({ user, id })
   if (updatedUser) {
     dispatch(setUserAC(updatedUser.data))
+  }
+}
+
+export const deleteUser = () => async (dispatch, getState) => {
+  const { id } = getState().auth.user
+  const response = await profileAPI.deleteUser({ id })
+  if (response.status === 200) {
+    localStorage.removeItem('token')
+    dispatch(deleteUserAC())
   }
 }

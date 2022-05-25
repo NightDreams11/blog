@@ -4,14 +4,13 @@ import { useFormik } from 'formik'
 import { UploadButton } from 'pages/ProfilePage/EditProfile/UploadButton/UploadButton'
 import { updateUser } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
-import { Avatar, Typography } from '@mui/material'
+import { Avatar, Grid, Typography } from '@mui/material'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import {
   BoxContainer,
   ContainerWrapper,
   Failed,
   Form,
-  GridContainer,
   GridProfile,
   Passed,
   RouteLink,
@@ -67,7 +66,7 @@ export const EditProfile = ({ user }) => {
   return (
     <Wrapper>
       <ContainerWrapper>
-        <GridContainer container spacing={2}>
+        <Grid container spacing={2}>
           <GridProfile item xs={8}>
             <Avatar
               sx={{ ...styles.avatar }}
@@ -252,7 +251,7 @@ export const EditProfile = ({ user }) => {
               </Form>
             </BoxContainer>
           </GridContainerInner>
-        </GridContainer>
+        </Grid>
       </ContainerWrapper>
     </Wrapper>
   )

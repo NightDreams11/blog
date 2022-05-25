@@ -7,13 +7,12 @@ import DialogContentText from '@mui/material/DialogContentText'
 import DialogTitle from '@mui/material/DialogTitle'
 import Slide from '@mui/material/Slide'
 import { useDispatch } from 'react-redux'
-import { deleteUser } from 'store/auth'
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />
 })
 
-export function AlertDialogSlide({ isDialogOpen, setIsDialogOpen }) {
+export function AlertDialogSlide({ isDialogOpen, setIsDialogOpen, deleteUser }) {
   const dispatch = useDispatch()
 
   const handleClose = () => {

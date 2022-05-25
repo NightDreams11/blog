@@ -2,6 +2,7 @@ import { Avatar, Typography } from '@mui/material'
 import { useState } from 'react'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { getImageUrl } from 'utils/imageURL/imageURL'
+import { deleteUser } from 'store/profile'
 import { AlertDialogSlide } from './DeleteProfileConfirmation/DeleteProfileConfirmation'
 import {
   ButtonBlockGrid,
@@ -62,6 +63,7 @@ export const ViewProfile = ({ user }) => {
               <AlertDialogSlide
                 isDialogOpen={isDialogOpen}
                 setIsDialogOpen={setIsDialogOpen}
+                deleteUser={deleteUser}
               />
             </ButtonBoxContainer>
           </ButtonBlockGrid>

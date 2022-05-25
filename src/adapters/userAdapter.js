@@ -1,6 +1,5 @@
 export function userAdapter(userResponse) {
   const vField = '__v'
-
   const idField = '_id'
 
   return {

@@ -20,8 +20,6 @@ export const ContainerWrapper = styled(
   marginTop: 20,
 })
 
-export const GridContainer = styled(Grid, {})({})
-
 export const Title = styled(
   Typography,
   {}

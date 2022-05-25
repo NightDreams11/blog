@@ -3,7 +3,7 @@ import FormGroup from '@mui/material/FormGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import Checkbox from '@mui/material/Checkbox'
 
-export function CheckboxLabels({ showPass, setShowPass }) {
+export function ShowPasswordButton({ showPass, setShowPass }) {
   return (
     <FormGroup sx={{ position: 'absolute', top: 295, left: 30 }}>
       <FormControlLabel

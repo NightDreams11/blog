@@ -5,7 +5,7 @@ import { Navigate } from 'react-router'
 import { loginUser, setTokenAC } from 'store/auth'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { CheckboxLabels } from 'components/layout/CheckBox/Checkbox'
+import { ShowPasswordButton } from 'components/layout/CheckBox/Checkbox'
 import {
   BoxContainer,
   ContainerWrapper,
@@ -124,7 +124,7 @@ export const LoginPage = () => {
               FormHelperTextProps={{ style: stylesForTextField.helperText }}
               helperText={errors?.password?.message}
             />
-            <CheckboxLabels showPass={showPass} setShowPass={setShowPass} />
+            <ShowPasswordButton showPass={showPass} setShowPass={setShowPass} />
             <EnterButton
               variant="contained"
               type="submit"
