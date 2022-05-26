@@ -25,8 +25,9 @@ export function PreviewButton() {
     reader.onloadend = () => {
       dispatch(setAvatarAC(file, reader.result))
     }
-
-    reader.readAsDataURL(file)
+    if (file) {
+      reader.readAsDataURL(file)
+    }
   }
 
   return (
