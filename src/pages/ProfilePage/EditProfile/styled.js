@@ -1,28 +1,90 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import { Button, Container, Grid, TextField, Typography } from '@mui/material'
+import { Box, styled } from '@mui/system'
+import style from 'styled-components'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
-import { styled } from '@mui/system'
-import style from 'styled-components'
 import { Link } from 'react-router-dom'
 
-export const Wrapper = style.div``
+export const Wrapper = style.div`
+min-height: 1000px;`
 
 export const ContainerWrapper = styled(
   Container,
   {}
 )({
   width: '100vw',
-  height: 700,
+  minHeight: 700,
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  marginTop: 20,
 })
 
+export const Title = styled(
+  Typography,
+  {}
+)({
+  maxWidth: 360,
+  width: '100%',
+  minWidth: 320,
+  paddingTop: 30,
+  color: '#1976d2',
+})
+
+export const GridProfile = styled(
+  Grid,
+  {}
+)({
+  display: 'flex',
+})
+export const GridContainerInner = styled(Grid, {})({})
+
+export const RouteLink = styled(
+  Link,
+  {}
+)({
+  textDecoration: 'none',
+})
+
+export const BoxProfileBlock = styled(
+  Box,
+  {}
+)({
+  marginLeft: 20,
+  paddingTop: 20,
+})
+
+export const BoxButtonBlock = styled(
+  Box,
+  {}
+)({
+  display: 'flex',
+  flexDirection: 'column',
+  marginLeft: 'auto',
+})
+export const BackButton = styled(
+  Button,
+  {}
+)({
+  height: 40,
+  width: 150,
+})
+
+export const styles = {
+  avatar: {
+    width: 150,
+    height: 150,
+  },
+  button2: {
+    marginTop: 2,
+  },
+}
+
+// Form
 export const BoxContainer = styled(
   Box,
   {}
 )({
-  position: 'relative',
   borderRadius: 4,
   backgroundColor: '#F5FAFE',
   transition: '0.1',
@@ -35,40 +97,12 @@ export const BoxContainer = styled(
 })
 
 export const Form = style.form`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `
 
-export const Title = styled(
-  Typography,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  paddingTop: 50,
-  color: '#1976d2',
-})
-
-export const Email = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 50,
-  zIndex: 1,
-  //   '& .MuiOutlinedInput-notchedOutline': {
-  //     background: '#fff',
-  //   },
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Password = styled(
+export const EditProfileTextField = styled(
   TextField,
   {}
 )({
@@ -76,27 +110,19 @@ export const Password = styled(
   width: '100%',
   minWidth: 320,
   marginTop: 30,
+  zIndex: 1,
   '& .MuiOutlinedInput-root': {
     background: '#fff',
   },
 })
 
-export const EnterButton = styled(
+export const SaveButton = styled(
   Button,
   {}
 )({
-  marginTop: 70,
+  marginTop: 50,
+  marginBottom: 50,
   width: 150,
-})
-
-export const RegistrationLink = styled(
-  Link,
-  {}
-)({
-  paddingTop: 30,
-  cursor: 'pointer',
-  textDecoration: 'none',
-  color: '#1976d2',
 })
 
 export const Passed = styled(

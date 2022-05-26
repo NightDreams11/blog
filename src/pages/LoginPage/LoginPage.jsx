@@ -1,11 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { loginUser, setTokenAC } from 'store/auth'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-
+import { ShowPasswordButton } from 'components/layout/CheckBox/Checkbox'
 import {
   BoxContainer,
   ContainerWrapper,
@@ -25,14 +25,12 @@ export const LoginPage = () => {
   const dispatch = useDispatch()
   const token = useSelector((state) => state.auth.token)
 
+  const [showPass, setShowPass] = useState(false)
+
   useEffect(() => {
     const value = localStorage.getItem('token')
     dispatch(setTokenAC(JSON.parse(value)))
   }, [dispatch])
-
-  useEffect(() => {
-    window.localStorage.setItem('token', JSON.stringify(token))
-  }, [token])
 
   const validationSchema = yup.object().shape({
     email: yup
@@ -79,8 +77,7 @@ export const LoginPage = () => {
               autoComplete="off"
               InputProps={{
                 endAdornment:
-                  (getFieldState('email').isTouched ||
-                    getFieldState('email').isDirty) &&
+                  getFieldState('email').isDirty &&
                   (errors.email ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (
@@ -101,12 +98,11 @@ export const LoginPage = () => {
               sx={{ ...stylesForTextField }}
               placeholder="Enter your password"
               label="Password*"
-              type="password"
+              type={showPass ? 'text' : 'password'}
               autoComplete="off"
               InputProps={{
                 endAdornment:
-                  (getFieldState('password').isTouched ||
-                    getFieldState('password').isDirty) &&
+                  getFieldState('password').isDirty &&
                   (errors.password ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (
@@ -122,6 +118,7 @@ export const LoginPage = () => {
               FormHelperTextProps={{ style: stylesForTextField.helperText }}
               helperText={errors?.password?.message}
             />
+            <ShowPasswordButton showPass={showPass} setShowPass={setShowPass} />
             <EnterButton
               variant="contained"
               type="submit"

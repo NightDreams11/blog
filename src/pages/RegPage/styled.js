@@ -50,7 +50,7 @@ export const Title = styled(
   color: '#1976d2',
 })
 
-export const Name = styled(
+export const ProfileTextField = styled(
   TextField,
   {}
 )({
@@ -61,9 +61,6 @@ export const Name = styled(
   zIndex: 1,
   '& .MuiOutlinedInput-root': {
     background: '#fff',
-  },
-  ':-webkit-autofill': {
-    WebkitBoxShadow: '0 0 0 1000px white inset',
   },
 })
 

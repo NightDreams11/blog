@@ -8,18 +8,12 @@ import { emailValidator, nameValidator, passwordValidator } from './regex'
 import {
   BoxContainer,
   ContainerWrapper,
-  Details,
-  Email,
-  ExtraDetails,
   Failed,
   Form,
   LoginLink,
-  Name,
   Passed,
-  Password,
-  Profession,
+  ProfileTextField,
   RegButton,
-  Skills,
   stylesForTextField,
   Title,
   Wrapper,
@@ -59,7 +53,7 @@ export const RegPage = () => {
         <BoxContainer>
           <Form onSubmit={handleSubmit}>
             <Title variant="h4">Регистрация</Title>
-            <Name
+            <ProfileTextField
               label="Name*"
               placeholder="Enter your name"
               name="name"
@@ -87,7 +81,7 @@ export const RegPage = () => {
                 />
               }
             />
-            <Email
+            <ProfileTextField
               label="Email*"
               placeholder="Enter your email"
               name="email"
@@ -115,7 +109,7 @@ export const RegPage = () => {
                 />
               }
             />
-            <Password
+            <ProfileTextField
               label="Password*"
               placeholder="Enter your password"
               name="password"
@@ -144,7 +138,7 @@ export const RegPage = () => {
                 />
               }
             />
-            <ExtraDetails
+            <ProfileTextField
               label="Extra details"
               placeholder="Add extra information"
               name="extra_details"
@@ -153,7 +147,7 @@ export const RegPage = () => {
               //   setExtraDetails(e.target.value)
               // }}
             />
-            <Skills
+            <ProfileTextField
               label="Skills"
               placeholder="Add your skills"
               name="skills"
@@ -162,7 +156,7 @@ export const RegPage = () => {
               //   setSkills(e.target.value)
               // }}
             />
-            <Profession
+            <ProfileTextField
               label="Profession"
               placeholder="Add your profession"
               name="profession"
@@ -171,7 +165,7 @@ export const RegPage = () => {
               //   setProfession(e.target.value)
               // }}
             />
-            <Details
+            <ProfileTextField
               label="Details"
               placeholder="Add details"
               name="details"

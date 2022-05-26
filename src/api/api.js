@@ -1,3 +1,4 @@
+import { userAdapter } from 'adapters/userAdapter'
 import * as axios from 'axios'
 
 const instance = axios.create({
@@ -5,6 +6,15 @@ const instance = axios.create({
   headers: {
     'Content-Type': 'application/json; charset=utf-8',
   },
+})
+
+instance.interceptors.request.use((request) => {
+  const token = JSON.parse(localStorage.getItem('token'))
+  if (token) {
+    request.headers.Authorization = `Bearer ${token}`
+  }
+
+  return request
 })
 
 export const authAPI = {
@@ -16,11 +26,23 @@ export const authAPI = {
     return instance.post('/auth', payload)
   },
 
-  getUser(token) {
-    return instance.get('/auth/user', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+  async getUser() {
+    return userAdapter(await instance.get('/auth/user'))
+  },
+}
+
+export const profileAPI = {
+  async uploadAvatar({ file, id }) {
+    const formData = new FormData()
+    formData.append('avatar', file)
+    return userAdapter(await instance.put(`/users/upload/${id}`, formData))
+  },
+
+  async updateUser({ user, id }) {
+    return userAdapter(await instance.patch(`/users/${id}`, user))
+  },
+
+  deleteUser({ id }) {
+    return instance.delete(`/users/${id}`)
   },
 }
