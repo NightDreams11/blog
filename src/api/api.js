@@ -1,8 +1,6 @@
 import { userAdapter } from 'adapters/userAdapter'
 import * as axios from 'axios'
 
-const token = JSON.parse(localStorage.getItem('token'))
-
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
@@ -11,7 +9,11 @@ const instance = axios.create({
 })
 
 instance.interceptors.request.use((request) => {
-  request.headers.Authorization = `Bearer ${token}`
+  const token = JSON.parse(localStorage.getItem('token'))
+  if (token) {
+    request.headers.Authorization = `Bearer ${token}`
+  }
+
   return request
 })
 

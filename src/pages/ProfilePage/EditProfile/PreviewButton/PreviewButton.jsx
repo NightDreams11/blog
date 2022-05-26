@@ -2,16 +2,31 @@ import * as React from 'react'
 import IconButton from '@mui/material/IconButton'
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import Stack from '@mui/material/Stack'
-import { useDispatch } from 'react-redux'
-import { uploadAvatar } from '../../../../store/profile'
+import { useDispatch, useSelector } from 'react-redux'
+import { setAvatarAC } from 'store/auth'
+import { Button } from '@mui/material'
+import { uploadAvatar } from 'store/profile'
 import { UploadAvatarButton } from './styled'
 
-export function UploadButton() {
+export function PreviewButton() {
+  const previewAvatar = useSelector((state) => state.auth.previewAvatar)
   const dispatch = useDispatch()
-  const onInputChange = (e) => {
+
+  const onInputChange = () => {
+    dispatch(uploadAvatar(previewAvatar.file))
+  }
+
+  function handleImageChange(e) {
     e.preventDefault()
-    const files = [...e.target.files]
-    dispatch(uploadAvatar(files[0]))
+
+    const reader = new FileReader()
+    const file = e.target.files[0]
+
+    reader.onloadend = () => {
+      dispatch(setAvatarAC(file, reader.result))
+    }
+
+    reader.readAsDataURL(file)
   }
 
   return (
@@ -23,10 +38,10 @@ export function UploadButton() {
           id="contained-button-file"
           multiple
           type="file"
-          onChange={onInputChange}
+          onChange={handleImageChange}
         />
         <UploadAvatarButton variant="contained" component="span">
-          Upload
+          Preview
         </UploadAvatarButton>
         <IconButton
           sx={{ ml: 1 }}
@@ -36,6 +51,7 @@ export function UploadButton() {
         >
           <PhotoCamera />
         </IconButton>
+        {previewAvatar !== null ? <Button onClick={onInputChange}>Save</Button> : ''}
       </label>
     </Stack>
   )

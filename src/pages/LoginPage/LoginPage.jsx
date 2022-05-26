@@ -32,10 +32,6 @@ export const LoginPage = () => {
     dispatch(setTokenAC(JSON.parse(value)))
   }, [dispatch])
 
-  useEffect(() => {
-    window.localStorage.setItem('token', JSON.stringify(token))
-  }, [token])
-
   const validationSchema = yup.object().shape({
     email: yup
       .string()
@@ -81,8 +77,7 @@ export const LoginPage = () => {
               autoComplete="off"
               InputProps={{
                 endAdornment:
-                  (getFieldState('email').isTouched ||
-                    getFieldState('email').isDirty) &&
+                  getFieldState('email').isDirty &&
                   (errors.email ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (
@@ -107,8 +102,7 @@ export const LoginPage = () => {
               autoComplete="off"
               InputProps={{
                 endAdornment:
-                  (getFieldState('password').isTouched ||
-                    getFieldState('password').isDirty) &&
+                  getFieldState('password').isDirty &&
                   (errors.password ? (
                     <Failed color="error" sx={{ ...stylesForTextField.icon }} />
                   ) : (

@@ -1,11 +1,11 @@
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import { UploadButton } from 'pages/ProfilePage/EditProfile/UploadButton/UploadButton'
 import { updateUser } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Avatar, Grid, Typography } from '@mui/material'
 import { getImageUrl } from 'utils/imageURL/imageURL'
+import { PreviewButton } from './PreviewButton/PreviewButton'
 import {
   BoxContainer,
   ContainerWrapper,
@@ -27,6 +27,7 @@ import {
 } from './styled'
 
 export const EditProfile = ({ user }) => {
+  const previewAvatar = useSelector((state) => state.auth.previewAvatar)
   const dispatch = useDispatch()
 
   const validationSchema = yup.object().shape({
@@ -71,7 +72,11 @@ export const EditProfile = ({ user }) => {
             <Avatar
               sx={{ ...styles.avatar }}
               alt={user.name}
-              src={getImageUrl(user.avatar)}
+              src={
+                previewAvatar !== null
+                  ? previewAvatar.imageUrl
+                  : getImageUrl(user.avatar)
+              }
             />
             <BoxProfileBlock>
               <Typography>{user.name}</Typography>
@@ -93,7 +98,7 @@ export const EditProfile = ({ user }) => {
             </BoxButtonBlock>
           </GridProfile>
           <GridContainerInner item xs={3}>
-            <UploadButton>Upload avatar</UploadButton>
+            <PreviewButton />
           </GridContainerInner>
           <GridContainerInner item xs={12}>
             {/* Form */}
