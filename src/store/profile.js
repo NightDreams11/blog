@@ -1,5 +1,5 @@
 import { profileAPI } from 'api/api'
-import { deleteUserAC, setUserAC } from './auth'
+import { deleteUserAC, setUserAC, toggleIsFetchingAC } from './auth'
 
 // const ActionTypes = {}
 
@@ -24,6 +24,7 @@ export const updateUser = (user) => async (dispatch, getState) => {
   const { id } = getState().auth.user
   const updatedUser = await profileAPI.updateUser({ user, id })
   if (updatedUser) {
+    dispatch(toggleIsFetchingAC(false))
     dispatch(setUserAC(updatedUser))
   }
 }

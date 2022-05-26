@@ -1,7 +1,8 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import { Box, Container, TextField, Typography } from '@mui/material'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
 import { styled } from '@mui/system'
+import { LoadingButton } from '@mui/lab'
 import style from 'styled-components'
 import { Link } from 'react-router-dom'
 
@@ -82,7 +83,7 @@ export const Password = styled(
 })
 
 export const EnterButton = styled(
-  Button,
+  LoadingButton,
   {}
 )({
   marginTop: 70,

@@ -5,6 +5,8 @@ import { updateUser } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Avatar, Grid, Typography } from '@mui/material'
 import { getImageUrl } from 'utils/imageURL/imageURL'
+import { toggleIsFetchingAC } from 'store/auth'
+import SaveIcon from '@mui/icons-material/Save'
 import { PreviewButton } from './PreviewButton/PreviewButton'
 import {
   BoxContainer,
@@ -28,6 +30,7 @@ import {
 
 export const EditProfile = ({ user }) => {
   const previewAvatar = useSelector((state) => state.auth.previewAvatar)
+  const isFetching = useSelector((state) => state.auth.isFetching)
   const dispatch = useDispatch()
 
   const validationSchema = yup.object().shape({
@@ -60,6 +63,7 @@ export const EditProfile = ({ user }) => {
         accumulator[key] = data[key] || user[key]
         return accumulator
       }, {})
+      dispatch(toggleIsFetchingAC(true))
       dispatch(updateUser(newData))
     },
   })
@@ -243,7 +247,11 @@ export const EditProfile = ({ user }) => {
                 <SaveButton
                   variant="contained"
                   type="submit"
+                  loading={isFetching}
+                  endIcon={<SaveIcon />}
+                  loadingPosition="end"
                   disabled={
+                    isFetching ||
                     !formik.touched.name ||
                     !formik.touched.extra_details ||
                     !formik.touched.skills ||

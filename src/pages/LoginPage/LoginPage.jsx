@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
-import { loginUser, setTokenAC } from 'store/auth'
+import { loginUser, setTokenAC, toggleIsFetchingAC } from 'store/auth'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ShowPasswordButton } from 'components/layout/CheckBox/Checkbox'
@@ -22,8 +22,9 @@ import {
 } from './styled'
 
 export const LoginPage = () => {
-  const dispatch = useDispatch()
   const token = useSelector((state) => state.auth.token)
+  const isFetching = useSelector((state) => state.auth.isFetching)
+  const dispatch = useDispatch()
 
   const [showPass, setShowPass] = useState(false)
 
@@ -57,6 +58,7 @@ export const LoginPage = () => {
   })
 
   const onSubmit = (data) => {
+    dispatch(toggleIsFetchingAC(true))
     dispatch(loginUser(data))
   }
 
@@ -122,8 +124,10 @@ export const LoginPage = () => {
             <EnterButton
               variant="contained"
               type="submit"
+              loading={isFetching}
+              loadingPosition="end"
               disabled={Boolean(
-                dirtyFields.email && dirtyFields.password
+                !isFetching && dirtyFields.email && dirtyFields.password
                   ? errors.email || errors.password
                   : true
               )}

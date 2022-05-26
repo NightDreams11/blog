@@ -7,12 +7,14 @@ const ActionTypes = {
   SET_AVATAR: 'SET_AVATAR',
   LOGOUT_USER: 'LOGOUT_USER',
   DELETE_USER: 'DELETE_USER',
+  TOGGLE_IS_FETCHING: 'TOGGLE_IS_FETCHING',
 }
 
 const initialState = {
   user: null,
   token: null,
   previewAvatar: null,
+  isFetching: false,
 }
 
 export const authReducer = (state = initialState, { type, payload = 0 }) => {
@@ -30,6 +32,8 @@ export const authReducer = (state = initialState, { type, payload = 0 }) => {
       return { ...state, token: null, user: null }
     case ActionTypes.DELETE_USER:
       return { ...state, token: null, user: null }
+    case ActionTypes.TOGGLE_IS_FETCHING:
+      return { ...state, isFetching: payload }
     default:
       return state
   }
@@ -53,12 +57,18 @@ export const logoutUserAC = () => ({
 export const deleteUserAC = () => ({
   type: ActionTypes.DELETE_USER,
 })
+export const toggleIsFetchingAC = (isFetching) => ({
+  type: ActionTypes.TOGGLE_IS_FETCHING,
+  payload: isFetching,
+})
 
 export const regUser = (payload) => async (dispatch) => {
   try {
     await authAPI.regUser(payload)
+    dispatch(toggleIsFetchingAC(false))
     dispatch(addSnackbarMessage('Новый пользователь зарегистрирован'))
   } catch (error) {
+    dispatch(toggleIsFetchingAC(false))
     dispatch(addSnackbarMessage(error.response.data.error.message))
   }
 }
@@ -71,9 +81,11 @@ export const loginUser = (payload) => async (dispatch) => {
       dispatch(setTokenAC(token.data.token))
       const user = await authAPI.getUser(token.data.token)
       dispatch(setUserAC(user))
+      dispatch(toggleIsFetchingAC(false))
       dispatch(addSnackbarMessage(`Welcome ${user.name}`))
     }
   } catch (error) {
+    dispatch(toggleIsFetchingAC(false))
     dispatch(addSnackbarMessage(error.response.data.error))
   }
 }

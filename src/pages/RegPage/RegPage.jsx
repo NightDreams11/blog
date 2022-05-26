@@ -2,7 +2,7 @@ import { HelperTexts } from 'components/auth/HelperText/HelperTexts'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
-import { regUser } from 'store/auth'
+import { regUser, toggleIsFetchingAC } from 'store/auth'
 
 import { emailValidator, nameValidator, passwordValidator } from './regex'
 import {
@@ -21,6 +21,7 @@ import {
 
 export const RegPage = () => {
   const token = useSelector((state) => state.auth.token)
+  const isFetching = useSelector((state) => state.auth.isFetching)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -37,6 +38,7 @@ export const RegPage = () => {
   const dispatch = useDispatch()
 
   const handleSubmit = (data) => {
+    dispatch(toggleIsFetchingAC(true))
     data.preventDefault()
     const formData = new FormData(data.target)
     const payload = Object.fromEntries(formData.entries())
@@ -177,7 +179,10 @@ export const RegPage = () => {
             <RegButton
               variant="contained"
               type="submit"
+              loading={isFetching}
+              loadingPosition="end"
               disabled={
+                isFetching ||
                 !!nameValidator(name) ||
                 !!emailValidator(email) ||
                 !!passwordValidator(password)
