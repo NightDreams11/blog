@@ -1,5 +1,5 @@
 import { authAPI } from '../api/api'
-import { addSnackbarMessage } from './messages'
+import { addSnackbarMessageErrorAC, addSnackbarMessageSuccessAC } from './messages'
 
 const ActionTypes = {
   SET_TOKEN: 'SET_TOKEN',
@@ -66,10 +66,10 @@ export const regUser = (payload) => async (dispatch) => {
   try {
     await authAPI.regUser(payload)
     dispatch(toggleIsFetchingAC(false))
-    dispatch(addSnackbarMessage('Новый пользователь зарегистрирован'))
+    dispatch(addSnackbarMessageSuccessAC('Новый пользователь зарегистрирован'))
   } catch (error) {
     dispatch(toggleIsFetchingAC(false))
-    dispatch(addSnackbarMessage(error.response.data.error.message))
+    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
   }
 }
 
@@ -82,11 +82,11 @@ export const loginUser = (payload) => async (dispatch) => {
       const user = await authAPI.getUser(token.data.token)
       dispatch(setUserAC(user))
       dispatch(toggleIsFetchingAC(false))
-      dispatch(addSnackbarMessage(`Welcome ${user.name}`))
+      dispatch(addSnackbarMessageSuccessAC(`Welcome ${user.name}`))
     }
   } catch (error) {
     dispatch(toggleIsFetchingAC(false))
-    dispatch(addSnackbarMessage(error.response.data.error))
+    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
   }
 }
 

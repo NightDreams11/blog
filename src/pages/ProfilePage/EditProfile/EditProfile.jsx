@@ -36,7 +36,7 @@ export const EditProfile = ({ user }) => {
   const validationSchema = yup.object().shape({
     name: yup
       .string()
-      .required()
+      .required('Name is a required field')
       .min(2, 'Min lenght 2 characters')
       .matches(/^[a-zA-Z\s]+[a-zA-Z\s]$/, 'Please use only latin characters'),
     extra_details: yup.string(),
