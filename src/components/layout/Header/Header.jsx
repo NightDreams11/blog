@@ -27,6 +27,7 @@ export const ResponsiveAppBar = () => {
 
   const settings = [
     { title: 'Profile', path: '/profile' },
+    { title: 'Posts', path: '/posts' },
     {
       title: 'Logout',
       path: '',

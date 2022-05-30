@@ -12,7 +12,7 @@ export const ProfilePage = ({ editMode }) => {
     return <Navigate to="/login" />
   }
 
-  if (user === null) {
+  if (!user) {
     return <Preloader />
   }
 

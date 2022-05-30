@@ -1,3 +1,4 @@
+import { postsAdapter } from 'adapters/postsAdapter'
 import { userAdapter } from 'adapters/userAdapter'
 import * as axios from 'axios'
 
@@ -44,5 +45,12 @@ export const profileAPI = {
 
   deleteUser({ id }) {
     return instance.delete(`/users/${id}`)
+  },
+}
+
+export const postsAPI = {
+  async getPosts() {
+    const response = postsAdapter(await instance.get('/posts?limit=9'))
+    return response
   },
 }
