@@ -1,5 +1,5 @@
 import { authAPI } from '../api/api'
-import { addSnackbarMessage } from './messages'
+import { addSnackbarMessageErrorAC, addSnackbarMessageSuccessAC } from './messages'
 
 const ActionTypes = {
   SET_TOKEN: 'SET_TOKEN',
@@ -7,12 +7,14 @@ const ActionTypes = {
   SET_AVATAR: 'SET_AVATAR',
   LOGOUT_USER: 'LOGOUT_USER',
   DELETE_USER: 'DELETE_USER',
+  TOGGLE_IS_FETCHING: 'TOGGLE_IS_FETCHING',
 }
 
 const initialState = {
   user: null,
   token: null,
   previewAvatar: null,
+  isFetching: false,
 }
 
 export const authReducer = (state = initialState, { type, payload = 0 }) => {
@@ -30,6 +32,8 @@ export const authReducer = (state = initialState, { type, payload = 0 }) => {
       return { ...state, token: null, user: null }
     case ActionTypes.DELETE_USER:
       return { ...state, token: null, user: null }
+    case ActionTypes.TOGGLE_IS_FETCHING:
+      return { ...state, isFetching: payload }
     default:
       return state
   }
@@ -53,28 +57,38 @@ export const logoutUserAC = () => ({
 export const deleteUserAC = () => ({
   type: ActionTypes.DELETE_USER,
 })
+export const toggleIsFetchingAC = (isFetching) => ({
+  type: ActionTypes.TOGGLE_IS_FETCHING,
+  payload: isFetching,
+})
 
 export const regUser = (payload) => async (dispatch) => {
   try {
+    dispatch(toggleIsFetchingAC(true))
     await authAPI.regUser(payload)
-    dispatch(addSnackbarMessage('Новый пользователь зарегистрирован'))
+    dispatch(addSnackbarMessageSuccessAC('Новый пользователь зарегистрирован'))
   } catch (error) {
-    dispatch(addSnackbarMessage(error.response.data.error.message))
+    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+  } finally {
+    dispatch(toggleIsFetchingAC(false))
   }
 }
 
 export const loginUser = (payload) => async (dispatch) => {
   try {
+    dispatch(toggleIsFetchingAC(true))
     const token = await authAPI.loginUser(payload)
     if (token.data.token) {
       window.localStorage.setItem('token', JSON.stringify(token.data.token))
       dispatch(setTokenAC(token.data.token))
       const user = await authAPI.getUser(token.data.token)
       dispatch(setUserAC(user))
-      dispatch(addSnackbarMessage(`Welcome ${user.name}`))
+      dispatch(addSnackbarMessageSuccessAC(`Welcome ${user.name}`))
     }
   } catch (error) {
-    dispatch(addSnackbarMessage(error.response.data.error))
+    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+  } finally {
+    dispatch(toggleIsFetchingAC(false))
   }
 }
 

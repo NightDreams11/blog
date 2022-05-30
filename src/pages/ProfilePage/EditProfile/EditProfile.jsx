@@ -5,6 +5,7 @@ import { updateUser } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Avatar, Grid, Typography } from '@mui/material'
 import { getImageUrl } from 'utils/imageURL/imageURL'
+import SaveIcon from '@mui/icons-material/Save'
 import { PreviewButton } from './PreviewButton/PreviewButton'
 import {
   BoxContainer,
@@ -28,12 +29,13 @@ import {
 
 export const EditProfile = ({ user }) => {
   const previewAvatar = useSelector((state) => state.auth.previewAvatar)
+  const isFetching = useSelector((state) => state.auth.isFetching)
   const dispatch = useDispatch()
 
   const validationSchema = yup.object().shape({
     name: yup
       .string()
-      .required()
+      .required('Name is a required field')
       .min(2, 'Min lenght 2 characters')
       .matches(/^[a-zA-Z\s]+[a-zA-Z\s]$/, 'Please use only latin characters'),
     extra_details: yup.string(),
@@ -243,7 +245,11 @@ export const EditProfile = ({ user }) => {
                 <SaveButton
                   variant="contained"
                   type="submit"
+                  loading={isFetching}
+                  endIcon={<SaveIcon />}
+                  loadingPosition="end"
                   disabled={
+                    isFetching ||
                     !formik.touched.name ||
                     !formik.touched.extra_details ||
                     !formik.touched.skills ||

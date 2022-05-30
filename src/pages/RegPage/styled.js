@@ -1,7 +1,8 @@
-import { Box, Button, Container, TextField, Typography } from '@mui/material'
+import { Box, Container, TextField, Typography } from '@mui/material'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
 import { styled } from '@mui/system'
+import { LoadingButton } from '@mui/lab'
 import style from 'styled-components'
 import { Link } from 'react-router-dom'
 
@@ -64,86 +65,8 @@ export const ProfileTextField = styled(
   },
 })
 
-export const Email = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 30,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Password = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 30,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const ExtraDetails = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 30,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Skills = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 50,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Profession = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 50,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
-export const Details = styled(
-  TextField,
-  {}
-)({
-  maxWidth: 360,
-  width: '100%',
-  minWidth: 320,
-  marginTop: 50,
-  '& .MuiOutlinedInput-root': {
-    background: '#fff',
-  },
-})
-
 export const RegButton = styled(
-  Button,
+  LoadingButton,
   {}
 )({
   marginTop: 50,
@@ -195,5 +118,7 @@ export const stylesForTextField = {
     display: 'flex',
     justifyContent: 'space-between',
     height: 20,
+    position: 'absolute',
+    bottom: '-22px',
   },
 }

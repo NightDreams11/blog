@@ -3,6 +3,7 @@ import { Box, styled } from '@mui/system'
 import style from 'styled-components'
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined'
 import ErrorOutlineOutlinedIcon from '@mui/icons-material/ErrorOutlineOutlined'
+import { LoadingButton } from '@mui/lab'
 import { Link } from 'react-router-dom'
 
 export const Wrapper = style.div`
@@ -117,7 +118,7 @@ export const EditProfileTextField = styled(
 })
 
 export const SaveButton = styled(
-  Button,
+  LoadingButton,
   {}
 )({
   marginTop: 50,

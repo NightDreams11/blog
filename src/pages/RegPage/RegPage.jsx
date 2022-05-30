@@ -21,6 +21,7 @@ import {
 
 export const RegPage = () => {
   const token = useSelector((state) => state.auth.token)
+  const isFetching = useSelector((state) => state.auth.isFetching)
 
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
@@ -177,7 +178,10 @@ export const RegPage = () => {
             <RegButton
               variant="contained"
               type="submit"
+              loading={isFetching}
+              loadingPosition="end"
               disabled={
+                isFetching ||
                 !!nameValidator(name) ||
                 !!emailValidator(email) ||
                 !!passwordValidator(password)

@@ -22,8 +22,9 @@ import {
 } from './styled'
 
 export const LoginPage = () => {
-  const dispatch = useDispatch()
   const token = useSelector((state) => state.auth.token)
+  const isFetching = useSelector((state) => state.auth.isFetching)
+  const dispatch = useDispatch()
 
   const [showPass, setShowPass] = useState(false)
 
@@ -122,8 +123,10 @@ export const LoginPage = () => {
             <EnterButton
               variant="contained"
               type="submit"
+              loading={isFetching}
+              loadingPosition="end"
               disabled={Boolean(
-                dirtyFields.email && dirtyFields.password
+                !isFetching && dirtyFields.email && dirtyFields.password
                   ? errors.email || errors.password
                   : true
               )}
