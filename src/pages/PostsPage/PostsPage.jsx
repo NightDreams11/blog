@@ -25,8 +25,8 @@ export const PostsPage = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(getPosts())
-  }, [dispatch])
+    dispatch(getPosts(pageSize))
+  }, [dispatch, pageSize])
 
   if (!token) {
     return <Navigate to="/login" />
@@ -46,6 +46,7 @@ export const PostsPage = () => {
                 <PostTitleContainer>
                   <PostTitle variant="h5">{post.title}</PostTitle>
                 </PostTitleContainer>
+                <img src={post.image} alt="PostAva" />
                 <PostsTextContainer>
                   <TextTitle>{post.title}</TextTitle>
                   <Text>{post.description}</Text>

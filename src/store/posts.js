@@ -24,7 +24,7 @@ const getPostsAC = (posts) => ({
   payload: posts,
 })
 
-export const getPosts = () => async (dispatch) => {
-  const posts = await postsAPI.getPosts()
+export const getPosts = (pageSize) => async (dispatch) => {
+  const posts = await postsAPI.getPosts(pageSize)
   dispatch(getPostsAC(posts))
 }

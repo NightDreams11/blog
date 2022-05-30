@@ -9,6 +9,7 @@ export function postsAdapter(postsResponse) {
         description: item.description,
         postedBy: item.postedBy,
         dateCreated: item.dateCreated,
+        image: item.image,
         v: item[vField],
         id: item[idField],
       }

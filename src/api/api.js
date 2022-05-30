@@ -49,8 +49,7 @@ export const profileAPI = {
 }
 
 export const postsAPI = {
-  async getPosts() {
-    const response = postsAdapter(await instance.get('/posts?limit=9'))
-    return response
+  async getPosts(pageSize) {
+    return postsAdapter(await instance.get(`/posts?limit=${pageSize}`))
   },
 }
