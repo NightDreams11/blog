@@ -13,12 +13,12 @@ export const messageReducer = (state = initialState, { type, payload = 0 }) => {
     case ActionTypes.ADD_SNACKBAR_MESSAGE_SUCCESS:
       return {
         ...state,
-        snackbarMessage: { message: payload.message, type: payload.type },
+        snackbarMessage: { message: payload, type: 'success' },
       }
     case ActionTypes.ADD_SNACKBAR_MESSAGE_ERROR:
       return {
         ...state,
-        snackbarMessage: { message: payload.message, type: payload.type },
+        snackbarMessage: { message: payload, type: 'error' },
       }
     case ActionTypes.DELETE_SNACKBAR_MESSAGE:
       return { ...state, snackbarMessage: null }
@@ -27,20 +27,14 @@ export const messageReducer = (state = initialState, { type, payload = 0 }) => {
   }
 }
 
-export const addSnackbarMessageSuccessAC = (payload) => ({
+export const addSnackbarMessageSuccessAC = (message) => ({
   type: ActionTypes.ADD_SNACKBAR_MESSAGE_SUCCESS,
-  payload: {
-    message: payload,
-    type: 'success',
-  },
+  payload: message,
 })
 
-export const addSnackbarMessageErrorAC = (payload) => ({
+export const addSnackbarMessageErrorAC = (message) => ({
   type: ActionTypes.ADD_SNACKBAR_MESSAGE_ERROR,
-  payload: {
-    message: payload,
-    type: 'error',
-  },
+  payload: message,
 })
 
 export const deleteSnackbarMessageAC = () => ({

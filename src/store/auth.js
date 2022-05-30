@@ -64,29 +64,31 @@ export const toggleIsFetchingAC = (isFetching) => ({
 
 export const regUser = (payload) => async (dispatch) => {
   try {
+    dispatch(toggleIsFetchingAC(true))
     await authAPI.regUser(payload)
-    dispatch(toggleIsFetchingAC(false))
     dispatch(addSnackbarMessageSuccessAC('Новый пользователь зарегистрирован'))
   } catch (error) {
-    dispatch(toggleIsFetchingAC(false))
     dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+  } finally {
+    dispatch(toggleIsFetchingAC(false))
   }
 }
 
 export const loginUser = (payload) => async (dispatch) => {
   try {
+    dispatch(toggleIsFetchingAC(true))
     const token = await authAPI.loginUser(payload)
     if (token.data.token) {
       window.localStorage.setItem('token', JSON.stringify(token.data.token))
       dispatch(setTokenAC(token.data.token))
       const user = await authAPI.getUser(token.data.token)
       dispatch(setUserAC(user))
-      dispatch(toggleIsFetchingAC(false))
       dispatch(addSnackbarMessageSuccessAC(`Welcome ${user.name}`))
     }
   } catch (error) {
-    dispatch(toggleIsFetchingAC(false))
     dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+  } finally {
+    dispatch(toggleIsFetchingAC(false))
   }
 }
 

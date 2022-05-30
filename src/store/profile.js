@@ -23,6 +23,7 @@ export const uploadAvatar = (file) => async (dispatch, getState) => {
 }
 
 export const updateUser = (user) => async (dispatch, getState) => {
+  dispatch(toggleIsFetchingAC(true))
   const { id } = getState().auth.user
   const updatedUser = await profileAPI.updateUser({ user, id })
   if (updatedUser) {

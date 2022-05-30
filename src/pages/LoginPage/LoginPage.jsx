@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
-import { loginUser, setTokenAC, toggleIsFetchingAC } from 'store/auth'
+import { loginUser, setTokenAC } from 'store/auth'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { ShowPasswordButton } from 'components/layout/CheckBox/Checkbox'
@@ -58,7 +58,6 @@ export const LoginPage = () => {
   })
 
   const onSubmit = (data) => {
-    dispatch(toggleIsFetchingAC(true))
     dispatch(loginUser(data))
   }
 

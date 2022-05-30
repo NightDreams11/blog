@@ -5,7 +5,6 @@ import { updateUser } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Avatar, Grid, Typography } from '@mui/material'
 import { getImageUrl } from 'utils/imageURL/imageURL'
-import { toggleIsFetchingAC } from 'store/auth'
 import SaveIcon from '@mui/icons-material/Save'
 import { PreviewButton } from './PreviewButton/PreviewButton'
 import {
@@ -63,7 +62,6 @@ export const EditProfile = ({ user }) => {
         accumulator[key] = data[key] || user[key]
         return accumulator
       }, {})
-      dispatch(toggleIsFetchingAC(true))
       dispatch(updateUser(newData))
     },
   })
