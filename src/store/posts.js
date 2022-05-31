@@ -1,5 +1,6 @@
 import { postsAPI } from 'api/api'
 import { toggleIsFetchingAC } from './auth'
+import { addSnackbarMessageErrorAC } from './messages'
 
 const ActionTypes = {
   SET_POSTS: 'SET_POSTS',
@@ -46,10 +47,15 @@ export const setScrollPositionAC = (position) => ({
 export const getPosts =
   (pageSize, skipPosts = 0) =>
   async (dispatch, getState) => {
-    dispatch(toggleIsFetchingAC(true))
-    const posts = await postsAPI.getPosts(pageSize, skipPosts)
-    dispatch(getPostsAC(posts))
-    dispatch(toggleIsFetchingAC(false))
-    const scrollY = getState().postsReducer.scrollPosition
-    window.scrollTo(0, scrollY)
+    try {
+      dispatch(toggleIsFetchingAC(true))
+      const posts = await postsAPI.getPosts(pageSize, skipPosts)
+      dispatch(getPostsAC(posts))
+    } catch (error) {
+      dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+    } finally {
+      dispatch(toggleIsFetchingAC(false))
+      const scrollY = getState().postsReducer.scrollPosition
+      window.scrollTo(0, scrollY)
+    }
   }
