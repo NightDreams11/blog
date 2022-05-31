@@ -3,11 +3,14 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { getPosts } from 'store/posts'
+import { getImageUrl } from 'utils/imageURL/imageURL'
 import { Paginator } from 'utils/Paginator/Paginator'
+import postImg from '../../images/post.jpg'
 import {
   ContainerWrapper,
   GridContainer,
   GridItem,
+  Image,
   Item,
   PaginatorContainer,
   PostsTextContainer,
@@ -22,6 +25,10 @@ export const PostsPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const postsObj = useSelector((state) => state.postsReducer.postsObj)
   const pageSize = useSelector((state) => state.postsReducer.pageSize)
+  const skipPosts = useSelector((state) => state.postsReducer.skipPosts)
+  const currentPage = useSelector((state) => state.postsReducer.currentPage)
+  const isFetching = useSelector((state) => state.auth.isFetching)
+
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -32,7 +39,7 @@ export const PostsPage = () => {
     return <Navigate to="/login" />
   }
 
-  if (!postsObj) {
+  if (!postsObj || isFetching) {
     return <Preloader />
   }
 
@@ -46,7 +53,10 @@ export const PostsPage = () => {
                 <PostTitleContainer>
                   <PostTitle variant="h5">{post.title}</PostTitle>
                 </PostTitleContainer>
-                <img src={post.image} alt="PostAva" />
+                <Image
+                  src={post.image ? getImageUrl(post.image) : postImg}
+                  alt="PostAva"
+                />
                 <PostsTextContainer>
                   <TextTitle>{post.title}</TextTitle>
                   <Text>{post.description}</Text>
@@ -59,6 +69,9 @@ export const PostsPage = () => {
           <Paginator
             totalItemsCount={postsObj.pagination.total}
             pageSize={pageSize}
+            skipPosts={skipPosts}
+            currentPage={currentPage}
+            getPosts={getPosts}
           />
         </PaginatorContainer>
       </ContainerWrapper>

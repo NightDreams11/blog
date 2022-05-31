@@ -10,7 +10,10 @@ export const ContainerWrapper = styled(
   {}
 )({
   width: '100vw',
+  height: '100vh',
   marginTop: 50,
+  display: 'flex',
+  flexDirection: 'column',
 })
 export const GridContainer = styled(Grid, {})({})
 
@@ -33,10 +36,19 @@ export const PostTitleContainer = styled(
   background: '#FFF',
   textAlign: 'center',
   paddingTop: 10,
+  paddingLeft: 10,
+  paddingRight: 10,
   width: '100%',
 })
 
-export const PostTitle = styled(Typography, {})({})
+export const PostTitle = styled(
+  Typography,
+  {}
+)({
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+})
 
 export const PostsTextContainer = styled(
   Box,
@@ -49,13 +61,29 @@ export const PostsTextContainer = styled(
   padding: 10,
 })
 
+export const Image = style.img`
+height: 140px;
+max-width: 373px;
+width: 100%;
+`
+
 export const TextTitle = styled(
   Typography,
   {}
 )({
   fontWeight: 500,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 })
-export const Text = styled(Typography, {})({})
+export const Text = styled(
+  Typography,
+  {}
+)({
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+})
 
 export const PaginatorContainer = styled(
   Box,
@@ -65,4 +93,5 @@ export const PaginatorContainer = styled(
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+  marginTop: 'auto',
 })

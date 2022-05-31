@@ -15,6 +15,12 @@ export const RoutesComponent = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/edit" element={<ProfilePage editMode />} />
         <Route path="/posts" element={<PostsPage />} />
+        {/* <Route
+          path={`/posts/:match=${pageSize}&skip=${
+            currentPage === 1 ? 0 : skipPosts
+          }`}
+          element={<PostsPage />}
+        /> */}
       </Routes>
     </div>
   )
