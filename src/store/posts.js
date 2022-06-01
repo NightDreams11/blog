@@ -11,7 +11,6 @@ const ActionTypes = {
 const initialState = {
   postsObj: null,
   pageSize: 9,
-  skipPosts: 9,
   currentPage: 1,
   scrollPosition: null,
 }

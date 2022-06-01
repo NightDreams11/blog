@@ -25,7 +25,6 @@ export const PostsPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const postsObj = useSelector((state) => state.postsReducer.postsObj)
   const pageSize = useSelector((state) => state.postsReducer.pageSize)
-  const skipPosts = useSelector((state) => state.postsReducer.skipPosts)
   const currentPage = useSelector((state) => state.postsReducer.currentPage)
   const isFetching = useSelector((state) => state.auth.isFetching)
 
@@ -67,9 +66,9 @@ export const PostsPage = () => {
         </GridContainer>
         <PaginatorContainer>
           <Paginator
+            skipPosts={postsObj.pagination.skip}
             totalItemsCount={postsObj.pagination.total}
             pageSize={pageSize}
-            skipPosts={skipPosts}
             currentPage={currentPage}
             getPosts={getPosts}
           />
