@@ -1,7 +1,8 @@
 import { Preloader } from 'components/layout/Preloader/Preloader'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
+import { useSearchParams } from 'react-router-dom'
 import { getPosts } from 'store/posts'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import { Paginator } from 'utils/Paginator/Paginator'
@@ -24,15 +25,35 @@ import {
 export const PostsPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const postsObj = useSelector((state) => state.postsReducer.postsObj)
-  const pageSize = useSelector((state) => state.postsReducer.pageSize)
-  const currentPage = useSelector((state) => state.postsReducer.currentPage)
+  const [currentPage, setCurrentPage] = useState(1)
   const isFetching = useSelector((state) => state.auth.isFetching)
 
   const dispatch = useDispatch()
 
+  const [searchParams, setSearchParam] = useSearchParams()
+
+  const [pageSize, setPageSize] = useState(9)
+  const [pageQuerry, setPageQuerry] = useState(searchParams.get('page'))
+
+  const postsQuerry = searchParams.get('posts')
+
   useEffect(() => {
-    dispatch(getPosts(pageSize))
-  }, [dispatch, pageSize])
+    if (pageQuerry === '0' || !pageQuerry) {
+      setPageQuerry(currentPage)
+    }
+
+    setSearchParam({
+      posts: postsQuerry !== null ? postsQuerry : pageSize,
+      page: pageQuerry !== null ? pageQuerry : currentPage,
+    })
+
+    if (postsQuerry || pageQuerry) {
+      const skip = (pageQuerry - 1) * Number(pageSize)
+      setCurrentPage(Number(pageQuerry))
+      setPageSize(postsQuerry)
+      dispatch(getPosts(postsQuerry, skip))
+    }
+  }, [dispatch, setSearchParam, postsQuerry, pageQuerry, pageSize, currentPage])
 
   if (!token) {
     return <Navigate to="/login" />
@@ -71,6 +92,7 @@ export const PostsPage = () => {
             pageSize={pageSize}
             currentPage={currentPage}
             getPosts={getPosts}
+            setPageQuerry={setPageQuerry}
           />
         </PaginatorContainer>
       </ContainerWrapper>
