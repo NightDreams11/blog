@@ -49,7 +49,14 @@ export const profileAPI = {
 }
 
 export const postsAPI = {
-  async getPosts(pageSize, skipPosts) {
+  async getPosts(pageSize, skipPosts, search) {
+    if (search) {
+      return postsAdapter(
+        await instance.get(
+          `/posts?search=${search}&limit=${pageSize}&skip=${skipPosts}`
+        )
+      )
+    }
     return postsAdapter(
       await instance.get(`/posts?limit=${pageSize}&skip=${skipPosts}`)
     )

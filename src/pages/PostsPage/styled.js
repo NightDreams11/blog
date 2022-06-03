@@ -18,6 +18,7 @@ export const ContainerWrapper = styled(
 export const GridContainer = styled(Grid, {})({})
 
 export const GridItem = styled(Grid, {})({})
+
 export const Item = styled(
   Paper,
   {}
@@ -94,4 +95,14 @@ export const PaginatorContainer = styled(
   justifyContent: 'center',
   alignItems: 'center',
   marginTop: 'auto',
+})
+
+export const SearchContainer = styled(
+  Box,
+  {}
+)({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginTop: 20,
 })

@@ -1,4 +1,5 @@
 import { Preloader } from 'components/layout/Preloader/Preloader'
+import { Search } from 'components/layout/Search/Search'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
@@ -17,6 +18,7 @@ import {
   PostsTextContainer,
   PostTitle,
   PostTitleContainer,
+  SearchContainer,
   Text,
   TextTitle,
   Wrapper,
@@ -25,17 +27,22 @@ import {
 export const PostsPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const postsObj = useSelector((state) => state.postsReducer.postsObj)
-  const [currentPage, setCurrentPage] = useState(1)
   const isFetching = useSelector((state) => state.auth.isFetching)
 
   const dispatch = useDispatch()
 
   const [searchParams, setSearchParam] = useSearchParams()
 
+  const [currentPage, setCurrentPage] = useState(1)
+  const [text, setText] = useState('')
   const [pageSize, setPageSize] = useState(9)
-  const [pageQuerry, setPageQuerry] = useState(searchParams.get('page'))
 
+  const [pageQuerry, setPageQuerry] = useState(searchParams.get('page'))
   const postsQuerry = searchParams.get('posts')
+
+  const handleSearch = (value) => {
+    setText(value)
+  }
 
   useEffect(() => {
     if (pageQuerry === '0' || !pageQuerry) {
@@ -44,16 +51,29 @@ export const PostsPage = () => {
 
     setSearchParam({
       posts: postsQuerry !== null ? postsQuerry : pageSize,
-      page: pageQuerry !== null ? pageQuerry : currentPage,
+      page: pageQuerry,
+      ...(text
+        ? {
+            search: text,
+          }
+        : {}),
     })
 
     if (postsQuerry || pageQuerry) {
       const skip = (pageQuerry - 1) * Number(pageSize)
       setCurrentPage(Number(pageQuerry))
       setPageSize(postsQuerry)
-      dispatch(getPosts(postsQuerry, skip))
+      dispatch(getPosts(postsQuerry, skip, text))
     }
-  }, [dispatch, setSearchParam, postsQuerry, pageQuerry, pageSize, currentPage])
+  }, [
+    dispatch,
+    setSearchParam,
+    postsQuerry,
+    pageQuerry,
+    pageSize,
+    currentPage,
+    text,
+  ])
 
   if (!token) {
     return <Navigate to="/login" />
@@ -65,6 +85,9 @@ export const PostsPage = () => {
 
   return (
     <Wrapper>
+      <SearchContainer>
+        <Search handleSearch={handleSearch} text={text} />
+      </SearchContainer>
       <ContainerWrapper>
         <GridContainer container rowSpacing={2} spacing={2}>
           {postsObj.posts.map((post) => (

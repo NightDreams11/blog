@@ -34,11 +34,11 @@ export const setScrollPositionAC = (position) => ({
 })
 
 export const getPosts =
-  (pageSize = 9, skipPosts = 0) =>
+  (pageSize = 9, skipPosts = 0, search) =>
   async (dispatch, getState) => {
     try {
       dispatch(toggleIsFetchingAC(true))
-      const posts = await postsAPI.getPosts(pageSize, skipPosts)
+      const posts = await postsAPI.getPosts(pageSize, skipPosts, search)
       dispatch(getPostsAC(posts))
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.response.data.error))
