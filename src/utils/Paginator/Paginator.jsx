@@ -7,14 +7,14 @@ export function Paginator({
   totalItemsCount,
   pageSize,
   currentPage,
-  setPageQuerry,
+  handleChangePage,
 }) {
   const pagesCount = Math.ceil(totalItemsCount / pageSize)
   const dispatch = useDispatch()
 
   const postsList = (page) => {
     dispatch(setScrollPositionAC(window.pageYOffset))
-    setPageQuerry(page)
+    handleChangePage(page)
   }
 
   return (

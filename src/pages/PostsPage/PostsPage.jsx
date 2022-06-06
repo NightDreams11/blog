@@ -1,6 +1,6 @@
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { Search } from 'components/layout/Search/Search'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { useSearchParams } from 'react-router-dom'
@@ -24,6 +24,9 @@ import {
   Wrapper,
 } from './styled'
 
+const defaultPageSize = 9
+const defaultPage = 1
+
 export const PostsPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const postsObj = useSelector((state) => state.postsReducer.postsObj)
@@ -33,47 +36,38 @@ export const PostsPage = () => {
 
   const [searchParams, setSearchParam] = useSearchParams()
 
-  const [currentPage, setCurrentPage] = useState(1)
-  const [text, setText] = useState('')
-  const [pageSize, setPageSize] = useState(9)
+  const currentPage = useMemo(() => {
+    return Number(searchParams.get('page') ?? defaultPage)
+  }, [searchParams])
 
-  const [pageQuerry, setPageQuerry] = useState(searchParams.get('page'))
-  const postsQuerry = searchParams.get('posts')
+  const pageSize = useMemo(() => {
+    return Number(searchParams.get('perPage') ?? defaultPageSize)
+  }, [searchParams])
+
+  const searchQuery = useMemo(() => {
+    return searchParams.get('search') ?? ''
+  }, [searchParams])
+
+  const handleChangeQuery = ({ search, page, perPage }) => {
+    setSearchParam({
+      ...Object.fromEntries(searchParams.entries()),
+      ...(search ? { search } : {}),
+      ...(page ? { page } : {}),
+      ...(perPage ? { perPage } : {}),
+    })
+  }
 
   const handleSearch = (value) => {
-    setText(value)
+    handleChangeQuery({ search: value })
+  }
+
+  const handleChangePagination = (page) => {
+    handleChangeQuery({ page })
   }
 
   useEffect(() => {
-    if (pageQuerry === '0' || !pageQuerry) {
-      setPageQuerry(currentPage)
-    }
-
-    setSearchParam({
-      posts: postsQuerry !== null ? postsQuerry : pageSize,
-      page: pageQuerry,
-      ...(text
-        ? {
-            search: text,
-          }
-        : {}),
-    })
-
-    if (postsQuerry || pageQuerry) {
-      const skip = (pageQuerry - 1) * Number(pageSize)
-      setCurrentPage(Number(pageQuerry))
-      setPageSize(postsQuerry)
-      dispatch(getPosts(postsQuerry, skip, text))
-    }
-  }, [
-    dispatch,
-    setSearchParam,
-    postsQuerry,
-    pageQuerry,
-    pageSize,
-    currentPage,
-    text,
-  ])
+    dispatch(getPosts(Object.fromEntries(searchParams.entries())))
+  }, [dispatch, searchParams])
 
   if (!token) {
     return <Navigate to="/login" />
@@ -86,7 +80,7 @@ export const PostsPage = () => {
   return (
     <Wrapper>
       <SearchContainer>
-        <Search handleSearch={handleSearch} text={text} />
+        <Search handleSearch={handleSearch} text={searchQuery} />
       </SearchContainer>
       <ContainerWrapper>
         <GridContainer container rowSpacing={2} spacing={2}>
@@ -110,12 +104,10 @@ export const PostsPage = () => {
         </GridContainer>
         <PaginatorContainer>
           <Paginator
-            skipPosts={postsObj.pagination.skip}
             totalItemsCount={postsObj.pagination.total}
             pageSize={pageSize}
             currentPage={currentPage}
-            getPosts={getPosts}
-            setPageQuerry={setPageQuerry}
+            handleChangePage={handleChangePagination}
           />
         </PaginatorContainer>
       </ContainerWrapper>
