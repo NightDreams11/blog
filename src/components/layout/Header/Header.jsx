@@ -15,7 +15,11 @@ import { logoutUserAC } from 'store/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 
-const pages = ['Products', 'Pricing', 'Blog']
+const pages = [
+  { title: 'Products', path: '' },
+  { title: 'Posts', path: '/posts' },
+  { title: 'Blog', path: '' },
+]
 const authorization = [
   { title: 'Login', path: '/login' },
   { title: 'Sing Up', path: '/registration' },
@@ -27,7 +31,6 @@ export const ResponsiveAppBar = () => {
 
   const settings = [
     { title: 'Profile', path: '/profile' },
-    { title: 'Posts', path: '/posts' },
     {
       title: 'Logout',
       path: '',
@@ -90,29 +93,54 @@ export const ResponsiveAppBar = () => {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.title} onClick={handleCloseNavMenu}>
+                  <Link
+                    to={page.path}
+                    style={{
+                      textDecoration: 'none',
+                      color: 'rgba(0, 0, 0, 0.87)',
+                    }}
+                  >
+                    <Typography textAlign="center">{page.title}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <Typography
-            variant="h6"
-            noWrap
-            component="div"
-            sx={{ flexGrow: { xs: 1, md: 'unset' }, mr: { xs: 'unset', md: 2 } }}
+          <Link
+            to="/home"
+            style={{
+              textDecoration: 'none',
+              color: '#FFF',
+            }}
           >
-            LOGO
-          </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{ flexGrow: { xs: 1, md: 'unset' }, mr: { xs: 'unset', md: 2 } }}
+            >
+              LOGO
+            </Typography>
+          </Link>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+              <Link
+                key={page.title}
+                to={page.path}
+                style={{
+                  textDecoration: 'none',
+                  color: 'rgba(0, 0, 0, 0.87)',
+                }}
               >
-                {page}
-              </Button>
+                <Button
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  {page.title}
+                </Button>
+              </Link>
             ))}
           </Box>
           {user ? (

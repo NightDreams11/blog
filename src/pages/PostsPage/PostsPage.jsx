@@ -2,7 +2,7 @@ import { Grid } from '@mui/material'
 import { Box } from '@mui/system'
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { Search } from 'components/layout/Search/Search'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { useSearchParams } from 'react-router-dom'
@@ -23,7 +23,6 @@ import {
   ResetButton,
   SearchContainer,
   Text,
-  TextTitle,
   Wrapper,
 } from './styled'
 
@@ -42,6 +41,14 @@ export const PostsPage = () => {
   const currentPage = Number(searchParams.get('page') ?? defaultPage)
   const pageSize = Number(searchParams.get('perPage') ?? defaultPageSize)
   const searchQuery = searchParams.get('search') ?? ''
+
+  const isQueries = useMemo(() => {
+    return (
+      searchParams.get('page') ||
+      searchParams.get('perPage') ||
+      searchParams.get('search')
+    )
+  }, [searchParams])
 
   const handleChangeQuery = ({ search, page, perPage }) => {
     setSearchParam({
@@ -88,7 +95,7 @@ export const PostsPage = () => {
         <Box>
           <PostsNumberContainerInner>
             <SelectPostsNumber handlePerPage={handlePerPage} page={pageSize} />
-            <ResetButton onClick={resetQueries}>Reset</ResetButton>
+            {isQueries && <ResetButton onClick={resetQueries}>Reset</ResetButton>}
           </PostsNumberContainerInner>
         </Box>
       </SearchContainer>
@@ -105,7 +112,6 @@ export const PostsPage = () => {
                   alt="PostAva"
                 />
                 <PostsTextContainer>
-                  <TextTitle>{post.title}</TextTitle>
                   <Text>{post.description}</Text>
                 </PostsTextContainer>
               </Item>

@@ -8,7 +8,7 @@ import InputBase from '@mui/material/InputBase'
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   'label + &': {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(2),
   },
   '& .MuiInputBase-input': {
     borderRadius: 4,
@@ -39,12 +39,8 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-const defaultPageSize = ''
-
 export function SelectPostsNumber({ handlePerPage, page }) {
-  const [postsCount, setPostsCount] = React.useState(
-    page !== 9 ? page : defaultPageSize
-  )
+  const [postsCount, setPostsCount] = React.useState(page)
 
   const handleChange = (event) => {
     handlePerPage(event.target.value)

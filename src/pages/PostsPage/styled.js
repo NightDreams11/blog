@@ -3,14 +3,13 @@ import { Box, Container, styled } from '@mui/system'
 import { Button, Paper, Typography } from '@mui/material'
 
 export const Wrapper = style.div`
-min-height: 1000px;
 `
 export const ContainerWrapper = styled(
   Container,
   {}
 )({
   width: '100vw',
-  height: '100vh',
+  minHeight: '100vh',
   marginTop: 50,
   display: 'flex',
   flexDirection: 'column',
@@ -52,7 +51,7 @@ export const PostsTextContainer = styled(
   Box,
   {}
 )({
-  height: 90,
+  height: 70,
   background: '#FFF',
   width: '100%',
   marginTop: 'auto',
@@ -60,20 +59,12 @@ export const PostsTextContainer = styled(
 })
 
 export const Image = style.img`
-height: 140px;
+height: 160px;
 max-width: 373px;
 width: 100%;
+object-fit: contain;
 `
 
-export const TextTitle = styled(
-  Typography,
-  {}
-)({
-  fontWeight: 500,
-  whiteSpace: 'nowrap',
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-})
 export const Text = styled(
   Typography,
   {}
@@ -111,7 +102,7 @@ export const PostsNumberContainerInner = styled(
 )({
   position: 'absolute',
   display: 'flex',
-  top: -30,
+  top: -22,
 })
 
 export const ResetButton = styled(
@@ -119,5 +110,5 @@ export const ResetButton = styled(
   {}
 )({
   height: 30,
-  marginTop: 40,
+  marginTop: 32,
 })
