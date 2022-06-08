@@ -1,6 +1,8 @@
+import { Grid } from '@mui/material'
+import { Box } from '@mui/system'
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { Search } from 'components/layout/Search/Search'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { useSearchParams } from 'react-router-dom'
@@ -8,16 +10,17 @@ import { getPosts } from 'store/posts'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import { Paginator } from 'utils/Paginator/Paginator'
 import postImg from '../../images/post.jpg'
+import { SelectPostsNumber } from './SelectPostsNumber/SelectPostsNumber'
 import {
   ContainerWrapper,
-  GridContainer,
-  GridItem,
   Image,
   Item,
   PaginatorContainer,
+  PostsNumberContainerInner,
   PostsTextContainer,
   PostTitle,
   PostTitleContainer,
+  ResetButton,
   SearchContainer,
   Text,
   TextTitle,
@@ -36,20 +39,13 @@ export const PostsPage = () => {
 
   const [searchParams, setSearchParam] = useSearchParams()
 
-  const currentPage = useMemo(() => {
-    return Number(searchParams.get('page') ?? defaultPage)
-  }, [searchParams])
-
-  const pageSize = useMemo(() => {
-    return Number(searchParams.get('perPage') ?? defaultPageSize)
-  }, [searchParams])
-
-  const searchQuery = useMemo(() => {
-    return searchParams.get('search') ?? ''
-  }, [searchParams])
+  const currentPage = Number(searchParams.get('page') ?? defaultPage)
+  const pageSize = Number(searchParams.get('perPage') ?? defaultPageSize)
+  const searchQuery = searchParams.get('search') ?? ''
 
   const handleChangeQuery = ({ search, page, perPage }) => {
     setSearchParam({
+      // Данная строка позволяет не терять значения URL, когда query-параметров больше одного
       ...Object.fromEntries(searchParams.entries()),
       ...(search ? { search } : {}),
       ...(page ? { page } : {}),
@@ -61,8 +57,16 @@ export const PostsPage = () => {
     handleChangeQuery({ search: value })
   }
 
+  const handlePerPage = (perPage) => {
+    handleChangeQuery({ perPage })
+  }
+
   const handleChangePagination = (page) => {
     handleChangeQuery({ page })
+  }
+
+  const resetQueries = () => {
+    setSearchParam({})
   }
 
   useEffect(() => {
@@ -81,11 +85,17 @@ export const PostsPage = () => {
     <Wrapper>
       <SearchContainer>
         <Search handleSearch={handleSearch} text={searchQuery} />
+        <Box>
+          <PostsNumberContainerInner>
+            <SelectPostsNumber handlePerPage={handlePerPage} page={pageSize} />
+            <ResetButton onClick={resetQueries}>Reset</ResetButton>
+          </PostsNumberContainerInner>
+        </Box>
       </SearchContainer>
       <ContainerWrapper>
-        <GridContainer container rowSpacing={2} spacing={2}>
+        <Grid container rowSpacing={2} spacing={2}>
           {postsObj.posts.map((post) => (
-            <GridItem key={post.id} item xs={4}>
+            <Grid key={post.id} item xs={4}>
               <Item>
                 <PostTitleContainer>
                   <PostTitle variant="h5">{post.title}</PostTitle>
@@ -99,9 +109,9 @@ export const PostsPage = () => {
                   <Text>{post.description}</Text>
                 </PostsTextContainer>
               </Item>
-            </GridItem>
+            </Grid>
           ))}
-        </GridContainer>
+        </Grid>
         <PaginatorContainer>
           <Paginator
             totalItemsCount={postsObj.pagination.total}

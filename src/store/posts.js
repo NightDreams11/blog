@@ -34,7 +34,7 @@ export const setScrollPositionAC = (position) => ({
 })
 
 export const getPosts =
-  ({ perPage = 9, page = 1, search } = {}) =>
+  ({ perPage = 9, page = 1, search }) =>
   async (dispatch, getState) => {
     try {
       dispatch(toggleIsFetchingAC(true))

@@ -1,6 +1,6 @@
 import style from 'styled-components'
 import { Box, Container, styled } from '@mui/system'
-import { Grid, Paper, Typography } from '@mui/material'
+import { Button, Paper, Typography } from '@mui/material'
 
 export const Wrapper = style.div`
 min-height: 1000px;
@@ -15,9 +15,6 @@ export const ContainerWrapper = styled(
   display: 'flex',
   flexDirection: 'column',
 })
-export const GridContainer = styled(Grid, {})({})
-
-export const GridItem = styled(Grid, {})({})
 
 export const Item = styled(
   Paper,
@@ -101,8 +98,26 @@ export const SearchContainer = styled(
   Box,
   {}
 )({
+  position: 'relative',
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
-  marginTop: 20,
+  marginTop: 30,
+})
+
+export const PostsNumberContainerInner = styled(
+  Box,
+  {}
+)({
+  position: 'absolute',
+  display: 'flex',
+  top: -30,
+})
+
+export const ResetButton = styled(
+  Button,
+  {}
+)({
+  height: 30,
+  marginTop: 40,
 })
