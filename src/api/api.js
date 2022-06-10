@@ -1,5 +1,6 @@
+import { postsAdapter } from 'adapters/postsAdapter'
 import { userAdapter } from 'adapters/userAdapter'
-import * as axios from 'axios'
+import axios from 'axios'
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -44,5 +45,24 @@ export const profileAPI = {
 
   deleteUser({ id }) {
     return instance.delete(`/users/${id}`)
+  },
+}
+
+export const postsAPI = {
+  async getPosts(pageSize, skipPosts, search) {
+    if (search) {
+      return postsAdapter(
+        await instance.get(`/posts`, {
+          params: {
+            limit: pageSize,
+            skip: skipPosts,
+            search,
+          },
+        })
+      )
+    }
+    return postsAdapter(
+      await instance.get(`/posts?limit=${pageSize}&skip=${skipPosts}`)
+    )
   },
 }
