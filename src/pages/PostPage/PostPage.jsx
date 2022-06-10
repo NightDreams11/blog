@@ -5,7 +5,6 @@ import { Navigate } from 'react-router'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { setLike } from 'store/posts'
-import { useMemo } from 'react'
 import postImg from '../../images/post.jpg'
 import {
   Author,
@@ -37,8 +36,6 @@ export const PostPage = () => {
         return id === userId
       })
     : false
-
-  console.log(isLiked)
 
   if (!token) {
     return <Navigate to="/login" />
