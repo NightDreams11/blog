@@ -64,7 +64,7 @@ export const PostsPage = () => {
     handleChangeQuery({ search: value })
   }
 
-  const handlePerPage = (perPage) => {
+  const handleChangePerPage = (perPage) => {
     handleChangeQuery({ perPage })
   }
 
@@ -94,7 +94,10 @@ export const PostsPage = () => {
         <Search handleSearch={handleSearch} text={searchQuery} />
         <Box>
           <PostsNumberContainerInner>
-            <SelectPostsNumber handlePerPage={handlePerPage} page={pageSize} />
+            <SelectPostsNumber
+              handleChangePerPage={handleChangePerPage}
+              page={pageSize}
+            />
             {isQueries && <ResetButton onClick={resetQueries}>Reset</ResetButton>}
           </PostsNumberContainerInner>
         </Box>

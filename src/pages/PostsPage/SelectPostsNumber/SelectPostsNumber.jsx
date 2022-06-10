@@ -39,12 +39,9 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
   },
 }))
 
-export function SelectPostsNumber({ handlePerPage, page }) {
-  const [postsCount, setPostsCount] = React.useState(page)
-
+export function SelectPostsNumber({ handleChangePerPage, page }) {
   const handleChange = (event) => {
-    handlePerPage(event.target.value)
-    setPostsCount(event.target.value)
+    handleChangePerPage(event.target.value)
   }
 
   return (
@@ -54,7 +51,7 @@ export function SelectPostsNumber({ handlePerPage, page }) {
         <Select
           labelId="demo-customized-select-label"
           id="demo-customized-select"
-          value={postsCount}
+          value={page}
           onChange={handleChange}
           input={<BootstrapInput />}
         >
