@@ -1,3 +1,4 @@
+import { postAdapter } from 'adapters/postAdapter'
 import { postsAdapter } from 'adapters/postsAdapter'
 import { userAdapter } from 'adapters/userAdapter'
 import axios from 'axios'
@@ -64,5 +65,17 @@ export const postsAPI = {
     return postsAdapter(
       await instance.get(`/posts?limit=${pageSize}&skip=${skipPosts}`)
     )
+  },
+
+  async getPost({ id }) {
+    return postAdapter(await instance.get(`/posts/${id}`))
+  },
+
+  async getAuthor(id) {
+    return userAdapter(await instance.get(`/users/${id}`))
+  },
+
+  setLike(id) {
+    return instance.put(`/posts/like/${id}`)
   },
 }
