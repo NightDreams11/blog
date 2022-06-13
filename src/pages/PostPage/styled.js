@@ -71,7 +71,6 @@ export const LikesContainer = styled(
 export const LikeCounter = style.span`
 padding-left: 2px;
 height: 20px;
-// color: #1976d2;
 `
 
 export const CommentField = styled(

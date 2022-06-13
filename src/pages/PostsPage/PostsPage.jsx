@@ -6,7 +6,7 @@ import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
 import { useSearchParams, Link } from 'react-router-dom'
-import { getPost, getPosts } from 'store/posts'
+import { getPosts } from 'store/posts'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import { Paginator } from 'utils/Paginator/Paginator'
 import postImg from '../../images/post.jpg'
@@ -112,8 +112,7 @@ export const PostsPage = () => {
                   color: 'rgba(0, 0, 0, 0.87)',
                   cursor: 'pointer',
                 }}
-                to="/post"
-                onClick={() => dispatch(getPost(post.id))}
+                to={`/post/${post.id}`}
               >
                 <Item>
                   <PostTitleContainer>

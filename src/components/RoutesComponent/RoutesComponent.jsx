@@ -16,7 +16,7 @@ export const RoutesComponent = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/edit" element={<ProfilePage editMode />} />
         <Route path="/posts" element={<PostsPage />} />
-        <Route path="/post" element={<PostPage />} />
+        <Route path="/post/:id" element={<PostPage />} />
       </Routes>
     </div>
   )

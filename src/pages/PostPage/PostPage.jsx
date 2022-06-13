@@ -1,10 +1,11 @@
 import { Avatar, Grid } from '@mui/material'
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined'
 import { useDispatch, useSelector } from 'react-redux'
-import { Navigate } from 'react-router'
+import { Navigate, useParams } from 'react-router'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Preloader } from 'components/layout/Preloader/Preloader'
-import { setLike } from 'store/posts'
+import { getPost, setLike } from 'store/posts'
+import { useEffect } from 'react'
 import postImg from '../../images/post.jpg'
 import {
   Author,
@@ -25,17 +26,22 @@ export const PostPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const post = useSelector((state) => state.postsReducer.post)
   const postId = useSelector((state) => state.postsReducer.postId)
-  const userId = useSelector((state) => state.auth.user.id)
+  const postLikesCounter = useSelector(
+    (state) => state.postsReducer.postLikesCounter
+  )
+  const postLikesBehavior = useSelector(
+    (state) => state.postsReducer.postLikesBehavior
+  )
   const author = useSelector((state) => state.postsReducer.author)
   const isFetching = useSelector((state) => state.auth.isFetching)
 
   const dispatch = useDispatch()
 
-  const isLiked = post
-    ? post.likes.filter((id) => {
-        return id === userId
-      })
-    : false
+  const { id } = useParams()
+
+  useEffect(() => {
+    dispatch(getPost(id))
+  }, [dispatch, id])
 
   if (!token) {
     return <Navigate to="/login" />
@@ -57,12 +63,8 @@ export const PostPage = () => {
             <Title variant="h2">{post.title}</Title>
           </GridItem>
           <GridItem item xs={12} sx={{ display: 'flex' }}>
-            <Avatar
-              src={author.avatar ? process.env.REACT_APP_URL + author.avatar : ''}
-            />
-            <Author variant="caption">
-              {author.name ? author.name : 'Unknown'}
-            </Author>
+            <Avatar src={author ? process.env.REACT_APP_URL + author.avatar : ''} />
+            <Author variant="caption">{author ? author.name : 'Unknown'}</Author>
           </GridItem>
           <GridItem item xs={12}>
             <Date variant="caption">{dateFormatter(post.dateCreated)}</Date>
@@ -77,7 +79,7 @@ export const PostPage = () => {
           </GridItem>
           <GridItem item xs={12} sx={{}}>
             <LikesContainer
-              style={{ background: isLiked.length === 1 ? '#ED7C7C' : '#edeef0' }}
+              style={{ background: postLikesBehavior ? '#ED7C7C' : '#edeef0' }}
             >
               <FavoriteBorderOutlinedIcon
                 sx={{ cursor: 'pointer' }}
@@ -85,7 +87,7 @@ export const PostPage = () => {
                   dispatch(setLike(postId))
                 }}
               />
-              <LikeCounter>{post.likes.length}</LikeCounter>
+              <LikeCounter>{postLikesCounter}</LikeCounter>
             </LikesContainer>
           </GridItem>
           <GridItem item xs={12}>
