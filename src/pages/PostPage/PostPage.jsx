@@ -7,6 +7,7 @@ import { Preloader } from 'components/layout/Preloader/Preloader'
 import { getPost, setLike } from 'store/posts'
 import { useEffect } from 'react'
 import { getImageUrl } from 'utils/imageURL/imageURL'
+import { isLiked } from 'utils/isLiked/isLiked'
 import postImg from '../../images/post.jpg'
 import {
   Author,
@@ -26,14 +27,9 @@ import {
 export const PostPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const post = useSelector((state) => state.postsReducer.post)
-  const postLikesCounter = useSelector(
-    (state) => state.postsReducer.postLikesCounter
-  )
-  const postLikesBehavior = useSelector(
-    (state) => state.postsReducer.postLikesBehavior
-  )
   const author = useSelector((state) => state.postsReducer.author)
   const isFetching = useSelector((state) => state.postsReducer.postsIsFetching)
+  const userId = useSelector((state) => state.auth.user.id)
 
   const dispatch = useDispatch()
 
@@ -79,7 +75,7 @@ export const PostPage = () => {
           </GridItem>
           <GridItem item xs={12} sx={{}}>
             <LikesContainer
-              style={{ background: postLikesBehavior ? '#ED7C7C' : '#edeef0' }}
+              style={{ background: isLiked(post, userId) ? '#ED7C7C' : '#edeef0' }}
             >
               <FavoriteBorderOutlinedIcon
                 sx={{ cursor: 'pointer' }}
@@ -87,7 +83,7 @@ export const PostPage = () => {
                   dispatch(setLike(id))
                 }}
               />
-              <LikeCounter>{postLikesCounter}</LikeCounter>
+              <LikeCounter>{post.likes.length}</LikeCounter>
             </LikesContainer>
           </GridItem>
           <GridItem item xs={12}>
