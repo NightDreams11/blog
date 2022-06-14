@@ -6,6 +6,7 @@ import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { getPost, setLike } from 'store/posts'
 import { useEffect } from 'react'
+import { getImageUrl } from 'utils/imageURL/imageURL'
 import postImg from '../../images/post.jpg'
 import {
   Author,
@@ -25,7 +26,6 @@ import {
 export const PostPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const post = useSelector((state) => state.postsReducer.post)
-  const postId = useSelector((state) => state.postsReducer.postId)
   const postLikesCounter = useSelector(
     (state) => state.postsReducer.postLikesCounter
   )
@@ -33,7 +33,7 @@ export const PostPage = () => {
     (state) => state.postsReducer.postLikesBehavior
   )
   const author = useSelector((state) => state.postsReducer.author)
-  const isFetching = useSelector((state) => state.auth.isFetching)
+  const isFetching = useSelector((state) => state.postsReducer.postsIsFetching)
 
   const dispatch = useDispatch()
 
@@ -63,7 +63,7 @@ export const PostPage = () => {
             <Title variant="h2">{post.title}</Title>
           </GridItem>
           <GridItem item xs={12} sx={{ display: 'flex' }}>
-            <Avatar src={author ? process.env.REACT_APP_URL + author.avatar : ''} />
+            <Avatar src={author ? getImageUrl(author.avatar) : ''} />
             <Author variant="caption">{author ? author.name : 'Unknown'}</Author>
           </GridItem>
           <GridItem item xs={12}>
@@ -84,7 +84,7 @@ export const PostPage = () => {
               <FavoriteBorderOutlinedIcon
                 sx={{ cursor: 'pointer' }}
                 onClick={() => {
-                  dispatch(setLike(postId))
+                  dispatch(setLike(id))
                 }}
               />
               <LikeCounter>{postLikesCounter}</LikeCounter>

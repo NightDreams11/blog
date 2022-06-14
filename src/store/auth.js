@@ -68,7 +68,7 @@ export const regUser = (payload) => async (dispatch) => {
     await authAPI.regUser(payload)
     dispatch(addSnackbarMessageSuccessAC('Новый пользователь зарегистрирован'))
   } catch (error) {
-    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+    dispatch(addSnackbarMessageErrorAC(error.message))
   } finally {
     dispatch(toggleIsFetchingAC(false))
   }
@@ -86,7 +86,7 @@ export const loginUser = (payload) => async (dispatch) => {
       dispatch(addSnackbarMessageSuccessAC(`Welcome ${user.name}`))
     }
   } catch (error) {
-    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+    dispatch(addSnackbarMessageErrorAC(error.message))
   } finally {
     dispatch(toggleIsFetchingAC(false))
   }

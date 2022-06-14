@@ -32,7 +32,7 @@ const defaultPage = 1
 export const PostsPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const postsObj = useSelector((state) => state.postsReducer.postsObj)
-  const isFetching = useSelector((state) => state.auth.isFetching)
+  const isFetching = useSelector((state) => state.postsReducer.postsIsFetching)
 
   const dispatch = useDispatch()
 

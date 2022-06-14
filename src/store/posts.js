@@ -1,13 +1,12 @@
 import { postsAPI } from 'api/api'
-import { toggleIsFetchingAC } from './auth'
 import { addSnackbarMessageErrorAC } from './messages'
 
 const ActionTypes = {
   SET_POSTS: 'SET_POSTS',
   SET_POST: 'SET_POST',
-  SET_POST_ID: 'SET_POST_ID',
   SET_POST_LIKES_COUNTER: 'SET_POST_LIKES_COUNTER',
   TOGGLE_POST_LIKE_BEHAVIOR: 'TOGGLE_POST_LIKE_BEHAVIOR',
+  TOGGLE_POSTS_IS_FETCHING: 'TOGGLE_POSTS_IS_FETCHING',
   SET_AUTHOR: 'SET_AUTHOR',
   SET_SCROLL_POSITION: 'SET_SCROLL_POSITION',
 }
@@ -15,11 +14,11 @@ const ActionTypes = {
 const initialState = {
   postsObj: null,
   post: null,
-  postId: null,
   author: null,
   scrollPosition: null,
   postLikesCounter: null,
   postLikesBehavior: false,
+  postsIsFetching: false,
 }
 
 export const postsReducer = (state = initialState, { type, payload = 0 }) => {
@@ -28,12 +27,12 @@ export const postsReducer = (state = initialState, { type, payload = 0 }) => {
       return { ...state, postsObj: payload }
     case ActionTypes.SET_POST:
       return { ...state, post: payload }
-    case ActionTypes.SET_POST_ID:
-      return { ...state, postId: payload }
     case ActionTypes.SET_POST_LIKES_COUNTER:
       return { ...state, postLikesCounter: payload }
     case ActionTypes.TOGGLE_POST_LIKE_BEHAVIOR:
       return { ...state, postLikesBehavior: payload }
+    case ActionTypes.TOGGLE_POSTS_IS_FETCHING:
+      return { ...state, postsIsFetching: !state.postsIsFetching }
     case ActionTypes.SET_AUTHOR:
       return { ...state, author: payload }
     case ActionTypes.SET_SCROLL_POSITION:
@@ -53,18 +52,18 @@ const getPostAC = (post) => ({
   payload: post,
 })
 
-const setPostIdAC = (id) => ({
-  type: ActionTypes.SET_POST_ID,
-  payload: id,
-})
-
 export const setPostLikesCounterAC = (likes) => ({
   type: ActionTypes.SET_POST_LIKES_COUNTER,
   payload: likes,
 })
-export const togglePostLikeBihavior = (value) => ({
+
+export const togglePostLikeBihaviorAC = (value) => ({
   type: ActionTypes.TOGGLE_POST_LIKE_BEHAVIOR,
   payload: value,
+})
+
+export const togglePostsIsFetchingAC = () => ({
+  type: ActionTypes.TOGGLE_POSTS_IS_FETCHING,
 })
 
 const setAuthorAC = (author) => ({
@@ -81,13 +80,13 @@ export const getPosts =
   ({ perPage = 9, page = 1, search }) =>
   async (dispatch, getState) => {
     try {
-      dispatch(toggleIsFetchingAC(true))
+      dispatch(togglePostsIsFetchingAC(true))
       const posts = await postsAPI.getPosts(perPage, (page - 1) * perPage, search)
       dispatch(getPostsAC(posts))
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))
     } finally {
-      dispatch(toggleIsFetchingAC(false))
+      dispatch(togglePostsIsFetchingAC(false))
       const scrollY = getState().postsReducer.scrollPosition
       window.scrollTo(0, scrollY)
     }
@@ -95,10 +94,10 @@ export const getPosts =
 
 export const getPost = (id) => async (dispatch, getState) => {
   try {
-    dispatch(toggleIsFetchingAC(true))
+    dispatch(togglePostsIsFetchingAC(true))
     const userId = getState().auth.user.id
     const response = await postsAPI.getPost({ id })
-    dispatch(setPostIdAC(id))
+
     if (response.postedBy) {
       const author = await postsAPI.getAuthor(response.postedBy)
       dispatch(setAuthorAC(author))
@@ -106,12 +105,12 @@ export const getPost = (id) => async (dispatch, getState) => {
     dispatch(getPostAC(response))
     dispatch(setPostLikesCounterAC(getState().postsReducer.post.likes.length))
     dispatch(
-      togglePostLikeBihavior(getState().postsReducer.post.likes.includes(userId))
+      togglePostLikeBihaviorAC(getState().postsReducer.post.likes.includes(userId))
     )
   } catch (error) {
     dispatch(addSnackbarMessageErrorAC(error.message))
   } finally {
-    dispatch(toggleIsFetchingAC(false))
+    dispatch(togglePostsIsFetchingAC(false))
   }
 }
 
@@ -120,7 +119,7 @@ export const setLike = (id) => async (dispatch, getState) => {
     const response = await postsAPI.setLike(id)
     if (response.status === 200) {
       const { postLikesBehavior } = getState().postsReducer
-      dispatch(togglePostLikeBihavior(!getState().postsReducer.postLikesBehavior))
+      dispatch(togglePostLikeBihaviorAC(!getState().postsReducer.postLikesBehavior))
 
       const likes = postLikesBehavior
         ? getState().postsReducer.postLikesCounter - 1
