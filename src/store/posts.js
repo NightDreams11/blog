@@ -1,4 +1,4 @@
-import { postsAPI } from 'api/api'
+import { authAPI, postsAPI } from 'api/api'
 import { addSnackbarMessageErrorAC } from './messages'
 
 const ActionTypes = {
@@ -31,7 +31,7 @@ export const postsReducer = (state = initialState, { type, payload = 0 }) => {
         post: { ...state.post, likes: [...payload] },
       }
     case ActionTypes.TOGGLE_POSTS_IS_FETCHING:
-      return { ...state, postsIsFetching: !state.postsIsFetching }
+      return { ...state, postsIsFetching: payload }
     case ActionTypes.SET_AUTHOR:
       return { ...state, author: payload }
     case ActionTypes.SET_SCROLL_POSITION:
@@ -56,8 +56,9 @@ export const setPostLikesCounterAC = (likes) => ({
   payload: likes,
 })
 
-export const togglePostsIsFetchingAC = () => ({
+export const togglePostsIsFetchingAC = (value) => ({
   type: ActionTypes.TOGGLE_POSTS_IS_FETCHING,
+  payload: value,
 })
 
 const setAuthorAC = (author) => ({
@@ -92,7 +93,7 @@ export const getPost = (id) => async (dispatch) => {
     const response = await postsAPI.getPost({ id })
 
     if (response.postedBy) {
-      const author = await postsAPI.getAuthor(response.postedBy)
+      const author = await authAPI.getAuthor(response.postedBy)
       dispatch(setAuthorAC(author))
     }
     dispatch(getPostAC(response))
@@ -112,12 +113,10 @@ export const setLike = (id) => async (dispatch, getState) => {
       const [...likes] = getState().postsReducer.post.likes
 
       if (isLiked) {
-        for (let i = 0; i < likes.length; i += 1) {
-          if (likes[i] === userId) {
-            likes.splice(i, 1)
-          }
-        }
-        dispatch(setPostLikesCounterAC(likes))
+        const currentLikes = likes.filter((item) => {
+          return item !== userId
+        })
+        dispatch(setPostLikesCounterAC(currentLikes))
       } else {
         likes.push(userId)
         dispatch(setPostLikesCounterAC(likes))

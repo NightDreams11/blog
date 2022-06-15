@@ -19,10 +19,10 @@ import {
   Wrapper,
   Image,
   ImageContainer,
-  CommentField,
   LikesContainer,
   LikeCounter,
 } from './styled'
+import { CommentsComponent } from './Comments/Comments'
 
 export const PostPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
@@ -56,7 +56,7 @@ export const PostPage = () => {
       <ContainerWrapper>
         <Grid container>
           <GridItem item xs={12}>
-            <Title variant="h2">{post.title}</Title>
+            <Title variant="h2">{post.description}</Title>
           </GridItem>
           <GridItem item xs={12} sx={{ display: 'flex' }}>
             <Avatar src={author ? getImageUrl(author.avatar) : ''} />
@@ -86,8 +86,17 @@ export const PostPage = () => {
               <LikeCounter>{post.likes.length}</LikeCounter>
             </LikesContainer>
           </GridItem>
-          <GridItem item xs={12}>
-            <CommentField />
+          <GridItem
+            item
+            xs={12}
+            sx={{
+              mt: '10px',
+              mb: '20px',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <CommentsComponent postId={id} />
           </GridItem>
         </Grid>
       </ContainerWrapper>

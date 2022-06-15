@@ -1,6 +1,6 @@
 import style from 'styled-components'
 import { Box, Container, styled } from '@mui/system'
-import { Grid, TextField, Typography } from '@mui/material'
+import { Grid, Typography } from '@mui/material'
 
 export const Wrapper = style.div`
 `
@@ -72,10 +72,3 @@ export const LikeCounter = style.span`
 padding-left: 2px;
 height: 20px;
 `
-
-export const CommentField = styled(
-  TextField,
-  {}
-)({
-  marginTop: '10px',
-})

@@ -1,3 +1,4 @@
+import { commentsAdapter } from 'adapters/commentsAdapter'
 import { postAdapter } from 'adapters/postAdapter'
 import { postsAdapter } from 'adapters/postsAdapter'
 import { userAdapter } from 'adapters/userAdapter'
@@ -30,6 +31,10 @@ export const authAPI = {
 
   async getUser() {
     return userAdapter(await instance.get('/auth/user'))
+  },
+
+  async getAuthor(id) {
+    return userAdapter(await instance.get(`/users/${id}`))
   },
 }
 
@@ -71,11 +76,13 @@ export const postsAPI = {
     return postAdapter(await instance.get(`/posts/${id}`))
   },
 
-  async getAuthor(id) {
-    return userAdapter(await instance.get(`/users/${id}`))
-  },
-
   setLike(id) {
     return instance.put(`/posts/like/${id}`)
+  },
+}
+
+export const commentsAPI = {
+  async getComments(id) {
+    return commentsAdapter(await instance.get(`/comments/post/${id}`))
   },
 }
