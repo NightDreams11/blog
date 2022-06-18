@@ -13,14 +13,14 @@ export const CommentsComponent = ({ postId }) => {
   const dispatch = useDispatch()
   const [numberOfComments, setNumberOfComments] = useState(5)
 
-  const commentsObj = useSelector((state) => state.commentsReducer.comments)
+  const comments = useSelector((state) => state.commentsReducer.comments)
+  const authorsOfComments = useSelector(
+    (state) => state.commentsReducer.authorsOfComments
+  )
 
   const isFetching = useSelector(
     (state) => state.commentsReducer.toggleCommentsIsFetching
   )
-  const author = useSelector((state) => state.commentsReducer.author)
-
-  const comments = commentsObj?.comments.slice(0, numberOfComments)
 
   const showMoreComments = () => {
     setNumberOfComments(numberOfComments + 5)
@@ -30,13 +30,20 @@ export const CommentsComponent = ({ postId }) => {
     dispatch(getComments(postId))
   }, [dispatch, postId])
 
-  if (numberOfComments >= commentsObj?.comments.length) {
+  if (!comments || !authorsOfComments) {
+    return <Preloader />
+  }
+
+  if (numberOfComments >= comments.length) {
     isShowedButton = false
   }
 
-  if (!commentsObj) {
-    return <Preloader />
-  }
+  const commentsAuthors = authorsOfComments.reduce((acc, elem) => {
+    acc[elem.id] = elem
+    return acc
+  }, {})
+
+  const sortedComments = comments.slice(0, numberOfComments)
 
   if (isFetching) {
     return <Preloader />
@@ -45,11 +52,16 @@ export const CommentsComponent = ({ postId }) => {
   return (
     <Wrapper>
       <TextInput />
-      {comments.map((elem) => {
+      {sortedComments.map((elem) => {
         return (
           <CommentBody key={elem.id}>
-            <Avatar src={author ? getImageUrl(author.avatar) : ''} />
-            <Author variant="caption">{author ? author.name : 'Unknown'}</Author>
+            <Avatar
+              key={elem.id}
+              src={elem ? getImageUrl(commentsAuthors[elem.commentedBy].avatar) : ''}
+            />
+            <Author variant="caption">
+              {elem ? commentsAuthors[elem.commentedBy].name : 'Unknown'}
+            </Author>
             <CommentText>{elem.text}</CommentText>
           </CommentBody>
         )
