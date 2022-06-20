@@ -85,4 +85,7 @@ export const commentsAPI = {
   async getComments(id) {
     return commentsAdapter(await instance.get(`/comments/post/${id}`))
   },
+  setLike(id) {
+    return instance.put(`/comments/like/${id}`)
+  },
 }

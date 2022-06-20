@@ -109,14 +109,13 @@ export const setLike = (id) => async (dispatch, getState) => {
     const response = await postsAPI.setLike(id)
     if (response.status === 200) {
       const userId = getState().auth.user.id
-      const isLiked = getState().postsReducer.post.likes.includes(userId)
-      const [...likes] = getState().postsReducer.post.likes
+      const userIndex = getState().postsReducer.post.likes.indexOf(userId)
+      const isLiked = userIndex !== -1
+      const { likes } = getState().postsReducer.post
 
       if (isLiked) {
-        const currentLikes = likes.filter((item) => {
-          return item !== userId
-        })
-        dispatch(setPostLikesCounterAC(currentLikes))
+        likes.splice(userIndex, 1)
+        dispatch(setPostLikesCounterAC(likes))
       } else {
         likes.push(userId)
         dispatch(setPostLikesCounterAC(likes))

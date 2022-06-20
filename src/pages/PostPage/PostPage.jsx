@@ -75,7 +75,7 @@ export const PostPage = () => {
           </GridItem>
           <GridItem item xs={12} sx={{}}>
             <LikesContainer
-              style={{ background: isLiked(post, userId) ? '#ED7C7C' : '#edeef0' }}
+              style={{ background: isLiked(post, userId) ? '#e64646' : '#edeef0' }}
             >
               <FavoriteBorderOutlinedIcon
                 sx={{ cursor: 'pointer' }}
