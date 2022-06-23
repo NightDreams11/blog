@@ -2,7 +2,7 @@ import { Avatar, Divider } from '@mui/material'
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getComments, getCurrentCommentAC, setLike } from 'store/comments'
+import { getComments, setLike } from 'store/comments'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import { getImageUrl } from 'utils/imageURL/imageURL'
@@ -26,6 +26,7 @@ export const CommentsComponent = ({ postId }) => {
   const [numberOfComments, setNumberOfComments] = useState(5)
 
   const comments = useSelector((state) => state.commentsReducer.comments)
+
   const authorsOfComments = useSelector(
     (state) => state.commentsReducer.authorsOfComments
   )
@@ -46,11 +47,15 @@ export const CommentsComponent = ({ postId }) => {
     return <Preloader />
   }
 
-  if (numberOfComments >= comments.length) {
+  if (numberOfComments >= Object.values(comments).length) {
     isShowedButton = false
   }
 
-  const sortedComments = comments.slice(0, numberOfComments)
+  const sortedComments = Object.values(comments)
+    .sort((a, b) => {
+      return new window.Date(a.dateCreated) - new window.Date(b.dateCreated)
+    })
+    .slice(0, numberOfComments)
 
   if (isFetching) {
     return <Preloader />
@@ -65,13 +70,13 @@ export const CommentsComponent = ({ postId }) => {
             <Avatar
               key={elem.id}
               src={
-                elem ? getImageUrl(authorsOfComments[elem.commentedBy].avatar) : ''
+                elem ? getImageUrl(authorsOfComments[elem.commentedBy]?.avatar) : ''
               }
               sx={{ height: '34px', width: '34px', mt: '5px' }}
             />
             <CommentBodyContainerInner>
               <Author variant="caption">
-                {elem ? authorsOfComments[elem.commentedBy].name : 'Unknown'}
+                {elem ? authorsOfComments[elem.commentedBy]?.name : 'Unknown'}
               </Author>
               <CommentText variant="body2">{elem.text}</CommentText>
               <Date variant="caption">{dateFormatter(elem.dateCreated)}</Date>
@@ -91,7 +96,6 @@ export const CommentsComponent = ({ postId }) => {
                     color: '#e64646',
                   }}
                   onClick={() => {
-                    dispatch(getCurrentCommentAC(elem))
                     dispatch(setLike(elem.id))
                   }}
                 />
@@ -103,7 +107,7 @@ export const CommentsComponent = ({ postId }) => {
                     color: '#e64646',
                   }}
                 >
-                  {elem.likes.length}
+                  {elem.likes?.length}
                 </LikeCounter>
               </LikesContainer>
               <Divider />

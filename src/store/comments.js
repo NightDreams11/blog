@@ -3,15 +3,13 @@ import { addSnackbarMessageErrorAC } from './messages'
 
 const ActionTypes = {
   SET_COMMENTS: 'SET_COMMENTS',
-  SET_LIKED_COMMENT: 'SET_LIKED_COMMENT',
   TOGGLE_COMMENTS_IS_FETCHING: 'TOGGLE_COMMENTS_IS_FETCHING',
   SET_COMMENT_AUTHORS: 'SET_COMMENT_AUTHORS',
-  SET_COMMENTS_LIKES_COUNTER: 'SET_COMMENTS_LIKES_COUNTER',
+  SET_COMMENT_LIKE: 'SET_COMMENT_LIKE',
 }
 
 const initialState = {
   comments: null,
-  comment: null,
   commentLikesCounter: null,
   toggleCommentsIsFetching: false,
   authorsOfComments: null,
@@ -21,8 +19,6 @@ export const commentsReducer = (state = initialState, { type, payload = 0 }) => 
   switch (type) {
     case ActionTypes.SET_COMMENTS:
       return { ...state, comments: payload }
-    case ActionTypes.SET_LIKED_COMMENT:
-      return { ...state, comment: payload }
     case ActionTypes.TOGGLE_COMMENTS_IS_FETCHING:
       return { ...state, toggleCommentsIsFetching: state.toggleCommentsIsFetching }
     case ActionTypes.SET_COMMENT_AUTHORS:
@@ -30,10 +26,13 @@ export const commentsReducer = (state = initialState, { type, payload = 0 }) => 
         ...state,
         authorsOfComments: payload,
       }
-    case ActionTypes.SET_COMMENTS_LIKES_COUNTER:
+    case ActionTypes.SET_COMMENT_LIKE:
       return {
         ...state,
-        comment: { ...state.comment, likes: [...payload] },
+        comments: {
+          ...state.comments,
+          [payload.id]: { ...state.comments[payload.id], likes: [...payload.likes] },
+        },
       }
 
     default:
@@ -46,11 +45,6 @@ const getCommentsAC = (comments) => ({
   payload: comments,
 })
 
-export const getCurrentCommentAC = (comment) => ({
-  type: ActionTypes.SET_LIKED_COMMENT,
-  payload: comment,
-})
-
 const toggleCommentsIsFetchingAC = (value) => ({
   type: ActionTypes.TOGGLE_COMMENTS_IS_FETCHING,
   payload: value,
@@ -61,9 +55,9 @@ const setAuthorsAC = (author) => ({
   payload: author,
 })
 
-export const setCommentsLikesCounterAC = (likes) => ({
-  type: ActionTypes.SET_COMMENTS_LIKES_COUNTER,
-  payload: likes,
+export const setCommentLike = ({ id, likes }) => ({
+  type: ActionTypes.SET_COMMENT_LIKE,
+  payload: { id, likes },
 })
 
 export const getComments = (id) => async (dispatch) => {
@@ -71,7 +65,31 @@ export const getComments = (id) => async (dispatch) => {
     dispatch(toggleCommentsIsFetchingAC(true))
     const response = await commentsAPI.getComments(id)
 
-    dispatch(getCommentsAC(response.comments))
+    const processedResponse = response.comments.reduce((acc, elem) => {
+      if (!elem.followedCommentID) {
+        acc[elem.id] = elem
+        return acc
+      }
+
+      if (elem.followedCommentID && acc[elem.followedCommentID]) {
+        acc[elem.followedCommentID].answers = elem
+        return acc
+      }
+
+      if (elem.followedCommentID && !acc[elem.followedCommentID]) {
+        acc[elem.followedCommentID] = { answers: { [elem.id]: elem } }
+        return acc
+      }
+
+      if (!elem.followedCommentID && acc[elem.id]) {
+        acc[elem.id] = { ...acc[elem.id], ...elem }
+        return acc
+      }
+
+      return acc
+    }, {})
+
+    dispatch(getCommentsAC(processedResponse))
     // Убираем все повторения
     const uniqueUsersIds = [
       ...new Set(response.comments.map((comment) => comment.commentedBy)),
@@ -111,17 +129,17 @@ export const setLike = (id) => async (dispatch, getState) => {
     const response = await commentsAPI.setLike(id)
     if (response.status === 200) {
       const userId = getState().auth.user.id
-      const currentComment = getState().commentsReducer.comment
+      const currentComment = getState().commentsReducer.comments[id]
       const userIndex = currentComment.likes.indexOf(userId)
       const isLiked = userIndex !== -1
       const { likes } = currentComment
 
       if (isLiked) {
         likes.splice(userIndex, 1)
-        dispatch(setCommentsLikesCounterAC(likes))
+        dispatch(setCommentLike({ id, likes }))
       } else {
         likes.push(userId)
-        dispatch(setCommentsLikesCounterAC(likes))
+        dispatch(setCommentLike({ id, likes }))
       }
     }
   } catch (error) {
