@@ -6,6 +6,7 @@ const ActionTypes = {
   TOGGLE_COMMENTS_IS_FETCHING: 'TOGGLE_COMMENTS_IS_FETCHING',
   SET_COMMENT_AUTHORS: 'SET_COMMENT_AUTHORS',
   SET_COMMENT_LIKE: 'SET_COMMENT_LIKE',
+  SET_COMMENT_LIKE_TO_CHILD: 'SET_COMMENT_LIKE_TO_CHILD',
 }
 
 const initialState = {
@@ -34,7 +35,21 @@ export const commentsReducer = (state = initialState, { type, payload = 0 }) => 
           [payload.id]: { ...state.comments[payload.id], likes: [...payload.likes] },
         },
       }
-
+    case ActionTypes.SET_COMMENT_LIKE_TO_CHILD:
+      return {
+        ...state,
+        comments: {
+          ...state.comments,
+          [payload.perentId]: {
+            ...state.comments[payload.perentId],
+            answers: {
+              ...state.comments[payload.perentId],
+              likes: [...payload.likes],
+            },
+            likes: [...payload.likes],
+          },
+        },
+      }
     default:
       return state
   }
@@ -55,8 +70,10 @@ const setAuthorsAC = (author) => ({
   payload: author,
 })
 
-export const setCommentLike = ({ id, likes }) => ({
-  type: ActionTypes.SET_COMMENT_LIKE,
+export const setCommentLike = ({ id, likes, perentId }) => ({
+  type: !perentId
+    ? ActionTypes.SET_COMMENT_LIKE
+    : ActionTypes.SET_COMMENT_LIKE_TO_CHILD,
   payload: { id, likes },
 })
 
@@ -124,22 +141,24 @@ export const getComments = (id) => async (dispatch) => {
   }
 }
 
-export const setLike = (id) => async (dispatch, getState) => {
+export const setLike = (id, perentId) => async (dispatch, getState) => {
   try {
     const response = await commentsAPI.setLike(id)
     if (response.status === 200) {
       const userId = getState().auth.user.id
-      const currentComment = getState().commentsReducer.comments[id]
+      const currentComment =
+        getState().commentsReducer.comments[id] ||
+        getState().commentsReducer.comments[perentId].answers
       const userIndex = currentComment.likes.indexOf(userId)
       const isLiked = userIndex !== -1
       const { likes } = currentComment
 
       if (isLiked) {
         likes.splice(userIndex, 1)
-        dispatch(setCommentLike({ id, likes }))
+        dispatch(setCommentLike({ id, likes, perentId }))
       } else {
         likes.push(userId)
-        dispatch(setCommentLike({ id, likes }))
+        dispatch(setCommentLike({ id, likes, perentId }))
       }
     }
   } catch (error) {

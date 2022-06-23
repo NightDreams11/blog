@@ -1,23 +1,10 @@
-import { Avatar, Divider } from '@mui/material'
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getComments, setLike } from 'store/comments'
-import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import { getImageUrl } from 'utils/imageURL/imageURL'
+import { getComments } from 'store/comments'
 import { Wrapper } from '../styled'
-import {
-  Author,
-  CommentBody,
-  CommentBodyContainerInner,
-  CommentText,
-  Date,
-  LikeCounter,
-  LikesContainer,
-  ShowMore,
-  TextInput,
-} from './styled'
+import { CommentsList } from '../CommentsList/CommentsList'
+import { ShowMore, TextInput } from './styled'
 
 let isShowedButton = true
 
@@ -26,6 +13,7 @@ export const CommentsComponent = ({ postId }) => {
   const [numberOfComments, setNumberOfComments] = useState(5)
 
   const comments = useSelector((state) => state.commentsReducer.comments)
+  const userId = useSelector((state) => state.auth.user.id)
 
   const authorsOfComments = useSelector(
     (state) => state.commentsReducer.authorsOfComments
@@ -64,57 +52,13 @@ export const CommentsComponent = ({ postId }) => {
   return (
     <Wrapper>
       <TextInput />
-      {sortedComments.map((elem) => {
-        return (
-          <CommentBody key={elem.id}>
-            <Avatar
-              key={elem.id}
-              src={
-                elem ? getImageUrl(authorsOfComments[elem.commentedBy]?.avatar) : ''
-              }
-              sx={{ height: '34px', width: '34px', mt: '5px' }}
-            />
-            <CommentBodyContainerInner>
-              <Author variant="caption">
-                {elem ? authorsOfComments[elem.commentedBy]?.name : 'Unknown'}
-              </Author>
-              <CommentText variant="body2">{elem.text}</CommentText>
-              <Date variant="caption">{dateFormatter(elem.dateCreated)}</Date>
-              <LikesContainer
-                style={{
-                  // background: isLiked(post, userId) ? '#ED7C7C' : '#edeef0',
-                  width: '27px',
-                  height: '13px',
-                }}
-              >
-                <FavoriteIcon
-                  sx={{
-                    cursor: 'pointer',
-                    width: '16px',
-                    height: '13px',
-                    mt: '3px',
-                    color: '#e64646',
-                  }}
-                  onClick={() => {
-                    dispatch(setLike(elem.id))
-                  }}
-                />
-                <LikeCounter
-                  style={{
-                    width: '7px',
-                    height: '13px',
-                    fontSize: '13px',
-                    color: '#e64646',
-                  }}
-                >
-                  {elem.likes?.length}
-                </LikeCounter>
-              </LikesContainer>
-              <Divider />
-            </CommentBodyContainerInner>
-          </CommentBody>
-        )
-      })}
+      <CommentsList
+        sortedComments={sortedComments}
+        authorsOfComments={authorsOfComments}
+        userId={userId}
+        isShowedButton={isShowedButton}
+        showMoreComments={showMoreComments}
+      />
       {isShowedButton && (
         <ShowMore onClick={showMoreComments}>Показать еще</ShowMore>
       )}

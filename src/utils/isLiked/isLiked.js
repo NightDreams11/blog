@@ -1,3 +1,3 @@
-export const isLiked = (post, userId) => {
-  return post?.likes.includes(userId)
+export const isLiked = (elem, userId) => {
+  return elem?.likes?.includes(userId)
 }
