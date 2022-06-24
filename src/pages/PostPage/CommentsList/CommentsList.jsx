@@ -8,6 +8,7 @@ import { isLiked } from 'utils/isLiked/isLiked'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import { Wrapper } from '../styled'
 import {
+  AnswersContainer,
   Author,
   CommentBody,
   CommentBodyContainerInner,
@@ -47,7 +48,11 @@ export const CommentsList = ({
                     ? getImageUrl(authorsOfComments[elem.commentedBy]?.avatar)
                     : ''
                 }
-                sx={{ height: '34px', width: '34px', mt: '5px' }}
+                sx={{
+                  height: !perentId ? '34px' : '24px',
+                  width: !perentId ? '34px' : '24px',
+                  mt: !perentId ? '5px' : '0px ',
+                }}
               />
               <CommentBodyContainerInner>
                 <Author variant="caption">
@@ -109,12 +114,14 @@ export const CommentsList = ({
                   </LikeCounter>
                 </LikesContainer>
                 <Divider />
-                <CommentsList
-                  sortedComments={elem.answers && [elem.answers]}
-                  authorsOfComments={authorsOfComments}
-                  userId={userId}
-                  perentId={elem.id}
-                />
+                <AnswersContainer>
+                  <CommentsList
+                    sortedComments={elem.answers && [elem.answers]}
+                    authorsOfComments={authorsOfComments}
+                    userId={userId}
+                    perentId={elem.id}
+                  />
+                </AnswersContainer>
               </CommentBodyContainerInner>
             </CommentBody>
           )

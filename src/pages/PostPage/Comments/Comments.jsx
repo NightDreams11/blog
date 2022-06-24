@@ -2,9 +2,9 @@ import { Preloader } from 'components/layout/Preloader/Preloader'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getComments } from 'store/comments'
-import { Wrapper } from '../styled'
+import SendIcon from '@mui/icons-material/Send'
 import { CommentsList } from '../CommentsList/CommentsList'
-import { ShowMore, TextInput } from './styled'
+import { Form, ShowMore, TextInput, TextInputContainer, Wrapper } from './styled'
 
 let isShowedButton = true
 
@@ -51,7 +51,6 @@ export const CommentsComponent = ({ postId }) => {
 
   return (
     <Wrapper>
-      <TextInput />
       <CommentsList
         sortedComments={sortedComments}
         authorsOfComments={authorsOfComments}
@@ -59,6 +58,12 @@ export const CommentsComponent = ({ postId }) => {
         isShowedButton={isShowedButton}
         showMoreComments={showMoreComments}
       />
+      <TextInputContainer>
+        <Form>
+          <TextInput placeholder="Add comment..." />
+          <SendIcon />
+        </Form>
+      </TextInputContainer>
       {isShowedButton && (
         <ShowMore onClick={showMoreComments}>Показать еще</ShowMore>
       )}

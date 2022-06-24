@@ -1,11 +1,32 @@
 import { TextField, Typography } from '@mui/material'
-import { styled } from '@mui/system'
+import { Box, styled } from '@mui/system'
+import style from 'styled-components'
+
+export const Wrapper = style.div`
+width: 550px;
+`
+
+export const TextInputContainer = styled(
+  Box,
+  {}
+)({
+  display: 'flex',
+  width: 466,
+  height: 34,
+})
+
+export const Form = style.form`
+display: flex;
+`
 
 export const TextInput = styled(
   TextField,
   {}
 )({
-  marginBottom: 20,
+  width: 422,
+  '& .MuiOutlinedInput-root': {
+    minHeight: 34,
+  },
 })
 
 export const ShowMore = styled(

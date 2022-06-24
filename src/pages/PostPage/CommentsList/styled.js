@@ -9,19 +9,24 @@ export const CommentBody = styled(
   Box,
   {}
 )({
-  width: 550,
+  maxWidth: 550,
+  width: '100%',
   display: 'flex',
   minHeight: 70,
+  paddingTop: 10,
+  marginLeft: -3,
+  position: 'relative',
 })
 
 export const CommentBodyContainerInner = styled(
   Box,
   {}
 )({
-  width: 466,
+  maxWidth: 466,
+  width: '100%',
+
   marginLeft: 10,
   position: 'relative',
-  cursor: 'pointer',
 })
 
 export const Author = styled(
@@ -58,3 +63,9 @@ export const LikeCounter = style.span`
 padding-left: 2px;
 height: 20px;
 `
+export const AnswersContainer = styled(
+  Box,
+  {}
+)({
+  width: 434,
+})
