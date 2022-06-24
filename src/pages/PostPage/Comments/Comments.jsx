@@ -1,15 +1,16 @@
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getComments } from 'store/comments'
+import { createComment, getComments } from 'store/comments'
 import SendIcon from '@mui/icons-material/Send'
 import { CommentsList } from '../CommentsList/CommentsList'
-import { Form, ShowMore, TextInput, TextInputContainer, Wrapper } from './styled'
+import { ShowMore, TextInput, TextInputContainer, Wrapper } from './styled'
 
 let isShowedButton = true
 
 export const CommentsComponent = ({ postId }) => {
   const dispatch = useDispatch()
+  const [comment, setComment] = useState('')
   const [numberOfComments, setNumberOfComments] = useState(5)
 
   const comments = useSelector((state) => state.commentsReducer.comments)
@@ -22,6 +23,10 @@ export const CommentsComponent = ({ postId }) => {
   const isFetching = useSelector(
     (state) => state.commentsReducer.toggleCommentsIsFetching
   )
+
+  const onSubmit = () => {
+    dispatch(createComment({ comment, postId }))
+  }
 
   const showMoreComments = () => {
     setNumberOfComments(numberOfComments + 5)
@@ -59,10 +64,11 @@ export const CommentsComponent = ({ postId }) => {
         showMoreComments={showMoreComments}
       />
       <TextInputContainer>
-        <Form>
-          <TextInput placeholder="Add comment..." />
-          <SendIcon />
-        </Form>
+        <TextInput
+          placeholder="Add comment..."
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <SendIcon sx={{ cursor: 'pointer' }} onClick={onSubmit} />
       </TextInputContainer>
       {isShowedButton && (
         <ShowMore onClick={showMoreComments}>Показать еще</ShowMore>

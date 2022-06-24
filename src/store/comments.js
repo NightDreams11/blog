@@ -165,3 +165,20 @@ export const setLike = (id, perentId) => async (dispatch, getState) => {
     dispatch(addSnackbarMessageErrorAC(error.message))
   }
 }
+
+export const createComment =
+  ({ comment, postId, followedCommentID = null }) =>
+  async (dispatch) => {
+    try {
+      const response = await commentsAPI.createComment({
+        comment,
+        postId,
+        followedCommentID,
+      })
+      if (response.status === 200) {
+        dispatch(getComments(postId))
+      }
+    } catch (error) {
+      dispatch(addSnackbarMessageErrorAC(error.message))
+    }
+  }

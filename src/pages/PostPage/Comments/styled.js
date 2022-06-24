@@ -15,10 +15,6 @@ export const TextInputContainer = styled(
   height: 34,
 })
 
-export const Form = style.form`
-display: flex;
-`
-
 export const TextInput = styled(
   TextField,
   {}
