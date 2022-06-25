@@ -1,5 +1,6 @@
 import { Typography } from '@mui/material'
 import { Box, styled } from '@mui/system'
+import ClearIcon from '@mui/icons-material/Clear'
 import style from 'styled-components'
 
 export const Wrapper = style.div`
@@ -68,4 +69,15 @@ export const AnswersContainer = styled(
   {}
 )({
   width: 434,
+})
+
+export const DeleteMessageIcon = styled(
+  ClearIcon,
+  {}
+)({
+  position: 'absolute',
+  right: 9,
+  top: 3,
+  height: 16,
+  width: 16,
 })

@@ -62,6 +62,7 @@ export const CommentsComponent = ({ postId }) => {
         userId={userId}
         isShowedButton={isShowedButton}
         showMoreComments={showMoreComments}
+        postId={postId}
       />
       <TextInputContainer>
         <TextInput

@@ -1,6 +1,6 @@
 import { Avatar, Divider } from '@mui/material'
 import { useDispatch } from 'react-redux'
-import { setLike } from 'store/comments'
+import { deleteComment, setLike } from 'store/comments'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
@@ -14,6 +14,7 @@ import {
   CommentBodyContainerInner,
   CommentText,
   Date,
+  DeleteMessageIcon,
   LikeCounter,
   LikesContainer,
 } from './styled'
@@ -23,8 +24,13 @@ export const CommentsList = ({
   authorsOfComments,
   userId,
   perentId,
+  postId,
 }) => {
   const dispatch = useDispatch()
+
+  const deleteOwnComment = (commentId) => {
+    dispatch(deleteComment({ commentId, postId }))
+  }
 
   return (
     <Wrapper>
@@ -113,6 +119,18 @@ export const CommentsList = ({
                     {elem.likes?.length !== 0 ? elem.likes?.length : ''}
                   </LikeCounter>
                 </LikesContainer>
+                {userId === elem.commentedBy && (
+                  <DeleteMessageIcon
+                    sx={{
+                      cursor: 'pointer',
+                      color: 'rgba(42, 88, 133, 0)',
+                      '&:hover': {
+                        color: 'rgba(42, 88, 133, 0.5)',
+                      },
+                    }}
+                    onClick={() => deleteOwnComment(elem.id)}
+                  />
+                )}
                 <Divider />
                 <AnswersContainer>
                   <CommentsList

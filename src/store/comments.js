@@ -182,3 +182,16 @@ export const createComment =
       dispatch(addSnackbarMessageErrorAC(error.message))
     }
   }
+
+export const deleteComment =
+  ({ commentId, postId }) =>
+  async (dispatch) => {
+    try {
+      const response = await commentsAPI.deleteComment(commentId)
+      if (response.status === 200) {
+        dispatch(getComments(postId))
+      }
+    } catch (error) {
+      dispatch(addSnackbarMessageErrorAC(error.message))
+    }
+  }

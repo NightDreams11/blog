@@ -85,14 +85,20 @@ export const commentsAPI = {
   async getComments(id) {
     return commentsAdapter(await instance.get(`/comments/post/${id}`))
   },
+
   setLike(id) {
     return instance.put(`/comments/like/${id}`)
   },
+
   async createComment({ postId, followedCommentID, comment }) {
     const response = await instance.post(`/comments/post/${postId}`, {
       text: comment,
       followedCommentID,
     })
     return response
+  },
+
+  deleteComment(commentId) {
+    return instance.delete(`/comments/${commentId}`)
   },
 }
