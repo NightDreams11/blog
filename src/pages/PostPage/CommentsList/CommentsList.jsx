@@ -1,9 +1,11 @@
 import { Avatar, Divider } from '@mui/material'
-import { useDispatch } from 'react-redux'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteComment, setLike } from 'store/comments'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import { DeletePreloader } from 'components/layout/DeletePreloader/DeletePreloader'
 import { isLiked } from 'utils/isLiked/isLiked'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import { Wrapper } from '../styled'
@@ -28,6 +30,12 @@ export const CommentsList = ({
 }) => {
   const dispatch = useDispatch()
 
+  const [deletingCommentId, setDeletingCommentId] = useState('')
+
+  const deleteCommentIsFetching = useSelector(
+    (state) => state.commentsReducer.toggleDeleteCommentsIsFetching
+  )
+
   const deleteOwnComment = (commentId) => {
     dispatch(deleteComment({ commentId, postId }))
   }
@@ -36,18 +44,8 @@ export const CommentsList = ({
     <Wrapper>
       {sortedComments &&
         sortedComments.map((elem) => {
-          return (
-            <CommentBody
-              key={elem.id}
-              // sx={{
-              //   '&:hover .MuiSvgIcon-root': {
-              //     color:
-              //       elem.likes?.length === 0
-              //         ? 'rgba(42, 88, 133, 0.5)'
-              //         : 'rgba(42, 88, 133, 1)',
-              //   },
-              // }}
-            >
+          return elem.id ? (
+            <CommentBody key={elem.id}>
               <Avatar
                 src={
                   elem
@@ -60,7 +58,22 @@ export const CommentsList = ({
                   mt: !perentId ? '5px' : '0px ',
                 }}
               />
-              <CommentBodyContainerInner>
+              <CommentBodyContainerInner
+                sx={{
+                  '&:hover .FavoriteBorderIcon ': {
+                    color:
+                      elem.likes?.length === 0
+                        ? 'rgba(42, 88, 133, 0.5)'
+                        : 'rgba(42, 88, 133, 1)',
+                  },
+                  '&:hover .DeleteMessageIcon': {
+                    color:
+                      elem.likes?.length === 0
+                        ? 'rgba(42, 88, 133, 0.5)'
+                        : 'rgba(42, 88, 133, 1)',
+                  },
+                }}
+              >
                 <Author variant="caption">
                   {elem ? authorsOfComments[elem.commentedBy]?.name : 'Unknown'}
                 </Author>
@@ -71,11 +84,13 @@ export const CommentsList = ({
                     width: '27px',
                     height: '13px',
                   }}
+                  onClick={() => {
+                    dispatch(setLike(elem.id, perentId))
+                  }}
                 >
                   {isLiked(elem, userId) ? (
                     <FavoriteIcon
                       sx={{
-                        cursor: 'pointer',
                         width: '16px',
                         height: '13px',
                         mt: '3px',
@@ -87,8 +102,8 @@ export const CommentsList = ({
                     />
                   ) : (
                     <FavoriteBorderIcon
+                      className="FavoriteBorderIcon"
                       sx={{
-                        cursor: 'pointer',
                         width: '16px',
                         height: '13px',
                         mt: '3px',
@@ -96,15 +111,6 @@ export const CommentsList = ({
                           elem.likes?.length === 0
                             ? 'rgba(42, 88, 133, 0)'
                             : 'rgba(42, 88, 133, 1)',
-                        '&:hover': {
-                          color:
-                            elem.likes?.length === 0
-                              ? 'rgba(42, 88, 133, 0.5)'
-                              : 'rgba(42, 88, 133, 1)',
-                        },
-                      }}
-                      onClick={() => {
-                        dispatch(setLike(elem.id, perentId))
                       }}
                     />
                   )}
@@ -119,18 +125,22 @@ export const CommentsList = ({
                     {elem.likes?.length !== 0 ? elem.likes?.length : ''}
                   </LikeCounter>
                 </LikesContainer>
-                {userId === elem.commentedBy && (
-                  <DeleteMessageIcon
-                    sx={{
-                      cursor: 'pointer',
-                      color: 'rgba(42, 88, 133, 0)',
-                      '&:hover': {
-                        color: 'rgba(42, 88, 133, 0.5)',
-                      },
-                    }}
-                    onClick={() => deleteOwnComment(elem.id)}
-                  />
-                )}
+                {userId === elem.commentedBy &&
+                  (deleteCommentIsFetching && deletingCommentId === elem.id ? (
+                    <DeletePreloader />
+                  ) : (
+                    <DeleteMessageIcon
+                      className="DeleteMessageIcon"
+                      sx={{
+                        cursor: 'pointer',
+                        color: 'rgba(42, 88, 133, 0)',
+                      }}
+                      onClick={() => {
+                        deleteOwnComment(elem.id)
+                        setDeletingCommentId(elem.id)
+                      }}
+                    />
+                  ))}
                 <Divider />
                 <AnswersContainer>
                   <CommentsList
@@ -142,6 +152,8 @@ export const CommentsList = ({
                 </AnswersContainer>
               </CommentBodyContainerInner>
             </CommentBody>
+          ) : (
+            ''
           )
         })}
     </Wrapper>

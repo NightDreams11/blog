@@ -20,16 +20,15 @@ export const CommentsComponent = ({ postId }) => {
     (state) => state.commentsReducer.authorsOfComments
   )
 
-  const isFetching = useSelector(
-    (state) => state.commentsReducer.toggleCommentsIsFetching
-  )
-
   const onSubmit = () => {
     dispatch(createComment({ comment, postId }))
+    setComment('')
   }
 
-  const showMoreComments = () => {
-    setNumberOfComments(numberOfComments + 5)
+  const showAllComments = () => {
+    setNumberOfComments(
+      numberOfComments + (Object.values(comments).length - numberOfComments)
+    )
   }
 
   useEffect(() => {
@@ -37,7 +36,7 @@ export const CommentsComponent = ({ postId }) => {
   }, [dispatch, postId])
 
   if (!comments || !authorsOfComments) {
-    return <Preloader />
+    return <Preloader thickness={0} />
   }
 
   if (numberOfComments >= Object.values(comments).length) {
@@ -46,13 +45,10 @@ export const CommentsComponent = ({ postId }) => {
 
   const sortedComments = Object.values(comments)
     .sort((a, b) => {
-      return new window.Date(a.dateCreated) - new window.Date(b.dateCreated)
+      // return new window.Date(a.dateCreated) - new window.Date(b.dateCreated)
+      return new window.Date(b.dateCreated) - new window.Date(a.dateCreated)
     })
     .slice(0, numberOfComments)
-
-  if (isFetching) {
-    return <Preloader />
-  }
 
   return (
     <Wrapper>
@@ -61,19 +57,17 @@ export const CommentsComponent = ({ postId }) => {
         authorsOfComments={authorsOfComments}
         userId={userId}
         isShowedButton={isShowedButton}
-        showMoreComments={showMoreComments}
         postId={postId}
       />
       <TextInputContainer>
         <TextInput
           placeholder="Add comment..."
+          value={comment}
           onChange={(e) => setComment(e.target.value)}
         />
         <SendIcon sx={{ cursor: 'pointer' }} onClick={onSubmit} />
       </TextInputContainer>
-      {isShowedButton && (
-        <ShowMore onClick={showMoreComments}>Показать еще</ShowMore>
-      )}
+      {isShowedButton && <ShowMore onClick={showAllComments}>Show all</ShowMore>}
     </Wrapper>
   )
 }

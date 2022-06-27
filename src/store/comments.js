@@ -4,6 +4,7 @@ import { addSnackbarMessageErrorAC } from './messages'
 const ActionTypes = {
   SET_COMMENTS: 'SET_COMMENTS',
   TOGGLE_COMMENTS_IS_FETCHING: 'TOGGLE_COMMENTS_IS_FETCHING',
+  TOGGLE_DELETE_COMMENTS_IS_FETCHING: 'TOGGLE_DELETE_COMMENTS_IS_FETCHING',
   SET_COMMENT_AUTHORS: 'SET_COMMENT_AUTHORS',
   SET_COMMENT_LIKE: 'SET_COMMENT_LIKE',
   SET_COMMENT_LIKE_TO_CHILD: 'SET_COMMENT_LIKE_TO_CHILD',
@@ -13,6 +14,7 @@ const initialState = {
   comments: null,
   commentLikesCounter: null,
   toggleCommentsIsFetching: false,
+  toggleDeleteCommentsIsFetching: false,
   authorsOfComments: null,
 }
 
@@ -21,7 +23,9 @@ export const commentsReducer = (state = initialState, { type, payload = 0 }) => 
     case ActionTypes.SET_COMMENTS:
       return { ...state, comments: payload }
     case ActionTypes.TOGGLE_COMMENTS_IS_FETCHING:
-      return { ...state, toggleCommentsIsFetching: state.toggleCommentsIsFetching }
+      return { ...state, toggleCommentsIsFetching: payload }
+    case ActionTypes.TOGGLE_DELETE_COMMENTS_IS_FETCHING:
+      return { ...state, toggleDeleteCommentsIsFetching: payload }
     case ActionTypes.SET_COMMENT_AUTHORS:
       return {
         ...state,
@@ -62,6 +66,11 @@ const getCommentsAC = (comments) => ({
 
 const toggleCommentsIsFetchingAC = (value) => ({
   type: ActionTypes.TOGGLE_COMMENTS_IS_FETCHING,
+  payload: value,
+})
+
+const toggleDeleteCommentsIsFetchingAC = (value) => ({
+  type: ActionTypes.TOGGLE_DELETE_COMMENTS_IS_FETCHING,
   payload: value,
 })
 
@@ -180,6 +189,8 @@ export const createComment =
       }
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))
+    } finally {
+      dispatch(toggleCommentsIsFetchingAC(false))
     }
   }
 
@@ -187,11 +198,14 @@ export const deleteComment =
   ({ commentId, postId }) =>
   async (dispatch) => {
     try {
+      dispatch(toggleDeleteCommentsIsFetchingAC(true))
       const response = await commentsAPI.deleteComment(commentId)
       if (response.status === 200) {
         dispatch(getComments(postId))
       }
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))
+    } finally {
+      dispatch(toggleDeleteCommentsIsFetchingAC(false))
     }
   }

@@ -58,6 +58,7 @@ export const LikesContainer = styled(
   position: 'absolute',
   right: 0,
   top: 45,
+  cursor: 'pointer',
 })
 
 export const LikeCounter = style.span`
