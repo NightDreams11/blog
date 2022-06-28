@@ -1,20 +1,29 @@
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Box } from '@mui/system'
 import { createComment, getComments } from 'store/comments'
+import { Avatar } from '@mui/material'
+import { getImageUrl } from 'utils/imageURL/imageURL'
 import SendIcon from '@mui/icons-material/Send'
 import { CommentsList } from '../CommentsList/CommentsList'
-import { ShowMore, TextInput, TextInputContainer, Wrapper } from './styled'
-
-let isShowedButton = true
+import {
+  CommentsCounterButton,
+  TextInput,
+  TextInputContainer,
+  Wrapper,
+} from './styled'
 
 export const CommentsComponent = ({ postId }) => {
+  let isShowedButton = true
+
   const dispatch = useDispatch()
   const [comment, setComment] = useState('')
   const [numberOfComments, setNumberOfComments] = useState(5)
 
   const comments = useSelector((state) => state.commentsReducer.comments)
   const userId = useSelector((state) => state.auth.user.id)
+  const user = useSelector((state) => state.auth.user)
 
   const authorsOfComments = useSelector(
     (state) => state.commentsReducer.authorsOfComments
@@ -31,6 +40,10 @@ export const CommentsComponent = ({ postId }) => {
     )
   }
 
+  const hideComments = () => {
+    setNumberOfComments(5)
+  }
+
   useEffect(() => {
     dispatch(getComments(postId))
   }, [dispatch, postId])
@@ -41,6 +54,8 @@ export const CommentsComponent = ({ postId }) => {
 
   if (numberOfComments >= Object.values(comments).length) {
     isShowedButton = false
+  } else {
+    isShowedButton = true
   }
 
   const sortedComments = Object.values(comments)
@@ -56,18 +71,52 @@ export const CommentsComponent = ({ postId }) => {
         sortedComments={sortedComments}
         authorsOfComments={authorsOfComments}
         userId={userId}
-        isShowedButton={isShowedButton}
         postId={postId}
       />
+      <Box sx={{ marginTop: '10px', marginBottom: '10px' }}>
+        {isShowedButton ? (
+          <CommentsCounterButton variant="body2" onClick={showAllComments}>
+            Show all comments
+          </CommentsCounterButton>
+        ) : (
+          <CommentsCounterButton variant="body2" onClick={hideComments}>
+            Hide comments
+          </CommentsCounterButton>
+        )}
+      </Box>
       <TextInputContainer>
+        <Avatar
+          src={getImageUrl(user.avatar)}
+          sx={{
+            marginLeft: '-3px',
+            height: '34px',
+            width: '34px',
+            mt: '0px ',
+          }}
+        />
         <TextInput
           placeholder="Add comment..."
           value={comment}
+          autoComplete="off"
           onChange={(e) => setComment(e.target.value)}
         />
-        <SendIcon sx={{ cursor: 'pointer' }} onClick={onSubmit} />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            marginLeft: '19px',
+          }}
+        >
+          <SendIcon
+            sx={{
+              cursor: comment.length >= 3 ? 'pointer' : 'auto',
+              color: '#99a2ad',
+              opacity: comment.length >= 3 ? 0.7 : 0.3,
+            }}
+            onClick={comment.length >= 3 ? onSubmit : ''}
+          />
+        </Box>
       </TextInputContainer>
-      {isShowedButton && <ShowMore onClick={showAllComments}>Show all</ShowMore>}
     </Wrapper>
   )
 }

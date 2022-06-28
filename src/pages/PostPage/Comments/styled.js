@@ -11,7 +11,6 @@ export const TextInputContainer = styled(
   {}
 )({
   display: 'flex',
-  width: 466,
   height: 34,
 })
 
@@ -20,14 +19,18 @@ export const TextInput = styled(
   {}
 )({
   width: 422,
+  marginLeft: 10,
   '& .MuiOutlinedInput-root': {
     minHeight: 34,
   },
 })
 
-export const ShowMore = styled(
+export const CommentsCounterButton = styled(
   Typography,
   {}
 )({
   cursor: 'pointer',
+  display: 'inline',
+  marginLeft: '42px',
+  color: '#2a5885',
 })

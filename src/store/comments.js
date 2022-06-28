@@ -4,6 +4,7 @@ import { addSnackbarMessageErrorAC } from './messages'
 const ActionTypes = {
   SET_COMMENTS: 'SET_COMMENTS',
   TOGGLE_COMMENTS_IS_FETCHING: 'TOGGLE_COMMENTS_IS_FETCHING',
+  TOGGLE_EDIT_MODE: 'TOGGLE_EDIT_MODE',
   TOGGLE_DELETE_COMMENTS_IS_FETCHING: 'TOGGLE_DELETE_COMMENTS_IS_FETCHING',
   SET_COMMENT_AUTHORS: 'SET_COMMENT_AUTHORS',
   SET_COMMENT_LIKE: 'SET_COMMENT_LIKE',
@@ -16,6 +17,7 @@ const initialState = {
   toggleCommentsIsFetching: false,
   toggleDeleteCommentsIsFetching: false,
   authorsOfComments: null,
+  editMode: false,
 }
 
 export const commentsReducer = (state = initialState, { type, payload = 0 }) => {
@@ -54,6 +56,12 @@ export const commentsReducer = (state = initialState, { type, payload = 0 }) => 
           },
         },
       }
+
+    case ActionTypes.TOGGLE_EDIT_MODE:
+      return {
+        ...state,
+        editMode: payload,
+      }
     default:
       return state
   }
@@ -84,6 +92,11 @@ export const setCommentLike = ({ id, likes, perentId }) => ({
     ? ActionTypes.SET_COMMENT_LIKE
     : ActionTypes.SET_COMMENT_LIKE_TO_CHILD,
   payload: { id, likes },
+})
+
+export const toggleEditModeAC = (value) => ({
+  type: ActionTypes.TOGGLE_EDIT_MODE,
+  payload: value,
 })
 
 export const getComments = (id) => async (dispatch) => {
@@ -191,6 +204,20 @@ export const createComment =
       dispatch(addSnackbarMessageErrorAC(error.message))
     } finally {
       dispatch(toggleCommentsIsFetchingAC(false))
+    }
+  }
+
+export const editComment =
+  ({ commentId, postId, text }) =>
+  async (dispatch) => {
+    try {
+      const response = await commentsAPI.editComment({ commentId, text })
+      if (response.status === 200) {
+        dispatch(getComments(postId))
+        dispatch(toggleEditModeAC(false))
+      }
+    } catch (error) {
+      dispatch(addSnackbarMessageErrorAC(error.message))
     }
   }
 

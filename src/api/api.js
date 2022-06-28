@@ -98,6 +98,10 @@ export const commentsAPI = {
     return response
   },
 
+  editComment({ commentId, text }) {
+    return instance.patch(`/comments/${commentId}`, { text })
+  },
+
   deleteComment(commentId) {
     return instance.delete(`/comments/${commentId}`)
   },
