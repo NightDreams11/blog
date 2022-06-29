@@ -107,11 +107,12 @@ export const getComments = (id) => async (dispatch) => {
     const processedResponse = response.comments.reduce((acc, elem) => {
       if (!elem.followedCommentID) {
         acc[elem.id] = elem
+        acc[elem.id].answers = {}
         return acc
       }
 
       if (elem.followedCommentID && acc[elem.followedCommentID]) {
-        acc[elem.followedCommentID].answers = elem
+        acc[elem.followedCommentID].answers[elem.id] = elem
         return acc
       }
 
@@ -170,7 +171,7 @@ export const setLike = (id, perentId) => async (dispatch, getState) => {
       const userId = getState().auth.user.id
       const currentComment =
         getState().commentsReducer.comments[id] ||
-        getState().commentsReducer.comments[perentId].answers
+        getState().commentsReducer.comments[perentId].answers[id]
       const userIndex = currentComment.likes.indexOf(userId)
       const isLiked = userIndex !== -1
       const { likes } = currentComment

@@ -74,163 +74,187 @@ export const CommentsList = ({
       {sortedComments &&
         sortedComments.map((elem) => {
           return elem.id ? (
-            <CommentBody key={elem.id}>
-              <Avatar
-                src={
-                  elem
-                    ? getImageUrl(authorsOfComments[elem.commentedBy]?.avatar)
-                    : ''
-                }
-                sx={{
-                  height: !perentId ? '34px' : '24px',
-                  width: !perentId ? '34px' : '24px',
-                  mt: !perentId ? '5px' : '0px ',
-                }}
-              />
-              <CommentBodyContainerInner
-                sx={{
-                  '&:hover .FavoriteBorderIcon ': {
-                    color:
-                      elem.likes?.length === 0
-                        ? 'rgba(42, 88, 133, 0.5)'
-                        : 'rgba(42, 88, 133, 1)',
-                  },
-                  '&:hover .DeleteMessageIcon': {
-                    color:
-                      elem.likes?.length === 0
-                        ? 'rgba(42, 88, 133, 0.5)'
-                        : 'rgba(42, 88, 133, 1)',
-                  },
-                  '&:hover .EditIcon': {
-                    color:
-                      elem.likes?.length === 0
-                        ? 'rgba(42, 88, 133, 0.5)'
-                        : 'rgba(42, 88, 133, 1)',
-                  },
-                }}
-              >
-                <Author variant="caption">
-                  {elem ? authorsOfComments[elem.commentedBy]?.name : 'Unknown'}
-                </Author>
-                {!editMode || editCommentId !== elem.id ? (
-                  <Box>
-                    <Typography variant="body2">{elem.text}</Typography>
-                    <Date variant="caption">{dateFormatter(elem.dateCreated)}</Date>
-                    {!elem.followedCommentID && (
-                      <AnswerButton
-                        variant="body2"
-                        onClick={() => {
-                          setAnswerMode(!answerMode)
-                          setAnswerCommentId(elem.id)
-                        }}
-                      >
-                        Answer
-                      </AnswerButton>
-                    )}
-                    <LikesContainer
-                      style={{
-                        marginRight: isLiked(elem, userId) ? 10 : 0,
-                        transition: '0.3s',
-                      }}
-                      onClick={() => {
-                        dispatch(setLike(elem.id, perentId))
-                      }}
-                    >
-                      {isLiked(elem, userId) ? (
-                        <LikedIcon />
-                      ) : (
-                        <NoLikedIcon
-                          className="FavoriteBorderIcon"
-                          sx={{
+            <Box>
+              <CommentBody key={elem.id}>
+                <Avatar
+                  src={
+                    elem
+                      ? getImageUrl(authorsOfComments[elem.commentedBy]?.avatar)
+                      : ''
+                  }
+                  sx={{
+                    height: !perentId ? '34px' : '24px',
+                    width: !perentId ? '34px' : '24px',
+                    mt: !perentId ? '5px' : '0px ',
+                  }}
+                />
+                <CommentBodyContainerInner
+                  sx={
+                    elem.followedCommentID
+                      ? {
+                          '&:hover .FavoriteBorderIconChild': {
                             color:
                               elem.likes?.length === 0
-                                ? 'rgba(42, 88, 133, 0)'
+                                ? 'rgba(42, 88, 133, 0.5)'
                                 : 'rgba(42, 88, 133, 1)',
+                          },
+                          '&:hover .DeleteMessageIconChild': {
+                            color: 'rgba(42, 88, 133, 0.5)',
+                          },
+                          '&:hover .EditIconChild': {
+                            color: 'rgba(42, 88, 133, 0.5)',
+                          },
+                        }
+                      : {
+                          '&:hover .FavoriteBorderIcon': {
+                            color:
+                              elem.likes?.length === 0
+                                ? 'rgba(42, 88, 133, 0.5)'
+                                : 'rgba(42, 88, 133, 1)',
+                          },
+                          '&:hover .DeleteMessageIcon': {
+                            color: 'rgba(42, 88, 133, 0.5)',
+                          },
+                          '&:hover .EditIcon': {
+                            color: 'rgba(42, 88, 133, 0.5)',
+                          },
+                        }
+                  }
+                >
+                  <Author variant="caption">
+                    {elem ? authorsOfComments[elem.commentedBy]?.name : 'Unknown'}
+                  </Author>
+                  {!editMode || editCommentId !== elem.id ? (
+                    <Box>
+                      <Typography variant="body2">{elem.text}</Typography>
+                      <Date variant="caption">
+                        {dateFormatter(elem.dateCreated)}
+                      </Date>
+                      {!elem.followedCommentID && (
+                        <AnswerButton
+                          variant="body2"
+                          onClick={() => {
+                            setAnswerMode(!answerMode)
+                            setAnswerCommentId(elem.id)
+                          }}
+                        >
+                          Answer
+                        </AnswerButton>
+                      )}
+                      <LikesContainer
+                        style={{
+                          transition: '0.3s',
+                          right: elem.likes?.length === 0 ? -10 : 0,
+                        }}
+                        onClick={() => {
+                          dispatch(setLike(elem.id, perentId))
+                        }}
+                      >
+                        {isLiked(elem, userId) ? (
+                          <LikedIcon />
+                        ) : (
+                          <NoLikedIcon
+                            className={
+                              elem.followedCommentID
+                                ? 'FavoriteBorderIconChild'
+                                : 'FavoriteBorderIcon'
+                            }
+                            sx={{
+                              color:
+                                elem.likes?.length === 0
+                                  ? 'rgba(42, 88, 133, 0)'
+                                  : 'rgba(42, 88, 133, 1)',
+                            }}
+                          />
+                        )}
+                        <LikeCounter
+                          style={{
+                            color: isLiked(elem, userId) ? '#e64646' : '#2a5885',
+                          }}
+                        >
+                          {elem.likes?.length !== 0 ? elem.likes?.length : ''}
+                        </LikeCounter>
+                      </LikesContainer>
+                      {userId === elem.commentedBy && (
+                        <EditMessageIcon
+                          className={
+                            elem.followedCommentID ? 'EditIconChild' : 'EditIcon'
+                          }
+                          onClick={() => {
+                            setEditCommentId(elem.id)
+                            setEditCommentValue(elem.text)
+                            dispatch(toggleEditModeAC(true))
                           }}
                         />
                       )}
-                      <LikeCounter
-                        style={{
-                          color: isLiked(elem, userId) ? '#e64646' : '#2a5885',
-                        }}
-                      >
-                        {elem.likes?.length !== 0 ? elem.likes?.length : ''}
-                      </LikeCounter>
-                    </LikesContainer>
-                    {userId === elem.commentedBy && (
-                      <EditMessageIcon
-                        className="EditIcon"
-                        onClick={() => {
-                          setEditCommentId(elem.id)
-                          setEditCommentValue(elem.text)
-                          dispatch(toggleEditModeAC(true))
-                        }}
-                      />
-                    )}
-                    {userId === elem.commentedBy &&
-                      (deleteCommentIsFetching && deletingCommentId === elem.id ? (
-                        <DeletePreloader />
-                      ) : (
-                        <DeleteMessageIcon
-                          className="DeleteMessageIcon"
-                          onClick={() => {
-                            deleteOwnComment(elem.id)
-                            setDeletingCommentId(elem.id)
-                          }}
+                      {userId === elem.commentedBy &&
+                        (deleteCommentIsFetching && deletingCommentId === elem.id ? (
+                          <DeletePreloader />
+                        ) : (
+                          <DeleteMessageIcon
+                            className={
+                              elem.followedCommentID
+                                ? 'DeleteMessageIconChild'
+                                : 'DeleteMessageIcon'
+                            }
+                            onClick={() => {
+                              deleteOwnComment(elem.id)
+                              setDeletingCommentId(elem.id)
+                            }}
+                          />
+                        ))}
+                      <Divider />
+                      {answerMode && answerCommentId === elem.id ? (
+                        <Answers
+                          user={user}
+                          comment={comment}
+                          setComment={setComment}
+                          answerToComment={Boolean(true)}
+                          createAsnwerToComment={createAsnwerToComment}
+                          followedCommentID={elem.id}
                         />
-                      ))}
-                    <Divider />
-                    {answerMode && answerCommentId === elem.id ? (
-                      <Answers
-                        user={user}
-                        comment={comment}
-                        setComment={setComment}
-                        answerToComment={Boolean(true)}
-                        createAsnwerToComment={createAsnwerToComment}
-                        followedCommentID={elem.id}
-                      />
-                    ) : (
-                      ''
-                    )}
-                  </Box>
-                ) : (
-                  <Box>
-                    <TextInput
-                      value={editCommentValue}
-                      onChange={(e) => {
-                        setEditCommentValue(e.target.value)
-                      }}
-                    />
-                    <EditModeButtonContainer>
-                      <CancelEditCommentButton
-                        onClick={() => dispatch(toggleEditModeAC(false))}
-                      >
-                        Cancel
-                      </CancelEditCommentButton>
-                      <SaveEditCommentButton
-                        variant="contained"
-                        disableElevation
-                        onClick={() => {
-                          editOwnComment(elem.id, editCommentValue)
+                      ) : (
+                        ''
+                      )}
+                    </Box>
+                  ) : (
+                    <Box>
+                      <TextInput
+                        value={editCommentValue}
+                        onChange={(e) => {
+                          setEditCommentValue(e.target.value)
                         }}
-                      >
-                        Save
-                      </SaveEditCommentButton>
-                    </EditModeButtonContainer>
-                  </Box>
-                )}
-
-                <AnswersContainer>
-                  <CommentsList
-                    sortedComments={elem.answers && [elem.answers]}
-                    authorsOfComments={authorsOfComments}
-                    userId={userId}
-                    perentId={elem.id}
-                    postId={postId}
-                  />
-                </AnswersContainer>
-              </CommentBodyContainerInner>
-            </CommentBody>
+                      />
+                      <EditModeButtonContainer>
+                        <CancelEditCommentButton
+                          onClick={() => dispatch(toggleEditModeAC(false))}
+                        >
+                          Cancel
+                        </CancelEditCommentButton>
+                        <SaveEditCommentButton
+                          variant="contained"
+                          disableElevation
+                          onClick={() => {
+                            editOwnComment(elem.id, editCommentValue)
+                          }}
+                        >
+                          Save
+                        </SaveEditCommentButton>
+                      </EditModeButtonContainer>
+                    </Box>
+                  )}
+                </CommentBodyContainerInner>
+              </CommentBody>
+              <AnswersContainer>
+                <CommentsList
+                  sortedComments={elem.answers && Object.values(elem.answers)}
+                  authorsOfComments={authorsOfComments}
+                  userId={userId}
+                  perentId={elem.id}
+                  postId={postId}
+                />
+              </AnswersContainer>
+            </Box>
           ) : (
             ''
           )

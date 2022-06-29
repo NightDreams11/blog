@@ -103,7 +103,8 @@ export const AnswersContainer = styled(
   Box,
   {}
 )({
-  width: 434,
+  width: 466,
+  marginLeft: 45,
 })
 
 export const DeleteMessageIcon = styled(
@@ -111,7 +112,7 @@ export const DeleteMessageIcon = styled(
   {}
 )({
   position: 'absolute',
-  right: 9,
+  right: 0,
   top: 3,
   height: 16,
   width: 16,
@@ -124,7 +125,7 @@ export const EditMessageIcon = styled(
   {}
 )({
   position: 'absolute',
-  right: 30,
+  right: 21,
   top: 4,
   height: 13,
   width: 13,
