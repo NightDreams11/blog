@@ -3,16 +3,9 @@ import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box } from '@mui/system'
 import { createComment, getComments } from 'store/comments'
-import { Avatar } from '@mui/material'
-import { getImageUrl } from 'utils/imageURL/imageURL'
-import SendIcon from '@mui/icons-material/Send'
 import { CommentsList } from '../CommentsList/CommentsList'
-import {
-  CommentsCounterButton,
-  TextInput,
-  TextInputContainer,
-  Wrapper,
-} from './styled'
+import { CommentsCounterButton, Wrapper } from './styled'
+import { Answers } from './Answers/Answers'
 
 export const CommentsComponent = ({ postId }) => {
   let isShowedButton = true
@@ -84,39 +77,12 @@ export const CommentsComponent = ({ postId }) => {
           </CommentsCounterButton>
         )}
       </Box>
-      <TextInputContainer>
-        <Avatar
-          src={getImageUrl(user.avatar)}
-          sx={{
-            marginLeft: '-3px',
-            height: '34px',
-            width: '34px',
-            mt: '0px ',
-          }}
-        />
-        <TextInput
-          placeholder="Add comment..."
-          value={comment}
-          autoComplete="off"
-          onChange={(e) => setComment(e.target.value)}
-        />
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            marginLeft: '19px',
-          }}
-        >
-          <SendIcon
-            sx={{
-              cursor: comment.length >= 3 ? 'pointer' : 'auto',
-              color: '#99a2ad',
-              opacity: comment.length >= 3 ? 0.7 : 0.3,
-            }}
-            onClick={comment.length >= 3 ? onSubmit : ''}
-          />
-        </Box>
-      </TextInputContainer>
+      <Answers
+        user={user}
+        setComment={setComment}
+        comment={comment}
+        onSubmit={onSubmit}
+      />
     </Wrapper>
   )
 }

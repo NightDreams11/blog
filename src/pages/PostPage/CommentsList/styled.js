@@ -1,5 +1,7 @@
 import { Button, TextField, Typography } from '@mui/material'
 import { Box, styled } from '@mui/system'
+import FavoriteIcon from '@mui/icons-material/Favorite'
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import EditIcon from '@mui/icons-material/Edit'
 import ClearIcon from '@mui/icons-material/Clear'
 import style from 'styled-components'
@@ -38,14 +40,41 @@ export const Author = styled(
   textAlign: 'center',
 })
 
-export const SwitchContainerEditMode = styled(Box, {})({})
-export const CommentText = styled(Typography, {})({})
-
 export const Date = styled(
   Typography,
   {}
 )({
   textAlign: 'center',
+})
+
+export const AnswerButton = styled(
+  Typography,
+  {}
+)({
+  display: 'inline',
+  marginLeft: '8px',
+  color: '#2a5885',
+  cursor: 'pointer',
+  fontSize: 13,
+})
+
+export const LikedIcon = styled(
+  FavoriteIcon,
+  {}
+)({
+  width: '16px',
+  height: '13px',
+  mt: '3px',
+  color: '#e64646',
+})
+
+export const NoLikedIcon = styled(
+  FavoriteBorderIcon,
+  {}
+)({
+  width: '16px',
+  height: '13px',
+  mt: '3px',
 })
 
 export const LikesContainer = styled(
@@ -66,6 +95,9 @@ export const LikesContainer = styled(
 export const LikeCounter = style.span`
 padding-left: 2px;
 height: 20px;
+width: 7px;
+height: 13px;
+font-size: 13px;
 `
 export const AnswersContainer = styled(
   Box,
@@ -83,6 +115,8 @@ export const DeleteMessageIcon = styled(
   top: 3,
   height: 16,
   width: 16,
+  cursor: 'pointer',
+  color: 'rgba(42, 88, 133, 0)',
 })
 
 export const EditMessageIcon = styled(
@@ -94,15 +128,15 @@ export const EditMessageIcon = styled(
   top: 4,
   height: 13,
   width: 13,
+  cursor: 'pointer',
+  color: 'rgba(42, 88, 133, 0)',
 })
-
-export const EditModeContainer = styled(Box, {})({})
 
 export const TextInput = styled(
   TextField,
   {}
 )({
-  width: 422,
+  width: 466,
   '& .MuiOutlinedInput-root': {
     minHeight: 48,
   },
@@ -117,7 +151,6 @@ export const EditModeButtonContainer = styled(
   justifyContent: 'end',
   flex: 1,
   marginTop: 10,
-  marginRight: 45,
 })
 
 export const SaveEditCommentButton = styled(

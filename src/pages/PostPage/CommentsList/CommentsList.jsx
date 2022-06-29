@@ -1,15 +1,15 @@
-import { Avatar, Divider } from '@mui/material'
+import { Avatar, Divider, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
+  createComment,
   deleteComment,
   editComment,
   setLike,
   toggleEditModeAC,
 } from 'store/comments'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
-import FavoriteIcon from '@mui/icons-material/Favorite'
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
+import { Box } from '@mui/system'
 import { DeletePreloader } from 'components/layout/DeletePreloader/DeletePreloader'
 import { isLiked } from 'utils/isLiked/isLiked'
 import { getImageUrl } from 'utils/imageURL/imageURL'
@@ -20,18 +20,19 @@ import {
   CancelEditCommentButton,
   CommentBody,
   CommentBodyContainerInner,
-  CommentText,
   Date,
   DeleteMessageIcon,
   EditMessageIcon,
   EditModeButtonContainer,
-  EditModeContainer,
   LikeCounter,
   LikesContainer,
   SaveEditCommentButton,
-  SwitchContainerEditMode,
   TextInput,
+  LikedIcon,
+  NoLikedIcon,
+  AnswerButton,
 } from './styled'
+import { Answers } from '../Comments/Answers/Answers'
 
 export const CommentsList = ({
   sortedComments = null,
@@ -44,12 +45,16 @@ export const CommentsList = ({
 
   const [deletingCommentId, setDeletingCommentId] = useState('')
   const [editCommentId, setEditCommentId] = useState('')
+  const [answerCommentId, setAnswerCommentId] = useState('')
   const [editCommentValue, setEditCommentValue] = useState('')
+  const [answerMode, setAnswerMode] = useState(false)
+  const [comment, setComment] = useState('')
 
   const deleteCommentIsFetching = useSelector(
     (state) => state.commentsReducer.toggleDeleteCommentsIsFetching
   )
   const editMode = useSelector((state) => state.commentsReducer.editMode)
+  const user = useSelector((state) => state.auth.user)
 
   const deleteOwnComment = (commentId) => {
     dispatch(deleteComment({ commentId, postId }))
@@ -57,6 +62,11 @@ export const CommentsList = ({
 
   const editOwnComment = (commentId, text) => {
     dispatch(editComment({ commentId, postId, text }))
+  }
+
+  const createAsnwerToComment = (followedCommentID = null) => {
+    dispatch(createComment({ comment, postId, followedCommentID }))
+    setAnswerMode(!answerMode)
   }
 
   return (
@@ -103,34 +113,35 @@ export const CommentsList = ({
                   {elem ? authorsOfComments[elem.commentedBy]?.name : 'Unknown'}
                 </Author>
                 {!editMode || editCommentId !== elem.id ? (
-                  <SwitchContainerEditMode>
-                    <CommentText variant="body2">{elem.text}</CommentText>
+                  <Box>
+                    <Typography variant="body2">{elem.text}</Typography>
                     <Date variant="caption">{dateFormatter(elem.dateCreated)}</Date>
+                    {!elem.followedCommentID && (
+                      <AnswerButton
+                        variant="body2"
+                        onClick={() => {
+                          setAnswerMode(!answerMode)
+                          setAnswerCommentId(elem.id)
+                        }}
+                      >
+                        Answer
+                      </AnswerButton>
+                    )}
                     <LikesContainer
                       style={{
-                        width: '27px',
-                        height: '13px',
+                        marginRight: isLiked(elem, userId) ? 10 : 0,
+                        transition: '0.3s',
                       }}
                       onClick={() => {
                         dispatch(setLike(elem.id, perentId))
                       }}
                     >
                       {isLiked(elem, userId) ? (
-                        <FavoriteIcon
-                          sx={{
-                            width: '16px',
-                            height: '13px',
-                            mt: '3px',
-                            color: '#e64646',
-                          }}
-                        />
+                        <LikedIcon />
                       ) : (
-                        <FavoriteBorderIcon
+                        <NoLikedIcon
                           className="FavoriteBorderIcon"
                           sx={{
-                            width: '16px',
-                            height: '13px',
-                            mt: '3px',
                             color:
                               elem.likes?.length === 0
                                 ? 'rgba(42, 88, 133, 0)'
@@ -140,9 +151,6 @@ export const CommentsList = ({
                       )}
                       <LikeCounter
                         style={{
-                          width: '7px',
-                          height: '13px',
-                          fontSize: '13px',
                           color: isLiked(elem, userId) ? '#e64646' : '#2a5885',
                         }}
                       >
@@ -152,10 +160,6 @@ export const CommentsList = ({
                     {userId === elem.commentedBy && (
                       <EditMessageIcon
                         className="EditIcon"
-                        sx={{
-                          cursor: 'pointer',
-                          color: 'rgba(42, 88, 133, 0)',
-                        }}
                         onClick={() => {
                           setEditCommentId(elem.id)
                           setEditCommentValue(elem.text)
@@ -169,10 +173,6 @@ export const CommentsList = ({
                       ) : (
                         <DeleteMessageIcon
                           className="DeleteMessageIcon"
-                          sx={{
-                            cursor: 'pointer',
-                            color: 'rgba(42, 88, 133, 0)',
-                          }}
                           onClick={() => {
                             deleteOwnComment(elem.id)
                             setDeletingCommentId(elem.id)
@@ -180,9 +180,21 @@ export const CommentsList = ({
                         />
                       ))}
                     <Divider />
-                  </SwitchContainerEditMode>
+                    {answerMode && answerCommentId === elem.id ? (
+                      <Answers
+                        user={user}
+                        comment={comment}
+                        setComment={setComment}
+                        answerToComment={Boolean(true)}
+                        createAsnwerToComment={createAsnwerToComment}
+                        followedCommentID={elem.id}
+                      />
+                    ) : (
+                      ''
+                    )}
+                  </Box>
                 ) : (
-                  <EditModeContainer>
+                  <Box>
                     <TextInput
                       value={editCommentValue}
                       onChange={(e) => {
@@ -205,7 +217,7 @@ export const CommentsList = ({
                         Save
                       </SaveEditCommentButton>
                     </EditModeButtonContainer>
-                  </EditModeContainer>
+                  </Box>
                 )}
 
                 <AnswersContainer>
@@ -214,6 +226,7 @@ export const CommentsList = ({
                     authorsOfComments={authorsOfComments}
                     userId={userId}
                     perentId={elem.id}
+                    postId={postId}
                   />
                 </AnswersContainer>
               </CommentBodyContainerInner>
