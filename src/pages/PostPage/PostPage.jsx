@@ -29,7 +29,7 @@ export const PostPage = () => {
   const post = useSelector((state) => state.postsReducer.post)
   const author = useSelector((state) => state.postsReducer.author)
   const isFetching = useSelector((state) => state.postsReducer.postsIsFetching)
-  const userId = useSelector((state) => state.auth.user.id)
+  const userId = useSelector((state) => state.auth.user?.id)
 
   const dispatch = useDispatch()
 
@@ -43,11 +43,7 @@ export const PostPage = () => {
     return <Navigate to="/login" />
   }
 
-  if (!post) {
-    return <Preloader />
-  }
-
-  if (isFetching) {
+  if (!post || isFetching) {
     return <Preloader />
   }
 

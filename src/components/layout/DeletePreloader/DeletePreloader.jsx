@@ -7,7 +7,7 @@ export function DeletePreloader() {
     <Box
       sx={{
         position: 'absolute',
-        right: 9,
+        right: -1,
         top: 3,
       }}
     >

@@ -1,3 +1,6 @@
 export const getImageUrl = (path) => {
-  return process.env.REACT_APP_URL + path
+  if (path) {
+    return process.env.REACT_APP_URL + path
+  }
+  return null
 }

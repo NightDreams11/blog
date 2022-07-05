@@ -92,10 +92,19 @@ export const loginUser = (payload) => async (dispatch) => {
   }
 }
 
+export const logoutUser = () => async (dispatch) => {
+  dispatch(logoutUserAC())
+  localStorage.setItem('token', null)
+}
+
 export const getUser = () => async (dispatch) => {
   if (JSON.parse(localStorage.getItem('token'))) {
-    const response = await authAPI.getUser()
-    dispatch(setUserAC(response))
-    // console.log(getState())
+    try {
+      const response = await authAPI.getUser()
+      dispatch(setUserAC(response))
+      // console.log(getState())
+    } catch (error) {
+      dispatch(logoutUser())
+    }
   }
 }

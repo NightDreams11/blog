@@ -6,7 +6,6 @@ export const TextInputContainer = styled(
   {}
 )({
   display: 'flex',
-  height: 34,
   marginTop: '10px',
 })
 
@@ -14,10 +13,11 @@ export const TextInput = styled(
   TextField,
   {}
 )({
-  width: 422,
+  width: '100%',
   marginLeft: 10,
   '& .MuiOutlinedInput-root': {
-    minHeight: 34,
+    paddingTop: '5.5px',
+    paddingBottom: '5.5px',
   },
 })
 
@@ -25,7 +25,6 @@ export const UsersAvatar = styled(
   Avatar,
   {}
 )({
-  marginLeft: '-3px',
   height: '34px',
   width: '34px',
   mt: '0px ',
@@ -37,5 +36,6 @@ export const Container = styled(
 )({
   display: 'flex',
   alignItems: 'center',
-  marginLeft: '19px',
+  marginLeft: '13px',
+  paddingRight: 40,
 })

@@ -18,7 +18,6 @@ export const CommentBody = styled(
   display: 'flex',
   minHeight: 70,
   paddingTop: 10,
-  marginLeft: -3,
   position: 'relative',
 })
 

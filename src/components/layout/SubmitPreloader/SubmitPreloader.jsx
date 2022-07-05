@@ -2,19 +2,18 @@ import * as React from 'react'
 import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box'
 
-export function Preloader({ top }) {
+export function SubmitPreloader() {
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        position: 'absolute',
-        left: 0,
-        right: 0,
-        top: top || '50%',
+        alignItems: 'center',
+        marginTop: '5px',
+        marginBottom: 'auto',
       }}
     >
-      <CircularProgress />
+      <CircularProgress size={24} sx={{ color: 'rgba(42, 88, 133, 0.5)' }} />
     </Box>
   )
 }

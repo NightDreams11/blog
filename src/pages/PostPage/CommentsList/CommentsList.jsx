@@ -6,6 +6,7 @@ import {
   deleteComment,
   editComment,
   setLike,
+  toggleAnswerModeAC,
   toggleEditModeAC,
 } from 'store/comments'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
@@ -32,7 +33,10 @@ import {
   NoLikedIcon,
   AnswerButton,
 } from './styled'
-import { Answers } from '../Comments/Answers/Answers'
+import { AnswersFrom } from '../Comments/AnswersForm/AnswersForm'
+
+const semiIconsColor = 'rgba(42, 88, 133, 0.5)'
+const iconsColor = 'rgba(42, 88, 133, 1)'
 
 export const CommentsList = ({
   sortedComments = null,
@@ -47,13 +51,13 @@ export const CommentsList = ({
   const [editCommentId, setEditCommentId] = useState('')
   const [answerCommentId, setAnswerCommentId] = useState('')
   const [editCommentValue, setEditCommentValue] = useState('')
-  const [answerMode, setAnswerMode] = useState(false)
   const [comment, setComment] = useState('')
 
   const deleteCommentIsFetching = useSelector(
     (state) => state.commentsReducer.toggleDeleteCommentsIsFetching
   )
   const editMode = useSelector((state) => state.commentsReducer.editMode)
+  const answerMode = useSelector((state) => state.commentsReducer.answerMode)
   const user = useSelector((state) => state.auth.user)
 
   const deleteOwnComment = (commentId) => {
@@ -64,9 +68,8 @@ export const CommentsList = ({
     dispatch(editComment({ commentId, postId, text }))
   }
 
-  const createAsnwerToComment = (followedCommentID = null) => {
-    dispatch(createComment({ comment, postId, followedCommentID }))
-    setAnswerMode(!answerMode)
+  const onSubmitAnswersForm = async (followedCommentID = null) => {
+    await dispatch(createComment({ comment, postId, followedCommentID }))
   }
 
   return (
@@ -74,8 +77,8 @@ export const CommentsList = ({
       {sortedComments &&
         sortedComments.map((elem) => {
           return elem.id ? (
-            <Box>
-              <CommentBody key={elem.id}>
+            <Box key={elem.id}>
+              <CommentBody>
                 <Avatar
                   src={
                     elem
@@ -89,40 +92,20 @@ export const CommentsList = ({
                   }}
                 />
                 <CommentBodyContainerInner
-                  sx={
-                    elem.followedCommentID
-                      ? {
-                          '&:hover .FavoriteBorderIconChild': {
-                            color:
-                              elem.likes?.length === 0
-                                ? 'rgba(42, 88, 133, 0.5)'
-                                : 'rgba(42, 88, 133, 1)',
-                          },
-                          '&:hover .DeleteMessageIconChild': {
-                            color: 'rgba(42, 88, 133, 0.5)',
-                          },
-                          '&:hover .EditIconChild': {
-                            color: 'rgba(42, 88, 133, 0.5)',
-                          },
-                        }
-                      : {
-                          '&:hover .FavoriteBorderIcon': {
-                            color:
-                              elem.likes?.length === 0
-                                ? 'rgba(42, 88, 133, 0.5)'
-                                : 'rgba(42, 88, 133, 1)',
-                          },
-                          '&:hover .DeleteMessageIcon': {
-                            color: 'rgba(42, 88, 133, 0.5)',
-                          },
-                          '&:hover .EditIcon': {
-                            color: 'rgba(42, 88, 133, 0.5)',
-                          },
-                        }
-                  }
+                  sx={{
+                    '&:hover .FavoriteBorderIcon': {
+                      color: elem.likes?.length === 0 ? semiIconsColor : iconsColor,
+                    },
+                    '&:hover .DeleteMessageIcon': {
+                      color: semiIconsColor,
+                    },
+                    '&:hover .EditIcon': {
+                      color: semiIconsColor,
+                    },
+                  }}
                 >
                   <Author variant="caption">
-                    {elem ? authorsOfComments[elem.commentedBy]?.name : 'Unknown'}
+                    {authorsOfComments[elem.commentedBy]?.name}
                   </Author>
                   {!editMode || editCommentId !== elem.id ? (
                     <Box>
@@ -134,7 +117,7 @@ export const CommentsList = ({
                         <AnswerButton
                           variant="body2"
                           onClick={() => {
-                            setAnswerMode(!answerMode)
+                            dispatch(toggleAnswerModeAC(true))
                             setAnswerCommentId(elem.id)
                           }}
                         >
@@ -154,11 +137,7 @@ export const CommentsList = ({
                           <LikedIcon />
                         ) : (
                           <NoLikedIcon
-                            className={
-                              elem.followedCommentID
-                                ? 'FavoriteBorderIconChild'
-                                : 'FavoriteBorderIcon'
-                            }
+                            className="FavoriteBorderIcon"
                             sx={{
                               color:
                                 elem.likes?.length === 0
@@ -177,9 +156,7 @@ export const CommentsList = ({
                       </LikesContainer>
                       {userId === elem.commentedBy && (
                         <EditMessageIcon
-                          className={
-                            elem.followedCommentID ? 'EditIconChild' : 'EditIcon'
-                          }
+                          className="EditIcon"
                           onClick={() => {
                             setEditCommentId(elem.id)
                             setEditCommentValue(elem.text)
@@ -192,11 +169,7 @@ export const CommentsList = ({
                           <DeletePreloader />
                         ) : (
                           <DeleteMessageIcon
-                            className={
-                              elem.followedCommentID
-                                ? 'DeleteMessageIconChild'
-                                : 'DeleteMessageIcon'
-                            }
+                            className="DeleteMessageIcon"
                             onClick={() => {
                               deleteOwnComment(elem.id)
                               setDeletingCommentId(elem.id)
@@ -205,12 +178,11 @@ export const CommentsList = ({
                         ))}
                       <Divider />
                       {answerMode && answerCommentId === elem.id ? (
-                        <Answers
+                        <AnswersFrom
                           user={user}
                           comment={comment}
                           setComment={setComment}
-                          answerToComment={Boolean(true)}
-                          createAsnwerToComment={createAsnwerToComment}
+                          onSubmitAnswersForm={onSubmitAnswersForm}
                           followedCommentID={elem.id}
                         />
                       ) : (
@@ -245,15 +217,17 @@ export const CommentsList = ({
                   )}
                 </CommentBodyContainerInner>
               </CommentBody>
-              <AnswersContainer>
-                <CommentsList
-                  sortedComments={elem.answers && Object.values(elem.answers)}
-                  authorsOfComments={authorsOfComments}
-                  userId={userId}
-                  perentId={elem.id}
-                  postId={postId}
-                />
-              </AnswersContainer>
+              {elem.answers && !!Object.values(elem.answers).length && (
+                <AnswersContainer>
+                  <CommentsList
+                    sortedComments={elem.answers && Object.values(elem.answers)}
+                    authorsOfComments={authorsOfComments}
+                    userId={userId}
+                    perentId={elem.id}
+                    postId={postId}
+                  />
+                </AnswersContainer>
+              )}
             </Box>
           ) : (
             ''

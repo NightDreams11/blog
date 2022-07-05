@@ -5,36 +5,37 @@ import { Box } from '@mui/system'
 import { createComment, getComments } from 'store/comments'
 import { CommentsList } from '../CommentsList/CommentsList'
 import { CommentsCounterButton, Wrapper } from './styled'
-import { Answers } from './Answers/Answers'
+import { AnswersFrom } from './AnswersForm/AnswersForm'
 
 export const CommentsComponent = ({ postId }) => {
   let isShowedButton = true
 
   const dispatch = useDispatch()
   const [comment, setComment] = useState('')
-  const [numberOfComments, setNumberOfComments] = useState(5)
+  const [numberOfCommentsToShow, setnumberOfCommentsToShow] = useState(5)
 
   const comments = useSelector((state) => state.commentsReducer.comments)
-  const userId = useSelector((state) => state.auth.user.id)
   const user = useSelector((state) => state.auth.user)
+  const userId = user?.id || null
 
   const authorsOfComments = useSelector(
     (state) => state.commentsReducer.authorsOfComments
   )
 
-  const onSubmit = () => {
-    dispatch(createComment({ comment, postId }))
+  const onSubmitAnswersForm = async () => {
+    await dispatch(createComment({ comment, postId }))
     setComment('')
   }
 
   const showAllComments = () => {
-    setNumberOfComments(
-      numberOfComments + (Object.values(comments).length - numberOfComments)
+    setnumberOfCommentsToShow(
+      numberOfCommentsToShow +
+        (Object.values(comments).length - numberOfCommentsToShow)
     )
   }
 
   const hideComments = () => {
-    setNumberOfComments(5)
+    setnumberOfCommentsToShow(5)
   }
 
   useEffect(() => {
@@ -42,21 +43,22 @@ export const CommentsComponent = ({ postId }) => {
   }, [dispatch, postId])
 
   if (!comments || !authorsOfComments) {
-    return <Preloader thickness={0} />
+    return <Preloader top="90%" />
   }
 
-  if (numberOfComments >= Object.values(comments).length) {
+  if (numberOfCommentsToShow >= Object.values(comments).length) {
     isShowedButton = false
   } else {
     isShowedButton = true
   }
 
   const sortedComments = Object.values(comments)
+    .filter((c) => !!c.id)
     .sort((a, b) => {
       // return new window.Date(a.dateCreated) - new window.Date(b.dateCreated)
       return new window.Date(b.dateCreated) - new window.Date(a.dateCreated)
     })
-    .slice(0, numberOfComments)
+    .slice(0, numberOfCommentsToShow)
 
   return (
     <Wrapper>
@@ -66,7 +68,7 @@ export const CommentsComponent = ({ postId }) => {
         userId={userId}
         postId={postId}
       />
-      <Box sx={{ marginTop: '10px', marginBottom: '10px' }}>
+      <Box sx={{ marginTop: '10px', marginBottom: '10px', marginLeft: '3px' }}>
         {isShowedButton ? (
           <CommentsCounterButton variant="body2" onClick={showAllComments}>
             Show all comments
@@ -77,11 +79,11 @@ export const CommentsComponent = ({ postId }) => {
           </CommentsCounterButton>
         )}
       </Box>
-      <Answers
+      <AnswersFrom
         user={user}
         setComment={setComment}
         comment={comment}
-        onSubmit={onSubmit}
+        onSubmitAnswersForm={onSubmitAnswersForm}
       />
     </Wrapper>
   )

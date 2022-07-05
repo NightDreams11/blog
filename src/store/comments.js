@@ -5,6 +5,7 @@ const ActionTypes = {
   SET_COMMENTS: 'SET_COMMENTS',
   TOGGLE_COMMENTS_IS_FETCHING: 'TOGGLE_COMMENTS_IS_FETCHING',
   TOGGLE_EDIT_MODE: 'TOGGLE_EDIT_MODE',
+  TOGGLE_ANSWER_MODE: 'TOGGLE_ANSWER_MODE',
   TOGGLE_DELETE_COMMENTS_IS_FETCHING: 'TOGGLE_DELETE_COMMENTS_IS_FETCHING',
   SET_COMMENT_AUTHORS: 'SET_COMMENT_AUTHORS',
   SET_COMMENT_LIKE: 'SET_COMMENT_LIKE',
@@ -18,6 +19,7 @@ const initialState = {
   toggleDeleteCommentsIsFetching: false,
   authorsOfComments: null,
   editMode: false,
+  answerMode: false,
 }
 
 export const commentsReducer = (state = initialState, { type, payload = 0 }) => {
@@ -62,6 +64,12 @@ export const commentsReducer = (state = initialState, { type, payload = 0 }) => 
         ...state,
         editMode: payload,
       }
+
+    case ActionTypes.TOGGLE_ANSWER_MODE:
+      return {
+        ...state,
+        answerMode: payload,
+      }
     default:
       return state
   }
@@ -99,13 +107,18 @@ export const toggleEditModeAC = (value) => ({
   payload: value,
 })
 
+export const toggleAnswerModeAC = (value) => ({
+  type: ActionTypes.TOGGLE_ANSWER_MODE,
+  payload: value,
+})
+
 export const getComments = (id) => async (dispatch) => {
   try {
     dispatch(toggleCommentsIsFetchingAC(true))
     const response = await commentsAPI.getComments(id)
 
     const processedResponse = response.comments.reduce((acc, elem) => {
-      if (!elem.followedCommentID) {
+      if (!elem.followedCommentID && !acc[elem.id]) {
         acc[elem.id] = elem
         acc[elem.id].answers = {}
         return acc
@@ -204,7 +217,7 @@ export const createComment =
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))
     } finally {
-      dispatch(toggleCommentsIsFetchingAC(false))
+      dispatch(toggleAnswerModeAC(false))
     }
   }
 
