@@ -1,14 +1,7 @@
 import { Avatar, Divider, Typography } from '@mui/material'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  createComment,
-  deleteComment,
-  editComment,
-  setLike,
-  toggleAnswerModeAC,
-  toggleEditModeAC,
-} from 'store/comments'
+import { createComment, deleteComment, editComment, setLike } from 'store/comments'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Box } from '@mui/system'
 import { DeletePreloader } from 'components/layout/DeletePreloader/DeletePreloader'
@@ -47,6 +40,8 @@ export const CommentsList = ({
 }) => {
   const dispatch = useDispatch()
 
+  const [editMode, setEditMode] = useState(false)
+  const [answerMode, setAnswerMode] = useState(false)
   const [deletingCommentId, setDeletingCommentId] = useState('')
   const [editCommentId, setEditCommentId] = useState('')
   const [answerCommentId, setAnswerCommentId] = useState('')
@@ -56,20 +51,21 @@ export const CommentsList = ({
   const deleteCommentIsFetching = useSelector(
     (state) => state.commentsReducer.toggleDeleteCommentsIsFetching
   )
-  const editMode = useSelector((state) => state.commentsReducer.editMode)
-  const answerMode = useSelector((state) => state.commentsReducer.answerMode)
+
   const user = useSelector((state) => state.auth.user)
 
   const deleteOwnComment = (commentId) => {
     dispatch(deleteComment({ commentId, postId }))
   }
 
-  const editOwnComment = (commentId, text) => {
-    dispatch(editComment({ commentId, postId, text }))
+  const editOwnComment = async (commentId, text) => {
+    await dispatch(editComment({ commentId, postId, text }))
+    setEditMode(false)
   }
 
   const onSubmitAnswersForm = async (followedCommentID = null) => {
     await dispatch(createComment({ comment, postId, followedCommentID }))
+    setAnswerMode(false)
   }
 
   return (
@@ -117,7 +113,8 @@ export const CommentsList = ({
                         <AnswerButton
                           variant="body2"
                           onClick={() => {
-                            dispatch(toggleAnswerModeAC(true))
+                            // dispatch(toggleAnswerModeAC(true))
+                            setAnswerMode(true)
                             setAnswerCommentId(elem.id)
                           }}
                         >
@@ -160,7 +157,7 @@ export const CommentsList = ({
                           onClick={() => {
                             setEditCommentId(elem.id)
                             setEditCommentValue(elem.text)
-                            dispatch(toggleEditModeAC(true))
+                            setEditMode(true)
                           }}
                         />
                       )}
@@ -198,9 +195,7 @@ export const CommentsList = ({
                         }}
                       />
                       <EditModeButtonContainer>
-                        <CancelEditCommentButton
-                          onClick={() => dispatch(toggleEditModeAC(false))}
-                        >
+                        <CancelEditCommentButton onClick={() => setEditMode(false)}>
                           Cancel
                         </CancelEditCommentButton>
                         <SaveEditCommentButton

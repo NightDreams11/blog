@@ -4,8 +4,6 @@ import { addSnackbarMessageErrorAC } from './messages'
 const ActionTypes = {
   SET_COMMENTS: 'SET_COMMENTS',
   TOGGLE_COMMENTS_IS_FETCHING: 'TOGGLE_COMMENTS_IS_FETCHING',
-  TOGGLE_EDIT_MODE: 'TOGGLE_EDIT_MODE',
-  TOGGLE_ANSWER_MODE: 'TOGGLE_ANSWER_MODE',
   TOGGLE_DELETE_COMMENTS_IS_FETCHING: 'TOGGLE_DELETE_COMMENTS_IS_FETCHING',
   SET_COMMENT_AUTHORS: 'SET_COMMENT_AUTHORS',
   SET_COMMENT_LIKE: 'SET_COMMENT_LIKE',
@@ -18,8 +16,6 @@ const initialState = {
   toggleCommentsIsFetching: false,
   toggleDeleteCommentsIsFetching: false,
   authorsOfComments: null,
-  editMode: false,
-  answerMode: false,
 }
 
 export const commentsReducer = (state = initialState, { type, payload = 0 }) => {
@@ -59,17 +55,6 @@ export const commentsReducer = (state = initialState, { type, payload = 0 }) => 
         },
       }
 
-    case ActionTypes.TOGGLE_EDIT_MODE:
-      return {
-        ...state,
-        editMode: payload,
-      }
-
-    case ActionTypes.TOGGLE_ANSWER_MODE:
-      return {
-        ...state,
-        answerMode: payload,
-      }
     default:
       return state
   }
@@ -100,16 +85,6 @@ export const setCommentLike = ({ id, likes, perentId }) => ({
     ? ActionTypes.SET_COMMENT_LIKE
     : ActionTypes.SET_COMMENT_LIKE_TO_CHILD,
   payload: { id, likes },
-})
-
-export const toggleEditModeAC = (value) => ({
-  type: ActionTypes.TOGGLE_EDIT_MODE,
-  payload: value,
-})
-
-export const toggleAnswerModeAC = (value) => ({
-  type: ActionTypes.TOGGLE_ANSWER_MODE,
-  payload: value,
 })
 
 export const getComments = (id) => async (dispatch) => {
@@ -216,8 +191,6 @@ export const createComment =
       }
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))
-    } finally {
-      dispatch(toggleAnswerModeAC(false))
     }
   }
 
@@ -228,7 +201,6 @@ export const editComment =
       const response = await commentsAPI.editComment({ commentId, text })
       if (response.status === 200) {
         dispatch(getComments(postId))
-        dispatch(toggleEditModeAC(false))
       }
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))

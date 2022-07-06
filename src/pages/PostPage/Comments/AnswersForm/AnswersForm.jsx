@@ -42,7 +42,6 @@ export const AnswersFrom = ({
         ) : (
           <IconButton
             sx={{
-              cursor: comment.length >= 3 ? 'pointer' : 'auto',
               color: '#99a2ad',
               opacity: comment.length >= 3 ? 0.7 : 0.3,
               padding: 0,
@@ -50,9 +49,7 @@ export const AnswersFrom = ({
               marginBottom: 'auto',
             }}
             disabled={comment.length < 3}
-            onClick={() => {
-              sendComment()
-            }}
+            onClick={sendComment}
           >
             <SendIcon />
           </IconButton>
