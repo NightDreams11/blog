@@ -13,7 +13,6 @@ export const AnswersFrom = ({
   followedCommentID,
 }) => {
   const [isSending, setIsSending] = useState(false)
-
   const sendComment = async () => {
     setIsSending(true)
     await onSubmitAnswersForm(followedCommentID)
@@ -45,6 +44,7 @@ export const AnswersFrom = ({
               color: '#99a2ad',
               opacity: comment.length >= 3 ? 0.7 : 0.3,
               padding: 0,
+
               marginTop: '4px',
               marginBottom: 'auto',
             }}
