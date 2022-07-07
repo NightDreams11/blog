@@ -2,7 +2,7 @@ import { getImageUrl } from 'utils/imageURL/imageURL'
 import SendIcon from '@mui/icons-material/Send'
 import IconButton from '@mui/material/IconButton'
 import { SubmitPreloader } from 'components/layout/SubmitPreloader/SubmitPreloader'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { Container, TextInput, TextInputContainer, UsersAvatar } from './styled'
 
 export const AnswersFrom = ({
@@ -12,11 +12,21 @@ export const AnswersFrom = ({
   onSubmitAnswersForm,
   followedCommentID,
 }) => {
+  const isMounted = useRef(true)
+  useEffect(() => {
+    return () => {
+      isMounted.current = false
+    }
+  })
+
   const [isSending, setIsSending] = useState(false)
+
   const sendComment = async () => {
     setIsSending(true)
     await onSubmitAnswersForm(followedCommentID)
-    setIsSending(false)
+    if (isMounted.current) {
+      setIsSending(false)
+    }
   }
 
   return (

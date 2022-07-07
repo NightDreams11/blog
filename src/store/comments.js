@@ -109,7 +109,6 @@ export const getComments = (id) => async (dispatch) => {
       return acc
     }, {})
 
-    dispatch(getCommentsAC(processedResponse))
     // Убираем все повторения
     const uniqueUsersIds = [
       ...new Set(response.comments.map((comment) => comment.commentedBy)),
@@ -136,7 +135,9 @@ export const getComments = (id) => async (dispatch) => {
       return acc
     }, {})
 
+    // Важно, чтобы авторы приходили раньше комментариев, иначе ловим undefined в компоненте по ключам
     dispatch(setAuthorsAC(commentsAuthors))
+    dispatch(getCommentsAC(processedResponse))
   } catch (error) {
     dispatch(addSnackbarMessageErrorAC(error.message))
   } finally {

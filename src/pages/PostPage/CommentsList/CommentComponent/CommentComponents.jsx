@@ -65,10 +65,6 @@ export const CommentComponent = ({
     setAnswerMode(false)
   }
 
-  // if (!authorsOfComments[commentedBy]) {
-  //   return <Wrapper />
-  // }
-
   return (
     <Wrapper>
       <CommentBody>
@@ -164,6 +160,7 @@ export const CommentComponent = ({
                   setComment={setComment}
                   onSubmitAnswersForm={onSubmitAnswersForm}
                   followedCommentID={id}
+                  setAnswerMode={setAnswerMode}
                 />
               ) : (
                 ''
