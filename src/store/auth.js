@@ -68,7 +68,7 @@ export const regUser = (payload) => async (dispatch) => {
     await authAPI.regUser(payload)
     dispatch(addSnackbarMessageSuccessAC('Новый пользователь зарегистрирован'))
   } catch (error) {
-    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+    dispatch(addSnackbarMessageErrorAC(error.message))
   } finally {
     dispatch(toggleIsFetchingAC(false))
   }
@@ -86,16 +86,25 @@ export const loginUser = (payload) => async (dispatch) => {
       dispatch(addSnackbarMessageSuccessAC(`Welcome ${user.name}`))
     }
   } catch (error) {
-    dispatch(addSnackbarMessageErrorAC(error.response.data.error))
+    dispatch(addSnackbarMessageErrorAC(error.message))
   } finally {
     dispatch(toggleIsFetchingAC(false))
   }
 }
 
+export const logoutUser = () => async (dispatch) => {
+  dispatch(logoutUserAC())
+  localStorage.setItem('token', null)
+}
+
 export const getUser = () => async (dispatch) => {
   if (JSON.parse(localStorage.getItem('token'))) {
-    const response = await authAPI.getUser()
-    dispatch(setUserAC(response))
-    // console.log(getState())
+    try {
+      const response = await authAPI.getUser()
+      dispatch(setUserAC(response))
+      // console.log(getState())
+    } catch (error) {
+      dispatch(logoutUser())
+    }
   }
 }

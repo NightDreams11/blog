@@ -5,7 +5,7 @@ import { Search } from 'components/layout/Search/Search'
 import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navigate } from 'react-router'
-import { useSearchParams } from 'react-router-dom'
+import { useSearchParams, Link } from 'react-router-dom'
 import { getPosts } from 'store/posts'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import { Paginator } from 'utils/Paginator/Paginator'
@@ -32,7 +32,7 @@ const defaultPage = 1
 export const PostsPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
   const postsObj = useSelector((state) => state.postsReducer.postsObj)
-  const isFetching = useSelector((state) => state.auth.isFetching)
+  const isFetching = useSelector((state) => state.postsReducer.postsIsFetching)
 
   const dispatch = useDispatch()
 
@@ -106,18 +106,27 @@ export const PostsPage = () => {
         <Grid container rowSpacing={2} spacing={2}>
           {postsObj.posts.map((post) => (
             <Grid key={post.id} item xs={4}>
-              <Item>
-                <PostTitleContainer>
-                  <PostTitle variant="h5">{post.title}</PostTitle>
-                </PostTitleContainer>
-                <Image
-                  src={post.image ? getImageUrl(post.image) : postImg}
-                  alt="PostAva"
-                />
-                <PostsTextContainer>
-                  <Text>{post.description}</Text>
-                </PostsTextContainer>
-              </Item>
+              <Link
+                style={{
+                  textDecoration: 'none',
+                  color: 'rgba(0, 0, 0, 0.87)',
+                  cursor: 'pointer',
+                }}
+                to={`/post/${post.id}`}
+              >
+                <Item>
+                  <PostTitleContainer>
+                    <PostTitle variant="h5">{post.title}</PostTitle>
+                  </PostTitleContainer>
+                  <Image
+                    src={post.image ? getImageUrl(post.image) : postImg}
+                    alt="PostAva"
+                  />
+                  <PostsTextContainer>
+                    <Text>{post.description}</Text>
+                  </PostsTextContainer>
+                </Item>
+              </Link>
             </Grid>
           ))}
         </Grid>

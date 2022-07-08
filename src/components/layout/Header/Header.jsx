@@ -118,7 +118,11 @@ export const ResponsiveAppBar = () => {
               variant="h6"
               noWrap
               component="div"
-              sx={{ flexGrow: { xs: 1, md: 'unset' }, mr: { xs: 'unset', md: 2 } }}
+              sx={{
+                flexGrow: { xs: 1, md: 'unset' },
+                mr: { xs: 'unset', md: 2 },
+                display: { xs: 'none' },
+              }}
             >
               LOGO
             </Typography>

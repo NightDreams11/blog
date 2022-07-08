@@ -94,6 +94,7 @@ export const LoginPage = () => {
               error={!!errors.email}
               FormHelperTextProps={{ style: stylesForTextField.helperText }}
               helperText={errors?.email?.message}
+              // По умолчанию onChange не триггерит валидацию.
             />
             <Password
               sx={{ ...stylesForTextField }}
@@ -111,7 +112,7 @@ export const LoginPage = () => {
                   )),
               }}
               {...register('password', {
-                mixLength: {
+                minLength: {
                   value: 5,
                 },
               })}
