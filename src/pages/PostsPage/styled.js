@@ -1,6 +1,7 @@
 import style from 'styled-components'
 import { Box, Container, styled } from '@mui/system'
 import { Button, Paper, Typography } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 export const Wrapper = style.div`
 `
@@ -111,4 +112,11 @@ export const ResetButton = styled(
 )({
   height: 30,
   marginTop: 32,
+})
+
+export const RouteLink = styled(
+  Link,
+  {}
+)({
+  textDecoration: 'none',
 })

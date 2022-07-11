@@ -26,10 +26,6 @@ export const RegPage = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  // const [extraDetails, setExtraDetails] = useState('')
-  // const [skills, setSkills] = useState('')
-  // const [profession, setProfession] = useState('')
-  // const [details, setDetails] = useState('')
 
   const [isDirtyName, setIsDirtyName] = useState(false)
   const [isDirtyEmail, setIsDirtyEmail] = useState(false)

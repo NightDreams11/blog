@@ -1,3 +1,4 @@
+import { CreateNewPost } from 'pages/CreateNewPost/CreateNewPost'
 import { HomePage } from 'pages/HomePage/HomePage'
 import { LoginPage } from 'pages/LoginPage/LoginPage'
 import { PostPage } from 'pages/PostPage/PostPage'
@@ -16,7 +17,8 @@ export const RoutesComponent = () => {
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/profile/edit" element={<ProfilePage editMode />} />
         <Route path="/posts" element={<PostsPage />} />
-        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/posts/:id" element={<PostPage />} />
+        <Route path="/posts/create" element={<CreateNewPost />} />
       </Routes>
     </div>
   )

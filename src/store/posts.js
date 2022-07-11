@@ -5,6 +5,7 @@ const ActionTypes = {
   SET_POSTS: 'SET_POSTS',
   SET_POST: 'SET_POST',
   SET_POST_LIKES_COUNTER: 'SET_POST_LIKES_COUNTER',
+  SET_CREATED_POSTS_ID: 'SET_CREATED_POSTS_ID',
   TOGGLE_POSTS_IS_FETCHING: 'TOGGLE_POSTS_IS_FETCHING',
   SET_AUTHOR: 'SET_AUTHOR',
   SET_SCROLL_POSITION: 'SET_SCROLL_POSITION',
@@ -13,6 +14,7 @@ const ActionTypes = {
 const initialState = {
   postsObj: null,
   post: null,
+  createdPostsId: null,
   author: null,
   scrollPosition: null,
   postLikesCounter: null,
@@ -25,6 +27,8 @@ export const postsReducer = (state = initialState, { type, payload = 0 }) => {
       return { ...state, postsObj: payload }
     case ActionTypes.SET_POST:
       return { ...state, post: payload }
+    case ActionTypes.SET_CREATED_POSTS_ID:
+      return { ...state, createdPostsId: payload }
     case ActionTypes.SET_POST_LIKES_COUNTER:
       return {
         ...state,
@@ -49,6 +53,11 @@ const getPostsAC = (posts) => ({
 const getPostAC = (post) => ({
   type: ActionTypes.SET_POST,
   payload: post,
+})
+
+const setCreatedPostsIdAC = (id) => ({
+  type: ActionTypes.SET_CREATED_POSTS_ID,
+  payload: id,
 })
 
 export const setPostLikesCounterAC = (likes) => ({
@@ -97,6 +106,21 @@ export const getPost = (id) => async (dispatch) => {
       dispatch(setAuthorAC(author))
     }
     dispatch(getPostAC(response))
+  } catch (error) {
+    dispatch(addSnackbarMessageErrorAC(error.message))
+  } finally {
+    dispatch(togglePostsIsFetchingAC(false))
+  }
+}
+
+export const createPost = (payload) => async (dispatch) => {
+  try {
+    dispatch(togglePostsIsFetchingAC(true))
+    const response = await postsAPI.createPost(payload)
+    if (response.id) {
+      dispatch(getPosts({}))
+      dispatch(setCreatedPostsIdAC(response.id))
+    }
   } catch (error) {
     dispatch(addSnackbarMessageErrorAC(error.message))
   } finally {

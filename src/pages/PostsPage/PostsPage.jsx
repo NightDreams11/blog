@@ -1,5 +1,6 @@
 import { Grid } from '@mui/material'
 import { Box } from '@mui/system'
+import { FloatingActionButtons } from 'components/layout/FLoatingAddButton/FloatingAddButton'
 import { Preloader } from 'components/layout/Preloader/Preloader'
 import { Search } from 'components/layout/Search/Search'
 import { useEffect, useMemo } from 'react'
@@ -21,6 +22,7 @@ import {
   PostTitle,
   PostTitleContainer,
   ResetButton,
+  RouteLink,
   SearchContainer,
   Text,
   Wrapper,
@@ -112,7 +114,7 @@ export const PostsPage = () => {
                   color: 'rgba(0, 0, 0, 0.87)',
                   cursor: 'pointer',
                 }}
-                to={`/post/${post.id}`}
+                to={`/posts/${post.id}`}
               >
                 <Item>
                   <PostTitleContainer>
@@ -139,6 +141,9 @@ export const PostsPage = () => {
           />
         </PaginatorContainer>
       </ContainerWrapper>
+      <RouteLink to="/posts/create">
+        <FloatingActionButtons />
+      </RouteLink>
     </Wrapper>
   )
 }

@@ -14,6 +14,7 @@ export const AnswersFrom = ({
 }) => {
   const isMounted = useRef(true)
   useEffect(() => {
+    isMounted.current = true
     return () => {
       isMounted.current = false
     }

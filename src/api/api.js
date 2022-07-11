@@ -76,6 +76,10 @@ export const postsAPI = {
     return postAdapter(await instance.get(`/posts/${id}`))
   },
 
+  async createPost(payload) {
+    return postAdapter(await instance.post('/posts', payload))
+  },
+
   setLike(id) {
     return instance.put(`/posts/like/${id}`)
   },

@@ -1,3 +1,3 @@
-export const isLiked = (likes, userId) => {
-  return Object.values(likes).includes(userId)
+export const isLiked = (elem, userId) => {
+  return Object.values(elem).includes(userId)
 }
