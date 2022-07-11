@@ -69,16 +69,18 @@ export const CommentsComponent = ({ postId }) => {
         postId={postId}
       />
       <Box sx={{ marginTop: '10px', marginBottom: '10px', marginLeft: '3px' }}>
-        {Object.keys(comments).length === 0 ||
-          (isShowedButton ? (
-            <CommentsCounterButton variant="body2" onClick={showAllComments}>
-              Show all comments
-            </CommentsCounterButton>
-          ) : (
-            <CommentsCounterButton variant="body2" onClick={hideComments}>
-              Hide comments
-            </CommentsCounterButton>
-          ))}
+        <>
+          {Object.keys(comments).length === 0 ||
+            (isShowedButton ? (
+              <CommentsCounterButton variant="body2" onClick={showAllComments}>
+                Show all comments
+              </CommentsCounterButton>
+            ) : (
+              <CommentsCounterButton variant="body2" onClick={hideComments}>
+                Hide comments
+              </CommentsCounterButton>
+            ))}
+        </>
       </Box>
       <AnswersFrom
         user={user}

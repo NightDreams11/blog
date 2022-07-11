@@ -23,6 +23,7 @@ import {
   LikeCounter,
 } from './styled'
 import { CommentsComponent } from './Comments/Comments'
+import { PostMenu } from './PostMenu/PostMenu'
 
 export const PostPage = () => {
   const token = JSON.parse(localStorage.getItem('token'))
@@ -57,6 +58,7 @@ export const PostPage = () => {
           <GridItem item xs={12} sx={{ display: 'flex' }}>
             <Avatar src={author ? getImageUrl(author.avatar) : ''} />
             <Author variant="caption">{author ? author.name : 'Unknown'}</Author>
+            {author.id === userId && <PostMenu postId={id} />}
           </GridItem>
           <GridItem item xs={12}>
             <Date variant="caption">{dateFormatter(post.dateCreated)}</Date>

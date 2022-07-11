@@ -149,3 +149,11 @@ export const setLike = (id) => async (dispatch, getState) => {
     dispatch(addSnackbarMessageErrorAC(error.message))
   }
 }
+
+export const deletePost = (id) => async (dispatch) => {
+  try {
+    await postsAPI.deletePost(id)
+  } catch (error) {
+    dispatch(addSnackbarMessageErrorAC(error.message))
+  }
+}

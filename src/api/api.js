@@ -83,6 +83,10 @@ export const postsAPI = {
   setLike(id) {
     return instance.put(`/posts/like/${id}`)
   },
+
+  deletePost(id) {
+    return instance.delete(`/posts/${id}`)
+  },
 }
 
 export const commentsAPI = {
