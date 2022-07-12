@@ -6,6 +6,7 @@ export function postAdapter(postResponse) {
     dateCreated: postResponse.data.dateCreated,
     description: postResponse.data.description,
     fullText: postResponse.data.fullText,
+    image: postResponse.data.image,
     postedBy: postResponse.data.postedBy,
     likes: postResponse.data.likes,
     v: postResponse.data[vField],

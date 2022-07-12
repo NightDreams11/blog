@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
-import { updateUser } from 'store/profile'
+import { setAvatarAC } from 'store/auth'
+import { updateUser, uploadAvatar } from 'store/profile'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Avatar, Grid, Typography } from '@mui/material'
 import { getImageUrl } from 'utils/imageURL/imageURL'
@@ -100,7 +101,11 @@ export const EditProfile = ({ user }) => {
             </BoxButtonBlock>
           </GridProfile>
           <GridContainerInner item xs={3}>
-            <PreviewButton />
+            <PreviewButton
+              photoPreview={previewAvatar}
+              reduxAction={uploadAvatar}
+              setPhotoPreview={setAvatarAC}
+            />
           </GridContainerInner>
           <GridContainerInner item xs={12}>
             {/* Form */}

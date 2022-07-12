@@ -1,9 +1,10 @@
 import { authAPI, postsAPI } from 'api/api'
-import { addSnackbarMessageErrorAC } from './messages'
+import { addSnackbarMessageErrorAC, addSnackbarMessageSuccessAC } from './messages'
 
 const ActionTypes = {
   SET_POSTS: 'SET_POSTS',
   SET_POST: 'SET_POST',
+  SET_POST_IMAGE: 'SET_POST_IMAGE',
   SET_POST_LIKES_COUNTER: 'SET_POST_LIKES_COUNTER',
   SET_CREATED_POSTS_ID: 'SET_CREATED_POSTS_ID',
   TOGGLE_POSTS_IS_FETCHING: 'TOGGLE_POSTS_IS_FETCHING',
@@ -19,6 +20,7 @@ const initialState = {
   scrollPosition: null,
   postLikesCounter: null,
   postsIsFetching: false,
+  previevPostImage: null,
 }
 
 export const postsReducer = (state = initialState, { type, payload = 0 }) => {
@@ -40,6 +42,11 @@ export const postsReducer = (state = initialState, { type, payload = 0 }) => {
       return { ...state, author: payload }
     case ActionTypes.SET_SCROLL_POSITION:
       return { ...state, scrollPosition: payload }
+    case ActionTypes.SET_POST_IMAGE:
+      return {
+        ...state,
+        previevPostImage: { file: payload.file, imageUrl: payload.imageUrl },
+      }
     default:
       return state
   }
@@ -80,6 +87,11 @@ export const setScrollPositionAC = (position) => ({
   payload: position,
 })
 
+export const setPostImageAC = (file, imageUrl) => ({
+  type: ActionTypes.SET_POST_IMAGE,
+  payload: { file, imageUrl },
+})
+
 export const getPosts =
   ({ perPage = 9, page = 1, search }) =>
   async (dispatch, getState) => {
@@ -113,20 +125,36 @@ export const getPost = (id) => async (dispatch) => {
   }
 }
 
-export const createPost = (payload) => async (dispatch) => {
-  try {
-    dispatch(togglePostsIsFetchingAC(true))
-    const response = await postsAPI.createPost(payload)
-    if (response.id) {
-      dispatch(getPosts({}))
-      dispatch(setCreatedPostsIdAC(response.id))
+export const createPost =
+  ({ payload }) =>
+  async (dispatch) => {
+    try {
+      dispatch(togglePostsIsFetchingAC(true))
+      const response = await postsAPI.createPost({ payload })
+      if (response.id) {
+        dispatch(getPosts({}))
+        dispatch(setCreatedPostsIdAC(response.id))
+      }
+    } catch (error) {
+      dispatch(addSnackbarMessageErrorAC(error.message))
+    } finally {
+      dispatch(togglePostsIsFetchingAC(false))
     }
-  } catch (error) {
-    dispatch(addSnackbarMessageErrorAC(error.message))
-  } finally {
-    dispatch(togglePostsIsFetchingAC(false))
   }
-}
+
+export const updatePostPhoto =
+  ({ id, file }) =>
+  async (dispatch) => {
+    try {
+      const response = await postsAPI.updatePostPhoto({ id, file })
+      if (response.status === 200) {
+        dispatch(getPosts({}))
+        dispatch(addSnackbarMessageSuccessAC('Photo was updated'))
+      }
+    } catch (error) {
+      dispatch(addSnackbarMessageErrorAC(error.message))
+    }
+  }
 
 export const setLike = (id) => async (dispatch, getState) => {
   try {

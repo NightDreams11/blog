@@ -1,9 +1,11 @@
 import { Typography } from '@mui/material'
+import { Box } from '@mui/system'
 import { useFormik } from 'formik'
+import { PreviewButton } from 'pages/ProfilePage/EditProfile/PreviewButton/PreviewButton'
 import { useMemo } from 'react'
-import { useDispatch, useStore } from 'react-redux'
+import { useDispatch, useSelector, useStore } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { createPost } from 'store/posts'
+import { createPost, setPostImageAC, updatePostPhoto } from 'store/posts'
 import * as yup from 'yup'
 import {
   ContainerWrapper,
@@ -18,6 +20,9 @@ import {
 export const CreateNewPost = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const previewPostPhoto = useSelector(
+    (state) => state.postsReducer.previevPostImage
+  )
   const store = useStore()
 
   const validationSchema = yup.object().shape({
@@ -36,12 +41,19 @@ export const CreateNewPost = () => {
     onSubmit: async (data) => {
       await dispatch(
         createPost({
-          title: data.title,
-          fullText: data.fullText,
-          description: data.description,
+          payload: {
+            title: data.title,
+            fullText: data.fullText,
+            description: data.description,
+          },
         })
       )
       const { createdPostsId } = store.getState().postsReducer
+      if (previewPostPhoto) {
+        await dispatch(
+          updatePostPhoto({ id: createdPostsId, file: previewPostPhoto.file })
+        )
+      }
       navigate(`/posts/${createdPostsId}`)
     },
   })
@@ -103,6 +115,15 @@ export const CreateNewPost = () => {
             helperText={formik.errors?.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
+          />
+          {previewPostPhoto && (
+            <Box>
+              <img src={previewPostPhoto.imageUrl} alt="post preview" />
+            </Box>
+          )}
+          <PreviewButton
+            photoPreview={previewPostPhoto}
+            setPhotoPreview={setPostImageAC}
           />
           <CreateNewPostButton
             variant="contained"

@@ -70,7 +70,7 @@ export const CommentsComponent = ({ postId }) => {
       />
       <Box sx={{ marginTop: '10px', marginBottom: '10px', marginLeft: '3px' }}>
         <>
-          {Object.keys(comments).length === 0 ||
+          {Object.keys(comments).length < 6 ||
             (isShowedButton ? (
               <CommentsCounterButton variant="body2" onClick={showAllComments}>
                 Show all comments

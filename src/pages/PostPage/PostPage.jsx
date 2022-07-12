@@ -65,7 +65,10 @@ export const PostPage = () => {
           </GridItem>
           <GridItem item xs={12} sx={{ mt: 2 }}>
             <ImageContainer>
-              <Image src={postImg} alt="Post photo" />
+              <Image
+                src={post.image ? getImageUrl(post.image) : postImg}
+                alt="Post photo"
+              />
             </ImageContainer>
           </GridItem>
           <GridItem item xs={12} sx={{ mt: 2 }}>

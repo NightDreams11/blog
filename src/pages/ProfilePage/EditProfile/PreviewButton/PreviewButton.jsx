@@ -2,18 +2,14 @@ import * as React from 'react'
 import IconButton from '@mui/material/IconButton'
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import Stack from '@mui/material/Stack'
-import { useDispatch, useSelector } from 'react-redux'
-import { setAvatarAC } from 'store/auth'
+import { useDispatch } from 'react-redux'
 import { Button } from '@mui/material'
-import { uploadAvatar } from 'store/profile'
 import { UploadAvatarButton } from './styled'
 
-export function PreviewButton() {
-  const previewAvatar = useSelector((state) => state.auth.previewAvatar)
+export function PreviewButton({ photoPreview, reduxAction, setPhotoPreview }) {
   const dispatch = useDispatch()
-
   const onInputChange = () => {
-    dispatch(uploadAvatar(previewAvatar.file))
+    dispatch(reduxAction(photoPreview.file))
   }
 
   function handleImageChange(e) {
@@ -23,7 +19,7 @@ export function PreviewButton() {
     const file = e.target.files[0]
 
     reader.onloadend = () => {
-      dispatch(setAvatarAC(file, reader.result))
+      dispatch(setPhotoPreview(file, reader.result))
     }
     if (file) {
       reader.readAsDataURL(file)
@@ -52,7 +48,11 @@ export function PreviewButton() {
         >
           <PhotoCamera />
         </IconButton>
-        {previewAvatar !== null ? <Button onClick={onInputChange}>Save</Button> : ''}
+        {photoPreview !== null && reduxAction ? (
+          <Button onClick={onInputChange}>Save</Button>
+        ) : (
+          ''
+        )}
       </label>
     </Stack>
   )

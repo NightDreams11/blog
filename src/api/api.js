@@ -76,8 +76,14 @@ export const postsAPI = {
     return postAdapter(await instance.get(`/posts/${id}`))
   },
 
-  async createPost(payload) {
+  async createPost({ payload }) {
     return postAdapter(await instance.post('/posts', payload))
+  },
+
+  updatePostPhoto({ file, id }) {
+    const formData = new FormData()
+    formData.append('image', file)
+    return instance.put(`/posts/upload/${id}`, formData)
   },
 
   setLike(id) {
