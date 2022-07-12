@@ -57,7 +57,9 @@ export const CreateNewPost = ({ editMode }) => {
       }
       const { createdPostsId } = store.getState().postsReducer
       if (previewPostPhoto) {
-        await dispatch(updatePostPhoto({ id: post.id, file: previewPostPhoto.file }))
+        await dispatch(
+          updatePostPhoto({ id: createdPostsId, file: previewPostPhoto.file })
+        )
       }
       if (editMode) {
         await dispatch(
