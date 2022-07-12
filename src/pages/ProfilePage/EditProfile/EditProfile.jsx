@@ -7,7 +7,7 @@ import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { Avatar, Grid, Typography } from '@mui/material'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import SaveIcon from '@mui/icons-material/Save'
-import { PreviewButton } from './PreviewButton/PreviewButton'
+import { PreviewButton } from '../../../components/layout/PreviewButton/PreviewButton'
 import {
   BoxContainer,
   ContainerWrapper,

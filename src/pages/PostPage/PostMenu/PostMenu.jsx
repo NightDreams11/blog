@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { deletePost } from 'store/posts'
 import { useNavigate } from 'react-router'
+import { Link } from 'react-router-dom'
 
 export function PostMenu({ postId }) {
   const dispatch = useDispatch()
@@ -52,6 +53,16 @@ export function PostMenu({ postId }) {
           horizontal: 'left',
         }}
       >
+        <Link
+          to="/posts/edit"
+          style={{
+            textDecoration: 'none',
+            color: 'rgba(0, 0, 0, 0.87)',
+          }}
+        >
+          <MenuItem>Edit</MenuItem>
+        </Link>
+
         <MenuItem
           onClick={() => {
             handleClose()

@@ -5,6 +5,7 @@ const ActionTypes = {
   SET_POSTS: 'SET_POSTS',
   SET_POST: 'SET_POST',
   SET_POST_IMAGE: 'SET_POST_IMAGE',
+  CLEAR_POST_IMAGE: 'CLEAR_POST_IMAGE',
   SET_POST_LIKES_COUNTER: 'SET_POST_LIKES_COUNTER',
   SET_CREATED_POSTS_ID: 'SET_CREATED_POSTS_ID',
   TOGGLE_POSTS_IS_FETCHING: 'TOGGLE_POSTS_IS_FETCHING',
@@ -46,6 +47,11 @@ export const postsReducer = (state = initialState, { type, payload = 0 }) => {
       return {
         ...state,
         previevPostImage: { file: payload.file, imageUrl: payload.imageUrl },
+      }
+    case ActionTypes.CLEAR_POST_IMAGE:
+      return {
+        ...state,
+        previevPostImage: null,
       }
     default:
       return state
@@ -90,6 +96,10 @@ export const setScrollPositionAC = (position) => ({
 export const setPostImageAC = (file, imageUrl) => ({
   type: ActionTypes.SET_POST_IMAGE,
   payload: { file, imageUrl },
+})
+
+export const clearPostImageAC = () => ({
+  type: ActionTypes.CLEAR_POST_IMAGE,
 })
 
 export const getPosts =
@@ -138,6 +148,7 @@ export const createPost =
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))
     } finally {
+      dispatch(clearPostImageAC())
       dispatch(togglePostsIsFetchingAC(false))
     }
   }
@@ -149,10 +160,27 @@ export const updatePostPhoto =
       const response = await postsAPI.updatePostPhoto({ id, file })
       if (response.status === 200) {
         dispatch(getPosts({}))
-        dispatch(addSnackbarMessageSuccessAC('Photo was updated'))
       }
     } catch (error) {
       dispatch(addSnackbarMessageErrorAC(error.message))
+    } finally {
+      dispatch(clearPostImageAC())
+    }
+  }
+
+export const editPost =
+  ({ id, payload }) =>
+  async (dispatch) => {
+    try {
+      const response = await postsAPI.editPost({ id, payload })
+      if (response.status === 200) {
+        dispatch(getPosts({}))
+        dispatch(addSnackbarMessageSuccessAC('Post was updated'))
+      }
+    } catch (error) {
+      dispatch(addSnackbarMessageErrorAC(error.message))
+    } finally {
+      dispatch(clearPostImageAC())
     }
   }
 

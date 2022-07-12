@@ -4,6 +4,7 @@ export function postAdapter(postResponse) {
 
   return {
     dateCreated: postResponse.data.dateCreated,
+    title: postResponse.data.title,
     description: postResponse.data.description,
     fullText: postResponse.data.fullText,
     image: postResponse.data.image,

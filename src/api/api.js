@@ -86,6 +86,10 @@ export const postsAPI = {
     return instance.put(`/posts/upload/${id}`, formData)
   },
 
+  editPost({ id, payload }) {
+    return instance.patch(`/posts/${id}`, payload)
+  },
+
   setLike(id) {
     return instance.put(`/posts/like/${id}`)
   },
