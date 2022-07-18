@@ -2,10 +2,18 @@ import { Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { useFormik } from 'formik'
 import { PreviewButton } from 'components/layout/PreviewButton/PreviewButton'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector, useStore } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
-import { createPost, editPost, setPostImageAC, updatePostPhoto } from 'store/posts'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Preloader } from 'components/layout/Preloader/Preloader'
+import { useIsMounted } from 'hooks/useIsMounted'
+import {
+  createPost,
+  editPost,
+  getPost,
+  setPostImageAC,
+  updatePostPhoto,
+} from 'store/posts'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import * as yup from 'yup'
 import {
@@ -19,16 +27,23 @@ import {
 } from './styled'
 
 export const CreateNewPost = ({ editMode }) => {
+  const { id } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const isMounted = useIsMounted()
   const post = useSelector((state) => state.postsReducer.post)
 
   const previewPostPhoto = useSelector(
     (state) => state.postsReducer.previevPostImage
   )
-
   const store = useStore()
+
+  useEffect(() => {
+    if (id && post?.id !== id) {
+      dispatch(getPost(id))
+    }
+  }, [post, id, dispatch])
 
   const validationSchema = yup.object().shape({
     title: yup.string().min(5, 'Min lenght 5 characters'),
@@ -36,11 +51,19 @@ export const CreateNewPost = ({ editMode }) => {
     description: yup.string(),
   })
 
-  const formik = useFormik({
+  const {
+    touched,
+    values,
+    errors,
+    handleBlur,
+    handleChange,
+    handleSubmit,
+    setValues,
+  } = useFormik({
     initialValues: {
-      title: post ? post.title : '',
-      fullText: post ? post.fullText : '',
-      description: post ? post.description : '',
+      title: '',
+      fullText: '',
+      description: '',
     },
     validationSchema,
     onSubmit: async (data) => {
@@ -77,97 +100,139 @@ export const CreateNewPost = ({ editMode }) => {
     },
   })
 
+  const createOrEditReset = () => {
+    if (editMode) {
+      setValues({
+        title: post.title,
+        fullText: post.fullText,
+        description: post.description,
+      })
+    } else {
+      setValues({
+        title: '',
+        fullText: '',
+        description: '',
+      })
+    }
+  }
+
+  const createOrEditCancel = (value) => {
+    navigate(editMode ? `/posts/${value}` : value)
+  }
+
+  useEffect(() => {
+    // Используем setValues, чтобы не терять значения после обновления страницы, с помощью функциональности Formik
+    if (editMode) {
+      setValues({
+        title: post ? post.title : '',
+        fullText: post ? post.fullText : '',
+        description: post ? post.description : '',
+      })
+    }
+  }, [post, setValues, editMode])
+
   const isDisabled = useMemo(() => {
     return (
-      !formik.touched.title ||
-      !formik.touched.fullText ||
-      !formik.touched.description ||
-      !!Object.keys(formik.errors).length ||
-      formik.values.title.length === 0 ||
-      formik.values.fullText.length === 0 ||
-      formik.values.description.length === 0
+      !touched.title ||
+      !touched.fullText ||
+      !touched.description ||
+      !!Object.keys(errors).length ||
+      values.title.length === 0 ||
+      values.fullText.length === 0 ||
+      values.description.length === 0
     )
   }, [
-    formik.touched.title,
-    formik.touched.fullText,
-    formik.touched.description,
-    formik.errors,
-    formik.values.title.length,
-    formik.values.fullText.length,
-    formik.values.description.length,
+    touched.title,
+    touched.fullText,
+    touched.description,
+    errors,
+    values.title.length,
+    values.fullText.length,
+    values.description.length,
   ])
+
+  if (!post && editMode) {
+    return <Preloader />
+  }
 
   return (
     <Wrapper>
       <ContainerWrapper>
-        <Form onSubmit={formik.handleSubmit}>
-          <Typography variant="h5">Create a new title</Typography>
-          <CreateTitle
-            name="title"
-            value={editMode ? formik.values.title : undefined}
-            placeholder="Add a title..."
-            label="Title"
-            autoComplete="off"
-            error={!!formik.errors.title}
-            helperText={formik.errors?.title}
-            onChange={formik.handleChange}
-            // Свойство formik.touched срабатывает только при onBlur
-            onBlur={formik.handleBlur}
-          />
-          <Typography variant="h5">Add a text of your post</Typography>
-          <CreateFullText
-            name="fullText"
-            value={editMode ? formik.values.fullText : undefined}
-            placeholder="Add a text..."
-            label="Text"
-            autoComplete="off"
-            error={!!formik.errors.fullText}
-            helperText={formik.errors?.fullText}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          <Typography variant="h5">Add a little description</Typography>
-          <CreateDescription
-            name="description"
-            value={editMode ? formik.values.description : undefined}
-            placeholder="Add a description..."
-            label="Description"
-            autoComplete="off"
-            error={!!formik.errors.description}
-            helperText={formik.errors?.description}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-          />
-          {previewPostPhoto && !editMode && (
-            <Box>
-              <img src={previewPostPhoto.imageUrl} alt="post preview" />
-            </Box>
-          )}
-          {editMode && previewPostPhoto && (
-            <Box>
-              <img src={previewPostPhoto.imageUrl} alt="post preview" />
-            </Box>
-          )}
-          {editMode &&
-            (editMode && previewPostPhoto ? (
-              ''
-            ) : (
+        {!isMounted ? (
+          <Preloader />
+        ) : (
+          <Form onSubmit={handleSubmit}>
+            <Typography variant="h5">Create a new title</Typography>
+            <CreateTitle
+              name="title"
+              value={values.title}
+              placeholder="Add a title..."
+              label="Title"
+              autoComplete="off"
+              error={!!errors.title}
+              helperText={errors?.title}
+              onChange={handleChange}
+              // Свойство formik.touched срабатывает только при onBlur
+              onBlur={handleBlur}
+            />
+            <Typography variant="h5">Add a text of your post</Typography>
+            <CreateFullText
+              name="fullText"
+              value={values.fullText}
+              placeholder="Add a text..."
+              label="Text"
+              autoComplete="off"
+              error={!!errors.fullText}
+              helperText={errors?.fullText}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <Typography variant="h5">Add a little description</Typography>
+            <CreateDescription
+              name="description"
+              value={values.description}
+              placeholder="Add a description..."
+              label="Description"
+              autoComplete="off"
+              error={!!errors.description}
+              helperText={errors?.description}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {previewPostPhoto && (
               <Box>
-                <img src={getImageUrl(post.image)} alt="post preview" />
+                <img src={previewPostPhoto.imageUrl} alt="post preview" />
               </Box>
-            ))}
-          <PreviewButton
-            photoPreview={previewPostPhoto}
-            setPhotoPreview={setPostImageAC}
-          />
-          <CreateNewPostButton
-            variant="contained"
-            type="submit"
-            disabled={isDisabled}
-          >
-            {editMode ? 'Edit post' : 'Add new post'}
-          </CreateNewPostButton>
-        </Form>
+            )}
+            {editMode &&
+              (editMode && previewPostPhoto ? (
+                ''
+              ) : (
+                <Box>
+                  <img src={getImageUrl(post.image)} alt="post preview" />
+                </Box>
+              ))}
+            <PreviewButton
+              photoPreview={previewPostPhoto}
+              setPhotoPreview={setPostImageAC}
+            />
+            <CreateNewPostButton
+              variant="contained"
+              type="submit"
+              disabled={isDisabled}
+            >
+              {editMode ? 'Edit post' : 'Add new post'}
+            </CreateNewPostButton>
+            <CreateNewPostButton onClick={createOrEditReset}>
+              Reset
+            </CreateNewPostButton>
+            <CreateNewPostButton
+              onClick={() => createOrEditCancel(editMode ? id : -1)}
+            >
+              Cancel
+            </CreateNewPostButton>
+          </Form>
+        )}
       </ContainerWrapper>
     </Wrapper>
   )

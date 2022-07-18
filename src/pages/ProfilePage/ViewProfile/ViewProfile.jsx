@@ -3,7 +3,8 @@ import { useState } from 'react'
 import { dateFormatter } from 'utils/dateFormatter/dateFormatter'
 import { getImageUrl } from 'utils/imageURL/imageURL'
 import { deleteUser } from 'store/profile'
-import { AlertDialogSlide } from './DeleteProfileConfirmation/DeleteProfileConfirmation'
+import { useDispatch } from 'react-redux'
+import { AlertDialogSlide } from 'components/layout/DeleteProfileConfirmation/DeleteProfileConfirmation'
 import {
   ButtonBlockGrid,
   ButtonBoxContainer,
@@ -21,6 +22,10 @@ import {
 
 export const ViewProfile = ({ user }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const dispatch = useDispatch()
+  const confirmDeleteUser = () => {
+    dispatch(deleteUser())
+  }
 
   return (
     <Wrapper>
@@ -63,7 +68,8 @@ export const ViewProfile = ({ user }) => {
               <AlertDialogSlide
                 isDialogOpen={isDialogOpen}
                 setIsDialogOpen={setIsDialogOpen}
-                deleteUser={deleteUser}
+                reduxAction={confirmDeleteUser}
+                text="Ваш аккаунт будет безвозвратно удален. Продолжить?"
               />
             </ButtonBoxContainer>
           </ButtonBlockGrid>

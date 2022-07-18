@@ -8,12 +8,14 @@ import { useDispatch } from 'react-redux'
 import { deletePost } from 'store/posts'
 import { useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
+import { AlertDialogSlide } from 'components/layout/DeleteProfileConfirmation/DeleteProfileConfirmation'
 
 export function PostMenu({ postId }) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [anchorEl, setAnchorEl] = useState(null)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const open = Boolean(anchorEl)
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget)
@@ -54,7 +56,7 @@ export function PostMenu({ postId }) {
         }}
       >
         <Link
-          to="/posts/edit"
+          to={`/posts/edit/${postId}`}
           style={{
             textDecoration: 'none',
             color: 'rgba(0, 0, 0, 0.87)',
@@ -65,13 +67,19 @@ export function PostMenu({ postId }) {
 
         <MenuItem
           onClick={() => {
+            setIsDialogOpen(true)
             handleClose()
-            handleDeletePost()
           }}
         >
           Delete
         </MenuItem>
       </Menu>
+      <AlertDialogSlide
+        isDialogOpen={isDialogOpen}
+        setIsDialogOpen={setIsDialogOpen}
+        reduxAction={handleDeletePost}
+        text="Ваш пост будет безвозвратно удален. Продолжить?"
+      />
     </Box>
   )
 }

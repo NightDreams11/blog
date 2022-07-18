@@ -19,7 +19,7 @@ export const RoutesComponent = () => {
         <Route path="/posts" element={<PostsPage />} />
         <Route path="/posts/:id" element={<PostPage />} />
         <Route path="/posts/create" element={<CreateNewPost />} />
-        <Route path="/posts/edit" element={<CreateNewPost editMode />} />
+        <Route path="/posts/edit/:id" element={<CreateNewPost editMode />} />
       </Routes>
     </div>
   )

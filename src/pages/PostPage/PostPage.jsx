@@ -53,7 +53,7 @@ export const PostPage = () => {
       <ContainerWrapper>
         <Grid container>
           <GridItem item xs={12}>
-            <Title variant="h2">{post.description}</Title>
+            <Title variant="h2">{post.title}</Title>
           </GridItem>
           <GridItem item xs={12} sx={{ display: 'flex' }}>
             <Avatar src={author ? getImageUrl(author.avatar) : ''} />
@@ -72,6 +72,9 @@ export const PostPage = () => {
             </ImageContainer>
           </GridItem>
           <GridItem item xs={12} sx={{ mt: 2 }}>
+            <Text variant="h6" sx={{ textAlign: 'center' }}>
+              {post.description}
+            </Text>
             <Text variant="body1">{post.fullText}</Text>
           </GridItem>
           <GridItem item xs={12} sx={{}}>
